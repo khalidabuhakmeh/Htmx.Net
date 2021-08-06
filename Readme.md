@@ -43,6 +43,37 @@ Response.Htmx(h => {
 
 Read more about the HTTP response headers at the [official documentation site](https://htmx.org/reference/#request_headers).
 
+## Htmx.TagHelpers
+
+You'll generally need URL paths pointing back to your ASP.NET Core backend. Luckily, `Htmx.TagHelpers` mimics the url generation included in ASP.NET Core. This makes linking HTMX with your ASP.NET Core application a seamless experience.
+
+```html
+<div hx-target="this">
+    <button hx-get
+            hx-page="Index"
+            hx-page-handler="Snippet"
+            hx-swap="outerHtml">
+        Click Me (Razor Page w/ Handler)
+    </button>
+</div>
+
+<div hx-target="this">
+    <button hx-get
+            hx-controller="Home"
+            hx-action="Index"
+            hx-route-id="1">
+        Click Me (Controller)
+    </button>
+</div>
+
+<div hx-target="this">
+    <button hx-post
+            hx-route="named">
+        Click Me (Named)
+    </button>
+</div>
+```
+
 ## License
 
 Copyright © 2021 Khalid Abuhakmeh

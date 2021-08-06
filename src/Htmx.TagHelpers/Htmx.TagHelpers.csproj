@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <OutputType>Library</OutputType>
+        <Nullable>enable</Nullable>
+        <LangVersion>Latest</LangVersion>
+        <IsPackable>true</IsPackable>
+        <PackageId>Htmx.TagHelpers</PackageId>
+        <Authors>Khalid Abuhakmeh</Authors>
+        <PackageIconUrl>https://raw.githubusercontent.com/bigskysoftware/htmx/master/www/img/htmx_logo.1.png</PackageIconUrl>
+        <RepositoryUrl>https://github.com/khalidabuhakmeh/Htmx.Net</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>web,javascript</PackageTags>
+        <Description>
+            Adds ASP.NET Core tag helpers to make generating urls for Htmx (https://htmx.org) easier. Mimics the ASP.NET Core url tag helpers.
+        </Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="MinVer" Version="2.5.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+
+</Project>

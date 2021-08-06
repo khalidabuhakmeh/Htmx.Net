@@ -1,0 +1,35 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div hx-target="this">
+    <button hx-get
+            hx-page="Index"
+            hx-page-handler="Snippet"
+            hx-swap="outerHtml">
+        Click Me (Razor Page w/ Handler)
+    </button>
+</div>
+
+<div hx-target="this">
+    <button hx-get
+            hx-controller="Home"
+            hx-action="Index"
+            hx-route-id="1">
+        Click Me (Controller)
+    </button>
+</div>
+
+<div hx-target="this">
+    <button hx-post
+            hx-route="named">
+        Click Me (Named)
+    </button>
+</div>
