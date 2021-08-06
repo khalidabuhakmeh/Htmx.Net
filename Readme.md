@@ -4,7 +4,17 @@
 
 This is a package designed to add server side helper methods for `HttpRequest` and `HttpResponse`. This makes working with [htmx](https://htmx.org/) server-side concepts simpler.
 
-## HttpRequest
+## Htmx Extension Methods
+
+### Getting Started
+
+Install the `Htmx` [NuGet package](https://www.nuget.org/packages/Htmx/) to your ASP.NET Core project.
+
+```console
+dotnet add package Htmx
+```
+
+### HttpRequest
 
 Using the `HttpRequest`, we can determine if the request was initiated by Htmx on the client.
 
@@ -29,7 +39,7 @@ Request.IsHtmx(out var values);
 
 Read more about the other header values on the [official documentation page](https://htmx.org/reference/#request_headers).
 
-## HttpResponse
+### HttpResponse
 
 We can set Http Response headers using the `Htmx` extension method, which passes an action and `HtmxResponseHeaders` object.
 
@@ -44,6 +54,14 @@ Response.Htmx(h => {
 Read more about the HTTP response headers at the [official documentation site](https://htmx.org/reference/#request_headers).
 
 ## Htmx.TagHelpers
+
+### Getting Started
+
+Install the `Htmx.TagHelpers` [NuGet package](https://www.nuget.org/packages/Htmx.TagHelpers/) to your ASP.NET Core project. Targets .NET Core 3.1+ projects.
+
+```console
+dotnet add package Htmx.TagHelpers
+```
 
 You'll generally need URL paths pointing back to your ASP.NET Core backend. Luckily, `Htmx.TagHelpers` mimics the url generation included in ASP.NET Core. This makes linking HTMX with your ASP.NET Core application a seamless experience.
 
