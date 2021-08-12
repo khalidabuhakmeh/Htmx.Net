@@ -29,4 +29,8 @@
       </PackageReference>
     </ItemGroup>
 
+    <PropertyGroup>
+        <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
+    </PropertyGroup>
+
 </Project>

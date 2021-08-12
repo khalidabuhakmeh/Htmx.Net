@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -69,6 +70,7 @@ namespace Htmx.TagHelpers
         /// Must be <c>null</c> if <see cref="Route"/> or <see cref="Page"/> is non-<c>null</c>.
         /// </remarks>
         [HtmlAttributeName(ActionAttributeName)]
+        [AspMvcAction]
         public string? Action { get; set; }
 
         /// <summary>
@@ -78,6 +80,7 @@ namespace Htmx.TagHelpers
         /// Must be <c>null</c> if <see cref="Route"/> or <see cref="Page"/> is non-<c>null</c>.
         /// </remarks>
         [HtmlAttributeName(ControllerAttributeName)]
+        [AspMvcController]
         public string? Controller { get; set; }
 
         /// <summary>
@@ -87,6 +90,7 @@ namespace Htmx.TagHelpers
         /// Must be <c>null</c> if <see cref="Route"/> is non-<c>null</c>.
         /// </remarks>
         [HtmlAttributeName(AreaAttributeName)]
+        [AspMvcArea]
         public string? Area { get; set; }
 
         /// <summary>
@@ -97,6 +101,7 @@ namespace Htmx.TagHelpers
         /// is non-<c>null</c>.
         /// </remarks>
         [HtmlAttributeName(PageAttributeName)]
+        [AspMvcView]
         public string? Page { get; set; }
 
         /// <summary>
