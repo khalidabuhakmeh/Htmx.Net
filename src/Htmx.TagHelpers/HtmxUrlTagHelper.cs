@@ -11,19 +11,14 @@ using Microsoft.AspNetCore.Routing;
 namespace Htmx.TagHelpers
 {
     /// <summary>
-    /// <see cref="ITagHelper"/> implementation targeting &lt;a&gt; elements.
+    /// Targets any element that has hx-get, hx-post, hx-put, hx-patch, and hx-delete. These
+    /// elements will ultimately hold the request URL generated.
     /// </summary>
-    [HtmlTargetElement("*", Attributes = ActionAttributeName)]
-    [HtmlTargetElement("*", Attributes = ControllerAttributeName)]
-    [HtmlTargetElement("*", Attributes = AreaAttributeName)]
-    [HtmlTargetElement("*", Attributes = PageAttributeName)]
-    [HtmlTargetElement("*", Attributes = PageHandlerAttributeName)]
-    [HtmlTargetElement("*", Attributes = FragmentAttributeName)]
-    [HtmlTargetElement("*", Attributes = HostAttributeName)]
-    [HtmlTargetElement("*", Attributes = ProtocolAttributeName)]
-    [HtmlTargetElement("*", Attributes = RouteAttributeName)]
-    [HtmlTargetElement("*", Attributes = RouteValuesDictionaryName)]
-    [HtmlTargetElement("*", Attributes = RouteValuesPrefix + "*")]
+    [HtmlTargetElement("*", Attributes = "[hx-get]")]
+    [HtmlTargetElement("*", Attributes = "[hx-post]")]
+    [HtmlTargetElement("*", Attributes = "[hx-delete]")]
+    [HtmlTargetElement("*", Attributes = "[hx-put]")]
+    [HtmlTargetElement("*", Attributes = "[hx-patch]")]
     public class HtmxUrlTagHelper : TagHelper
     {
         private const string ActionAttributeName = "hx-action";
