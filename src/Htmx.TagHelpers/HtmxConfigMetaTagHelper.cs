@@ -124,7 +124,14 @@ namespace Htmx.TagHelpers
             });
             
             output.Attributes.RemoveAll("content");
-            output.Attributes.Add(new TagHelperAttribute("name", new HtmlString(config)));
+            
+            // make sure to use single quotes
+            // because JSON uses double quotes
+            output.Attributes.Add(new TagHelperAttribute(
+                "content",
+                new HtmlString(config),
+                HtmlAttributeValueStyle.SingleQuotes)
+            );
         }
     }
 }
