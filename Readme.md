@@ -92,6 +92,47 @@ You'll generally need URL paths pointing back to your ASP.NET Core backend. Luck
 </div>
 ```
 
+### Htmx.Config
+
+An additional tag helper is included that makes creating htmx configuration simpler. For example, below we can set the `historyCacheSize`, default `indicatorClass`, and whether to include ASP.NET Core's anti-forgery tokens as an additional element on the HTMX configuration.
+
+```html
+    <meta name="htmx-config" 
+          historyCacheSize="20"
+          indicatorClass="htmx-indicator"
+          includeAspNetAntiforgeryToken="true"
+          />
+```
+
+The resulting HTML will be.
+
+```html
+<meta name="htmx-config" content='{"indicatorClass":"htmx-indicator","historyCacheSize":20,"antiForgery":{"formFieldName":"__RequestVerificationToken","headerName":"RequestVerificationToken","requestToken":"<token>"}}' />
+```
+
+### HTMX and Anti-forgery Tokens
+
+You can set the attribute `includeAspNetAntiforgerToken` on the `htmx-config` element. Then you'll need to include this additional JavaScript in your web application.
+
+```javascript
+document.addEventListener("htmx:configRequest", (evt) => {
+    let httpVerb = evt.detail.verb.toUpperCase();
+    if (httpVerb === 'GET') return;
+    
+    let antiForgery = htmx.config.antiForgery;
+    
+    if (antiForgery) {
+        if (antiForgery.headerName) {
+            evt.detail.headers[antiForgery.headerName]
+                = antiForgery.requestToken;
+        } else {
+            evt.detail.parameters[antiForgery.formFieldName]
+                = antiForgery.requestToken;
+        }
+    }
+});
+```
+
 ## License
 
 Copyright © 2021 Khalid Abuhakmeh

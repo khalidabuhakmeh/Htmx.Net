@@ -10,6 +10,7 @@ namespace Htmx.Sample.Controllers
             return Content($"<h2>Hello, From Home Controller (id: {id})</h2>");
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost, Route("home/name", Name = "named")]
         public IActionResult Named()
         {
