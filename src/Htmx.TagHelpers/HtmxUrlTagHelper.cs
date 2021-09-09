@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -32,7 +33,7 @@ namespace Htmx.TagHelpers
         private const string RouteAttributeName = "hx-route";
         private const string RouteValuesDictionaryName = "hx-all-route-data";
         private const string RouteValuesPrefix = "hx-route-";
-        private IDictionary<string, string>? _routeValues;
+        private IDictionary<string, string>? routeValues;
 
         private static readonly List<string> HtmxMethods = new()
         {
@@ -46,8 +47,7 @@ namespace Htmx.TagHelpers
         public HtmxUrlTagHelper(IHtmlGenerator generator)
         {
             Generator = generator;
-            _routeValues = new Dictionary<string, string>();
-
+            routeValues = new Dictionary<string, string>();
         }
 
         /// <inheritdoc />
@@ -143,8 +143,8 @@ namespace Htmx.TagHelpers
         [HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
         public IDictionary<string, string>? RouteValues
         {
-            get => _routeValues ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            set => _routeValues = value;
+            get => routeValues ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            set => routeValues = value;
         }
 
         /// <summary>
@@ -169,8 +169,21 @@ namespace Htmx.TagHelpers
                 throw new ArgumentNullException(nameof(output));
             }
 
-            if (output.Attributes.Count(a => HtmxMethods.Contains(a.Name)) > 1) {
-                throw new InvalidOperationException($"Too many htmx method attributes found on element. Use only one of the following: {string.Join(",", HtmxMethods)}");
+            if (output.Attributes.Count(a => HtmxMethods.Contains(a.Name)) > 1)
+            {
+                throw new InvalidOperationException(
+                    $"Too many htmx method attributes found on element. Use only one of the following: {string.Join(",", HtmxMethods)}");
+            }
+
+            var hxMethodAttribute = context.AllAttributes.First(a => HtmxMethods.Contains(a.Name));
+            // if it already has a value, don't do anything
+            if (hxMethodAttribute.Value is HtmlString s && !string.IsNullOrWhiteSpace(s.Value))
+            {
+                // if the attribute already has a value
+                // then continue on, we don't want to alter it
+                // Note: this will leave other hx-method attributes
+                //       in the case the user is sloppy
+                return;
             }
 
             var routeLink = Route != null;
@@ -189,17 +202,17 @@ namespace Htmx.TagHelpers
                 throw new InvalidOperationException(message);
             }
 
-            RouteValueDictionary? routeValues = null;
-            if (_routeValues is { Count: >0 })
+            RouteValueDictionary? values = null;
+            if (routeValues is {Count: >0})
             {
-                routeValues = new RouteValueDictionary(_routeValues);
+                values = new RouteValueDictionary(routeValues);
             }
 
             if (Area != null)
             {
                 // Unconditionally replace any value from asp-route-area.
-                routeValues ??= new RouteValueDictionary();
-                routeValues["area"] = Area;
+                values ??= new RouteValueDictionary();
+                values["area"] = Area;
             }
 
             TagBuilder tagBuilder;
@@ -213,7 +226,7 @@ namespace Htmx.TagHelpers
                     protocol: Protocol,
                     hostname: Host,
                     fragment: Fragment,
-                    routeValues: routeValues,
+                    routeValues: values,
                     htmlAttributes: null);
             }
             else if (routeLink)
@@ -225,25 +238,26 @@ namespace Htmx.TagHelpers
                     protocol: Protocol,
                     hostName: Host,
                     fragment: Fragment,
-                    routeValues: routeValues,
+                    routeValues: values,
                     htmlAttributes: null);
             }
             else
             {
                 tagBuilder = Generator.GenerateActionLink(
-                   ViewContext,
-                   linkText: string.Empty,
-                   actionName: Action,
-                   controllerName: Controller,
-                   protocol: Protocol,
-                   hostname: Host,
-                   fragment: Fragment,
-                   routeValues: routeValues,
-                   htmlAttributes: null);
+                    ViewContext,
+                    linkText: string.Empty,
+                    actionName: Action,
+                    controllerName: Controller,
+                    protocol: Protocol,
+                    hostname: Host,
+                    fragment: Fragment,
+                    routeValues: values,
+                    htmlAttributes: null);
             }
 
             var href = tagBuilder.Attributes["href"];
-            foreach (var htmxMethod in HtmxMethods.Where(htmxMethod => output.Attributes.TryGetAttribute(htmxMethod, out var _)))
+            foreach (var htmxMethod in HtmxMethods.Where(htmxMethod =>
+                output.Attributes.TryGetAttribute(htmxMethod, out _)))
             {
                 // should only loop once... should
                 output.Attributes.RemoveAll(htmxMethod);

@@ -19,6 +19,13 @@
 </div>
 
 <div hx-target="this">
+    <button hx-get="@Url.Page("Index", "Snippet")"
+            hx-swap="outerHtml">
+        Click Me (Razor Page w/ Handler using Url.Page)
+    </button>
+</div>
+
+<div hx-target="this">
     <button hx-get
             hx-controller="Home"
             hx-action="Index"
