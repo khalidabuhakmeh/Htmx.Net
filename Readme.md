@@ -63,6 +63,12 @@ Install the `Htmx.TagHelpers` [NuGet package](https://www.nuget.org/packages/Htm
 dotnet add package Htmx.TagHelpers
 ```
 
+Make the Tag Helpers available in your project by adding the following line to your `_ViewImports.cshtml`:
+
+```razor
+@addTagHelper *, Htmx.TagHelpers
+```
+
 You'll generally need URL paths pointing back to your ASP.NET Core backend. Luckily, `Htmx.TagHelpers` mimics the url generation included in ASP.NET Core. This makes linking HTMX with your ASP.NET Core application a seamless experience.
 
 ```html
