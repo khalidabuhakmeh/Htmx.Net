@@ -103,9 +103,16 @@ namespace Htmx.TagHelpers
         /// </summary>
         [HtmlAttributeName("disableSelector")]
         public string? DisableSelector { get; set; }
+        
+        /// <summary>
+        /// default timeout of an HTMX triggered HTTP Request. Defaults to 0 in HTMX.
+        /// </summary>
+        [HtmlAttributeName("timeout")]
+        public int? Timeout { get; set; }
 
         [HtmlAttributeName("includeAspNetAntiforgeryToken")]
         public bool IncludeAntiForgery { get; set; }
+        
 
         [ViewContext] 
         public ViewContext ViewContext { get; set; } = null!;
@@ -131,6 +138,7 @@ namespace Htmx.TagHelpers
                 UseTemplateFragments,
                 WsReconnectDelay,
                 RefreshOnHistoryMiss,
+                Timeout,
                 AntiForgery = TryGetAntiForgeryConfig()
             }, new JsonSerializerOptions
             {
