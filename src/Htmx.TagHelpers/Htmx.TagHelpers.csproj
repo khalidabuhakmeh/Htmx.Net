@@ -29,6 +29,14 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="antiforgerySnippet.js" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="JavaScript\antiforgerySnippet.js" LogicalName="AntiforgeryJavaScript" />
+    </ItemGroup>
+
     <PropertyGroup>
         <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
     </PropertyGroup>

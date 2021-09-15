@@ -138,6 +138,23 @@ document.addEventListener("htmx:configRequest", (evt) => {
 });
 ```
 
+You can access the snippet in two ways. The first is to use the `HtmxSnippet` static class in your views.
+
+```
+<script>
+@Html.Raw(HtmxSnippets.AntiforgeryJavaScript)
+</script>
+```
+
+A simpler way is to use the `HtmlExtensions` class that extends `IHtmlHelper`.
+
+```
+@Html.HtmxAntiforgeryScript()
+```
+
+This html helper will result in a `<script>` tag along with the previously mentioned JavaScript. **Note: You can still register multiple event handlers for `htmx:configRequest`, so having more than one is ok.**
+
+
 ## License
 
 Copyright © 2021 Khalid Abuhakmeh
