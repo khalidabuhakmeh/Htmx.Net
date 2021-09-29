@@ -5,7 +5,7 @@ on:
     branches: 
       - main
     tags:
-      - [\d]+.[\d]+.[\d]+
+      - "[\d]+.[\d]+.[\d]+"
 
 jobs:
   build:
