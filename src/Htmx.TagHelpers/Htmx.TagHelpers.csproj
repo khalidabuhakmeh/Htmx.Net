@@ -8,7 +8,7 @@
         <IsPackable>true</IsPackable>
         <PackageId>Htmx.TagHelpers</PackageId>
         <Authors>Khalid Abuhakmeh</Authors>
-        <PackageIconUrl>https://raw.githubusercontent.com/bigskysoftware/htmx/master/www/img/htmx_logo.1.png</PackageIconUrl>
+        <PackageIcon>icon.png</PackageIcon>
         <RepositoryUrl>https://github.com/khalidabuhakmeh/Htmx.Net</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageTags>web,javascript</PackageTags>
@@ -35,6 +35,10 @@
 
     <ItemGroup>
       <EmbeddedResource Include="JavaScript\antiforgerySnippet.js" LogicalName="AntiforgeryJavaScript" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\icon.png" Pack="true" PackagePath="" />
     </ItemGroup>
 
     <PropertyGroup>
