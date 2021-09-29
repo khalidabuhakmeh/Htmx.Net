@@ -18,27 +18,26 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="JetBrains.Annotations" Version="2021.2.0" />
-      <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="MinVer" Version="2.5.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+        <PackageReference Include="JetBrains.Annotations" Version="2021.2.0"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.0-beta-20204-02">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="MinVer" Version="2.5.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="antiforgerySnippet.js" />
+        <None Remove="antiforgerySnippet.js"/>
+        <None Include="..\..\icon.png" Pack="true" PackagePath="">
+            <Link>Properties\icon.png</Link>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="JavaScript\antiforgerySnippet.js" LogicalName="AntiforgeryJavaScript" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="..\..\icon.png" Pack="true" PackagePath="" />
+        <EmbeddedResource Include="JavaScript\antiforgerySnippet.js" LogicalName="AntiforgeryJavaScript"/>
     </ItemGroup>
 
     <PropertyGroup>
