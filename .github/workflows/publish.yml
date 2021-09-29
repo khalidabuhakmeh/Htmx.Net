@@ -2,8 +2,10 @@ name: Publish
 
 on:
   push:
+    branches: 
+      - main
     tags:
-      - '**'
+      - [\d]+.[\d]+.[\d]+
 
 jobs:
   build:
