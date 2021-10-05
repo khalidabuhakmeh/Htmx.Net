@@ -38,6 +38,16 @@ namespace Htmx
         {
             return request?.Headers.GetValueOrDefault(HtmxRequestHeaders.Keys.HistoryRestoreRequest, false) is true;
         }
+        
+        /// <summary>
+        /// true if the request is an HTMX Boosted Request
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public static bool IsHtmxBoosted(this HttpRequest request)
+        {
+            return request?.Headers.GetValueOrDefault(HtmxRequestHeaders.Keys.Boosted, false) is true;
+        }
 
         /// <summary>
         /// Set the Htmx Response Headers

@@ -17,6 +17,7 @@ namespace Htmx
             public const string Target = "HX-Target";
             public const string TriggerName = "HX-Trigger-Name";
             public const string Trigger = "HX-Trigger";
+            public const string Boosted = "HX-Boosted";
         }
 
         public HtmxRequestHeaders(HttpRequest request)
@@ -28,6 +29,7 @@ namespace Htmx
             Target = headers.GetValueOrDefault(Keys.Target, string.Empty);
             TriggerName = headers.GetValueOrDefault(Keys.TriggerName, string.Empty);
             Trigger = headers.GetValueOrDefault(Keys.Trigger, string.Empty);
+            Boosted = headers.GetValueOrDefault(Keys.Boosted, false);
         }
 
         /// <summary>
@@ -54,5 +56,11 @@ namespace Htmx
         /// the id of the triggered element if it exists
         /// </summary>
         public string Trigger { get; }
+        
+        /// <summary>
+        /// Determines if the request was Boosted looking at "Hx-Boosted" header
+        /// See https://htmx.org/docs/#boosting
+        /// </summary>
+        public bool Boosted { get; }
     }
 }
