@@ -15,6 +15,7 @@ namespace Htmx.Tests
             Request.Headers.Add(HtmxRequestHeaders.Keys.CurrentUrl, "/");
             Request.Headers.Add(HtmxRequestHeaders.Keys.Target, "123");
             Request.Headers.Add(HtmxRequestHeaders.Keys.TriggerName, "trigger-name");
+            Request.Headers.Add(HtmxRequestHeaders.Keys.Boosted, "true");
         }
 
         private HttpRequest Request { get; set; }
@@ -92,6 +93,12 @@ namespace Htmx.Tests
             var regularRequest = new FakeHttpRequest();
             regularRequest.IsHtmx(out var values);
             Assert.Null(values);
+        }
+
+        [Fact]
+        public void Can_determine_request_is_boosted()
+        {
+            Assert.True(Request.IsHtmxBoosted());
         }
     }
 }
