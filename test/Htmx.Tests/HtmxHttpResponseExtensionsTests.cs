@@ -75,6 +75,18 @@ namespace Htmx.Tests
             Assert.True(Headers.ContainsKey(Keys.TriggerAfterSettle));
             Assert.Equal(expected, Headers[Keys.TriggerAfterSettle]);
         }
+        
+        [Fact]
+        public void Can_retarget()
+        {
+            const string expected = "#header";
+            Response.Htmx(h => {
+                h.Retarget(expected);
+            });
+
+            Assert.True(Headers.ContainsKey(Keys.Retarget));
+            Assert.Equal(expected, Headers[Keys.Retarget]);
+        }
 
     }
 }

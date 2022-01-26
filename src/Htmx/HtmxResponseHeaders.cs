@@ -18,6 +18,7 @@ namespace Htmx
             public const string Trigger = "HX-Trigger";
             public const string TriggerAfterSettle = "HX-Trigger-After-Settle";
             public const string TriggerAfterSwap = "HX-Trigger-After-Swap";
+            public const string Retarget = "HX-Retarget";
         }
 
         internal HtmxResponseHeaders(IHeaderDictionary headers)
@@ -90,6 +91,17 @@ namespace Htmx
         public HtmxResponseHeaders TriggerAfterSwap(string value)
         {
             _headers[Keys.TriggerAfterSwap] = value;
+            return this;
+        }
+
+        /// <summary>
+        /// A header that allows you to change the default target of returned content
+        /// </summary>
+        /// <param name="value">CSS Selector of target</param>
+        /// <returns></returns>
+        public HtmxResponseHeaders Retarget(string value)
+        {
+            _headers[Keys.Retarget] = value;
             return this;
         }
     }
