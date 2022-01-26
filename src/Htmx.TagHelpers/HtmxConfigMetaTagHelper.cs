@@ -164,7 +164,12 @@ namespace Htmx.TagHelpers
                 return null;
 
             var antiforgery = HttpContext.RequestServices.GetService<IAntiforgery>();
-            if (antiforgery?.GetTokens(HttpContext) is { } tokens)
+            
+            // need to call GetAndStoreTokens or else
+            // all requests will fail until something calls
+            // GetAndStoreTokens. This ensures the token
+            // is added to the user's session cookies
+            if (antiforgery?.GetAndStoreTokens(HttpContext) is { } tokens)
             {
                 return new AntiForgeryConfig(tokens);
             }
