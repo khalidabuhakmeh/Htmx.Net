@@ -15,11 +15,11 @@ namespace Htmx.TagHelpers
     /// Targets any element that has hx-get, hx-post, hx-put, hx-patch, and hx-delete. These
     /// elements will ultimately hold the request URL generated.
     /// </summary>
-    [HtmlTargetElement("*", Attributes = "[hx-get]")]
-    [HtmlTargetElement("*", Attributes = "[hx-post]")]
-    [HtmlTargetElement("*", Attributes = "[hx-delete]")]
-    [HtmlTargetElement("*", Attributes = "[hx-put]")]
-    [HtmlTargetElement("*", Attributes = "[hx-patch]")]
+    [HtmlTargetElement("*", Attributes = "hx-get")]
+    [HtmlTargetElement("*", Attributes = "hx-post")]
+    [HtmlTargetElement("*", Attributes = "hx-delete")]
+    [HtmlTargetElement("*", Attributes = "hx-put")]
+    [HtmlTargetElement("*", Attributes = "hx-patch")]
     public class HtmxUrlTagHelper : TagHelper
     {
         private const string ActionAttributeName = "hx-action";
