@@ -12,7 +12,7 @@ namespace Htmx
 
         public static class Keys
         {
-            public const string Push = "HX-Push-Url";
+            public const string PushUrl = "HX-Push-Url";
             public const string Location = "HX-Location";
             public const string Redirect = "HX-Redirect";
             public const string Refresh = "HX-Refresh";
@@ -34,9 +34,20 @@ namespace Htmx
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [Obsolete("HX-Push was replaced with HX-Push-Url, use PushUrl(value) instead")]
         public HtmxResponseHeaders Push(string value)
         {
-            _headers[Keys.Push] = value;
+            return PushUrl(value);
+        }
+
+        /// <summary>
+        ///	pushes a new url into the history stack
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public HtmxResponseHeaders PushUrl(string value)
+        {
+            _headers[Keys.PushUrl] = value;
             return this;
         }
 
