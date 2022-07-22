@@ -13,6 +13,7 @@ namespace Htmx
         public static class Keys
         {
             public const string Push = "HX-Push-Url";
+            public const string Location = "HX-Location";
             public const string Redirect = "HX-Redirect";
             public const string Refresh = "HX-Refresh";
             public const string Trigger = "HX-Trigger";
@@ -20,6 +21,7 @@ namespace Htmx
             public const string TriggerAfterSwap = "HX-Trigger-After-Swap";
             public const string Reswap = "HX-Reswap";
             public const string Retarget = "HX-Retarget";
+            public const string ReplaceUrl = "HX-Replace-Url";
         }
 
         internal HtmxResponseHeaders(IHeaderDictionary headers)
@@ -58,6 +60,28 @@ namespace Htmx
         public HtmxResponseHeaders Reswap(string value)
         {
             _headers[Keys.Reswap] = value;
+            return this;
+        }
+        
+        /// <summary>
+        /// Allows you to do a client-side redirect that does not do a full page reload
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public HtmxResponseHeaders Location(string value)
+        {
+            _headers[Keys.Location] = value;
+            return this;
+        }
+        
+        /// <summary>
+        /// Replaces the current URL in the location bar
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public HtmxResponseHeaders ReplaceUrl(string value)
+        {
+            _headers[Keys.ReplaceUrl] = value;
             return this;
         }
 
