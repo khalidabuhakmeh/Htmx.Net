@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Http;
 using NuGet.Frameworks;
 using Xunit;
@@ -115,6 +116,27 @@ namespace Htmx.Tests
             
             Assert.True(Headers.ContainsKey(Keys.Trigger));
             Assert.Equal(expected, Headers[Keys.Trigger]);
+        }
+
+        [Fact]
+        public void Cant_use_legacy_trigger_and_with_trigger()
+        {
+            Response.Htmx(h => h.Trigger("cool"));
+            Assert.Throws<Exception>(() => Response.Htmx(h => h.WithTrigger("neat")));
+        }
+        
+        [Fact]
+        public void Cant_use_legacy_triggeraftersettle_and_with_trigger()
+        {
+            Response.Htmx(h => h.TriggerAfterSettle("cool"));
+            Assert.Throws<Exception>(() => Response.Htmx(h => h.WithTrigger("neat", timing: HtmxTriggerTiming.AfterSettle)));
+        }
+        
+        [Fact]
+        public void Cant_use_legacy_triggerafterswap_and_with_trigger()
+        {
+            Response.Htmx(h => h.TriggerAfterSwap("cool"));
+            Assert.Throws<Exception>(() => Response.Htmx(h => h.WithTrigger("neat", timing: HtmxTriggerTiming.AfterSwap)));
         }
 
         [Fact]
