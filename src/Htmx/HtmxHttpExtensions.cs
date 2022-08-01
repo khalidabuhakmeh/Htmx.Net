@@ -56,7 +56,9 @@ namespace Htmx
         /// <param name="action">Action used to action the response headers</param>
         public static void Htmx(this HttpResponse response, Action<HtmxResponseHeaders> action)
         {
-            action(new HtmxResponseHeaders(response.Headers));
+            var headerContainer = new HtmxResponseHeaders(response.Headers);
+            action(headerContainer);
+            headerContainer.Process();
         }
 
         internal static T GetValueOrDefault<T>(this IHeaderDictionary headers, string key, T @default)

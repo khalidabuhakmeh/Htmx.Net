@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 
 namespace Htmx
@@ -10,6 +13,8 @@ namespace Htmx
     public class HtmxResponseHeaders
     {
         private readonly IHeaderDictionary _headers;
+
+        private readonly Dictionary<HtmxTriggerTiming, Dictionary<string, object?>> _triggers = new();
 
         public static class Keys
         {
@@ -113,6 +118,7 @@ namespace Htmx
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
         public HtmxResponseHeaders Trigger(string value)
         {
             _headers[Keys.Trigger] = value;
@@ -125,6 +131,7 @@ namespace Htmx
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
         public HtmxResponseHeaders TriggerAfterSettle(string value)
         {
             _headers[Keys.TriggerAfterSettle] = value;
@@ -137,6 +144,7 @@ namespace Htmx
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
+        [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
         public HtmxResponseHeaders TriggerAfterSwap(string value)
         {
             _headers[Keys.TriggerAfterSwap] = value;
@@ -152,6 +160,79 @@ namespace Htmx
         {
             _headers[Keys.Retarget] = value;
             return this;
+        }
+
+        /// <summary>
+        /// Trigger a client side event named <paramref name="eventName"/> at different stages of the HTMX lifecycle.
+        /// </summary>
+        /// <param name="eventName">Event name</param>
+        /// <param name="detail">Detail to be sent with the event, string or other JSON mappable object</param>
+        /// <param name="timing">The HTMX request lifecycle step to run the trigger at</param>
+        /// <returns></returns>
+        public HtmxResponseHeaders WithTrigger(string eventName, object? detail = null,
+            HtmxTriggerTiming timing = HtmxTriggerTiming.Default)
+        {
+            if (!_triggers.ContainsKey(timing))
+            {
+                _triggers.Add(timing, new() { {eventName, detail ?? string.Empty } });
+            }
+            else
+            {
+                _triggers[timing].Add(eventName, detail ?? string.Empty);
+            }
+
+            return this;
+        }
+        
+        /// <summary>
+        /// Process the Triggers
+        /// </summary>
+        internal HtmxResponseHeaders Process()
+        {
+            if (_triggers.ContainsKey(HtmxTriggerTiming.Default))
+            {
+                if (_headers.ContainsKey(Keys.Trigger))
+                {
+                    throw new Exception("You must use either WithTrigger(..) or Trigger(..), but not both.");
+                }
+                
+                _headers[Keys.Trigger] = BuildTriggerHeader(HtmxTriggerTiming.Default);
+            }
+            if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSettle))
+            {
+                if (_headers.ContainsKey(Keys.TriggerAfterSettle))
+                {
+                    throw new Exception("You must use either WithTrigger(..) or TriggerAfterSettle(..), but not both.");
+                }
+
+                _headers[Keys.TriggerAfterSettle] = BuildTriggerHeader(HtmxTriggerTiming.AfterSettle);
+            }
+            if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSwap))
+            {
+                if (_headers.ContainsKey(Keys.TriggerAfterSwap))
+                {
+                    throw new Exception("You must use either WithTrigger(..) or TriggerAfterSwap(..), but not both.");
+                }
+                _headers[Keys.TriggerAfterSwap] = BuildTriggerHeader(HtmxTriggerTiming.AfterSwap);
+            }
+
+            return this;
+        }
+
+        private string BuildTriggerHeader(HtmxTriggerTiming timing)
+        {
+            // Reduce the payload if the user has only specified 1 trigger with no value
+            if (_triggers[timing].Count == 1 &&
+                ReferenceEquals(_triggers[timing].First().Value, string.Empty))
+            {
+                return _triggers[timing].First().Key;
+            }
+            
+            var jsonHeader = JsonSerializer.Serialize(_triggers[timing]);
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine(jsonHeader);
+#endif
+            return jsonHeader;
         }
     }
 }
