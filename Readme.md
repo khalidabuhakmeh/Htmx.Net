@@ -45,13 +45,24 @@ We can set Http Response headers using the `Htmx` extension method, which passes
 
 ```c#
 Response.Htmx(h => {
-    h.Push("/new-url")
-     .TriggerAfterSettle("yes")
-     .TriggerAfterSwap("cool");
+    h.PushUrl("/new-url")
+     .WithTrigger("cool")
 });
 ```
 
 Read more about the HTTP response headers at the [official documentation site](https://htmx.org/reference/#request_headers).
+
+#### Triggering Client-Side Events
+
+You can trigger client side events with HTMX using the `HX-Trigger` header. Htmx.Net provides a `WithTrigger` helper method to configure one or more events that you wish to trigger.
+
+```c#
+Response.Htmx(h => {
+    h.WithTrigger("yes")
+     .WithTrigger("cool", timing: HtmxTriggerTiming.AfterSettle)
+     .WithTrigger("neat", new { valueForFrontEnd: 42, status: "Done!" }, timing: Htmx.TriggerTiming.AfterSwap);
+});
+```
 
 ## Htmx.TagHelpers
 
@@ -169,6 +180,8 @@ A simpler way is to use the `HtmlExtensions` class that extends `IHtmlHelper`.
 ```
 
 This html helper will result in a `<script>` tag along with the previously mentioned JavaScript. **Note: You can still register multiple event handlers for `htmx:configRequest`, so having more than one is ok.**
+
+Note that if the `hx-[get|post|put]` attribute is on a `<form ..>` tag, the ASP.NET Tag Helpers will add the Anti-forgery Token as an `input` element and you do not need to further configure your requests as above. You could also use [`hx-include`](https://htmx.org/attributes/hx-include/) pointing to a form, but this all comes down to a matter of preference.
 
 
 ## License
