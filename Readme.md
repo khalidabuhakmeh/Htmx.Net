@@ -60,7 +60,7 @@ You can trigger client side events with HTMX using the `HX-Trigger` header. Htmx
 Response.Htmx(h => {
     h.WithTrigger("yes")
      .WithTrigger("cool", timing: HtmxTriggerTiming.AfterSettle)
-     .WithTrigger("neat", new { valueForFrontEnd: 42, status: "Done!" }, timing: Htmx.TriggerTiming.AfterSwap);
+     .WithTrigger("neat", new { valueForFrontEnd= 42, status= "Done!" }, timing: HtmxTriggerTiming.AfterSwap);
 });
 ```
 
@@ -186,7 +186,7 @@ Note that if the `hx-[get|post|put]` attribute is on a `<form ..>` tag, the ASP.
 
 ## License
 
-Copyright © 2021 Khalid Abuhakmeh
+Copyright © 2022 Khalid Abuhakmeh
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
