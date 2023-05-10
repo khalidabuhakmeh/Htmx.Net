@@ -23,3 +23,7 @@ jobs:
         run: dotnet build --no-restore -c Release
       - name: Test
         run: dotnet test -c Release --no-build --verbosity normal
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@main
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}   
