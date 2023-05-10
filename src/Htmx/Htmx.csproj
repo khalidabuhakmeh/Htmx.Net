@@ -36,6 +36,12 @@
         </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Include="..\..\shared\JetBrains.Annotations.cs">
+        <Link>JetBrains.Annotations.cs</Link>
+      </Compile>
+    </ItemGroup>
+
     <PropertyGroup>
         <MinVerSkip Condition="'$(Configuration)' == 'Debug'">true</MinVerSkip>
     </PropertyGroup>
