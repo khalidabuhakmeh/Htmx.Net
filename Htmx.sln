@@ -12,6 +12,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Htmx.Tests", "test\Htmx.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Htmx.Sample", "test\Htmx.Sample\Htmx.Sample.csproj", "{5E3A2238-021C-4AB2-816A-34DE88D2721C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{49B8F483-7FD2-4FA0-8461-9E951574542F}"
+	ProjectSection(SolutionItems) = preProject
+		shared\JetBrains.Annotations.cs = shared\JetBrains.Annotations.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
