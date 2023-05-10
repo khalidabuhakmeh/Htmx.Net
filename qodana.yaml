@@ -4,4 +4,4 @@ exclude:
   - name: All
     paths:
       - shared/JetBrains.Annotations.cs
-      - test/Htmx.Sample
+      - test/Sample

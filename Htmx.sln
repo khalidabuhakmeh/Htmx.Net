@@ -10,12 +10,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Htmx.TagHelpers", "src\Htmx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Htmx.Tests", "test\Htmx.Tests\Htmx.Tests.csproj", "{F6A44600-B556-4224-9B63-0B13C0A3010C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Htmx.Sample", "test\Htmx.Sample\Htmx.Sample.csproj", "{5E3A2238-021C-4AB2-816A-34DE88D2721C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{49B8F483-7FD2-4FA0-8461-9E951574542F}"
 	ProjectSection(SolutionItems) = preProject
 		shared\JetBrains.Annotations.cs = shared\JetBrains.Annotations.cs
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample", "test\Sample\Sample.csproj", "{38C328C0-9B25-4C87-B1C5-77FA1B562E9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,15 +35,15 @@ Global
 		{F6A44600-B556-4224-9B63-0B13C0A3010C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6A44600-B556-4224-9B63-0B13C0A3010C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6A44600-B556-4224-9B63-0B13C0A3010C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E3A2238-021C-4AB2-816A-34DE88D2721C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E3A2238-021C-4AB2-816A-34DE88D2721C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E3A2238-021C-4AB2-816A-34DE88D2721C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E3A2238-021C-4AB2-816A-34DE88D2721C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38C328C0-9B25-4C87-B1C5-77FA1B562E9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C328C0-9B25-4C87-B1C5-77FA1B562E9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C328C0-9B25-4C87-B1C5-77FA1B562E9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C328C0-9B25-4C87-B1C5-77FA1B562E9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1928D4F8-0E6F-4FC9-A7E0-003E884C1FDC} = {A404D2D4-BFE7-4A5C-95DB-2F4BE79CAB3E}
 		{2198BCC6-E9FC-4BCB-9C8E-D2D4C9EB6125} = {A404D2D4-BFE7-4A5C-95DB-2F4BE79CAB3E}
 		{F6A44600-B556-4224-9B63-0B13C0A3010C} = {81536BF5-DC4A-4ED9-956C-4333A63FD9B1}
-		{5E3A2238-021C-4AB2-816A-34DE88D2721C} = {81536BF5-DC4A-4ED9-956C-4333A63FD9B1}
+		{38C328C0-9B25-4C87-B1C5-77FA1B562E9C} = {81536BF5-DC4A-4ED9-956C-4333A63FD9B1}
 	EndGlobalSection
 EndGlobal
