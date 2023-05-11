@@ -1,6 +1,6 @@
 # Htmx.Net
 
-![HTMX Logo](https://raw.githubusercontent.com/bigskysoftware/htmx/master/www/img/htmx_logo.1.png)
+![HTMX Logo](./shared/htmx-logo.png)
 
 This is a package designed to add server side helper methods for `HttpRequest` and `HttpResponse`. This makes working with [htmx](https://htmx.org/) server-side concepts simpler. You should also consider reading about [Hyperscript](https://hyperscript.org/), an optional companion project for HTMX.
 
