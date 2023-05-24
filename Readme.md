@@ -139,30 +139,46 @@ The resulting HTML will be.
 
 ### HTMX and Anti-forgery Tokens
 
-You can set the attribute `includeAspNetAntiforgerToken` on the `htmx-config` element. Then you'll need to include this additional JavaScript in your web application.
+You can set the attribute `includeAspNetAntiforgerToken` on the `htmx-config` element. Then you'll need to include this additional JavaScript in your web application. We include the attribute `__htmx_antiforgery` to track the event listener was added already. This keeps us from accidentally re-registering the event listener.
 
 ```javascript
-document.addEventListener("htmx:configRequest", (evt) => {
-    let httpVerb = evt.detail.verb.toUpperCase();
-    if (httpVerb === 'GET') return;
+if (!document.body.attributes.__htmx_antiforgery) {
+    document.addEventListener("htmx:configRequest", evt => {
+        let httpVerb = evt.detail.verb.toUpperCase();
+        if (httpVerb === 'GET') return;
+        let antiForgery = htmx.config.antiForgery;
+        if (antiForgery) {
+            // already specified on form, short circuit
+            if (evt.detail.parameters[antiForgery.formFieldName])
+                return;
 
-    let antiForgery = htmx.config.antiForgery;
-
-    if (antiForgery) {
-
-        // already specified on form, short circuit
-        if (evt.detail.parameters[antiForgery.formFieldName])
-            return;
-
-        if (antiForgery.headerName) {
-            evt.detail.headers[antiForgery.headerName]
-                = antiForgery.requestToken;
-        } else {
-            evt.detail.parameters[antiForgery.formFieldName]
-                = antiForgery.requestToken;
+            if (antiForgery.headerName) {
+                evt.detail.headers[antiForgery.headerName]
+                    = antiForgery.requestToken;
+            } else {
+                evt.detail.parameters[antiForgery.formFieldName]
+                    = antiForgery.requestToken;
+            }
         }
-    }
-});
+    });
+    document.addEventListener("htmx:afterOnLoad", evt => {
+        if (evt.detail.boosted) {
+            const parser = new DOMParser();
+            const html = parser.parseFromString(evt.detail.xhr.responseText, 'text/html');
+            const selector = 'meta[name=htmx-config]';
+            const config = html.querySelector(selector);
+            if (config) {
+                const current = document.querySelector(selector);
+                // only change the anti-forgery token
+                const key = 'antiForgery';
+                htmx.config[key] = JSON.parse(config.attributes['content'].value)[key];
+                // update DOM, probably not necessary, but for sanity's sake
+                current.replaceWith(config);
+            }
+        }
+    });
+    document.body.attributes.__htmx_antiforgery = true;
+}
 ```
 
 You can access the snippet in two ways. The first is to use the `HtmxSnippet` static class in your views.
