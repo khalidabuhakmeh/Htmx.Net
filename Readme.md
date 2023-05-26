@@ -199,6 +199,37 @@ This html helper will result in a `<script>` tag along with the previously menti
 
 Note that if the `hx-[get|post|put]` attribute is on a `<form ..>` tag, the ASP.NET Tag Helpers will add the Anti-forgery Token as an `input` element and you do not need to further configure your requests as above. You could also use [`hx-include`](https://htmx.org/attributes/hx-include/) pointing to a form, but this all comes down to a matter of preference.
 
+Additionally, and **the recommended approach** is to use the `HtmxAntiforgeryScriptEndpoint`, which will let you map the JavaScript file to a specific endpoint, and by default it will be `_htmx/antiforgery.js`.
+
+```c#
+app.UseAuthorization();
+// registered here
+app.MapHtmxAntiforgeryScript();
+app.MapRazorPages();
+app.MapControllers();
+```
+
+You can now configure this endpoint with caching, authentication, etc. More importantly, you can use the script in your `head` tag now by applying the `defer` tag, which is preferred to having JavaScript at the end of a `body` element.
+
+```html
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+        name="htmx-config"
+        historyCacheSize="20"
+        indicatorClass="htmx-indicator"
+        includeAspNetAntiforgeryToken="true"/>
+    <title>@ViewData["Title"] - Htmx.Sample</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://unpkg.com/htmx.org@@1.9.2" defer></script>
+    <!-- this uses the static value in a script tag -->
+    <script src="@HtmxAntiforgeryScriptEndpoints.Path" defer></script>
+</head>
+```
 
 ## License
 

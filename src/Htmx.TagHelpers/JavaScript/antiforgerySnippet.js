@@ -4,7 +4,7 @@ if (!document.body.attributes.__htmx_antiforgery) {
         if (httpVerb === 'GET') return;
         let antiForgery = htmx.config.antiForgery;
         if (antiForgery) {
-            // already specified on form, short circuit
+            // already specified on the form, short circuit
             if (evt.detail.parameters[antiForgery.formFieldName])
                 return;
 
