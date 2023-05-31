@@ -12,6 +12,7 @@
         <RepositoryUrl>https://github.com/khalidabuhakmeh/Htmx.Net</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageTags>web,javascript</PackageTags>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
         <Description>
             Adds ASP.NET Core tag helpers to make generating urls for Htmx (https://htmx.org) easier. Mimics the ASP.NET Core url tag helpers.
         </Description>
@@ -33,7 +34,7 @@
         <None Include="..\..\icon.png" Pack="true" PackagePath="">
             <Link>Properties\icon.png</Link>
         </None>
-        <None Include="..\..\README.md" Pack="true" PackagePath="">
+        <None Include="..\..\README.md" Pack="true" PackagePath="\">
             <Link>Properties\README.md</Link>
         </None>
     </ItemGroup>
