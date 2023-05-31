@@ -12,7 +12,7 @@
         <RepositoryUrl>https://github.com/khalidabuhakmeh/Htmx.Net</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageTags>web,javascript</PackageTags>
-        <PackageReadmeFile>readme.md</PackageReadmeFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <Description>
             Adds helper methods to HttpResponse and HttpRequest to make working with Htmx (https://htmx.org) easier.
         </Description>
@@ -35,7 +35,7 @@
         <None Include="..\..\icon.png" Pack="true" PackagePath="">
             <Link>Properties\icon.png</Link>
         </None>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\">
+        <None Include="..\..\README.md" Pack="true" PackagePath="">
             <Link>Properties\README.md</Link>
         </None>
     </ItemGroup>
