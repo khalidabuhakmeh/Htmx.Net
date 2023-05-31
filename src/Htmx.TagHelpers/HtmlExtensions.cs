@@ -13,6 +13,8 @@ public static class HtmlExtensions
     /// </summary>
     /// <remarks>
     /// Note: This includes wrapping script tags.To get the JavaScript string use <see cref="HtmxSnippets.AntiforgeryJavaScript">HtmxSnippets.AntiforgeryJavaScript</see>.
+    ///
+    /// You may also want to consider using the <see cref="HtmxAntiforgeryScriptEndpoints"/> instead of this approach.
     /// </remarks>
     /// <param name="helper">An instance of the HTML Helper interface</param>
     /// <returns>HTML Content with JavaScript tag</returns>

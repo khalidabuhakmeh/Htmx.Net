@@ -139,30 +139,46 @@ The resulting HTML will be.
 
 ### HTMX and Anti-forgery Tokens
 
-You can set the attribute `includeAspNetAntiforgerToken` on the `htmx-config` element. Then you'll need to include this additional JavaScript in your web application.
+You can set the attribute `includeAspNetAntiforgerToken` on the `htmx-config` element. Then you'll need to include this additional JavaScript in your web application. We include the attribute `__htmx_antiforgery` to track the event listener was added already. This keeps us from accidentally re-registering the event listener.
 
 ```javascript
-document.addEventListener("htmx:configRequest", (evt) => {
-    let httpVerb = evt.detail.verb.toUpperCase();
-    if (httpVerb === 'GET') return;
+if (!document.body.attributes.__htmx_antiforgery) {
+    document.addEventListener("htmx:configRequest", evt => {
+        let httpVerb = evt.detail.verb.toUpperCase();
+        if (httpVerb === 'GET') return;
+        let antiForgery = htmx.config.antiForgery;
+        if (antiForgery) {
+            // already specified on form, short circuit
+            if (evt.detail.parameters[antiForgery.formFieldName])
+                return;
 
-    let antiForgery = htmx.config.antiForgery;
-
-    if (antiForgery) {
-
-        // already specified on form, short circuit
-        if (evt.detail.parameters[antiForgery.formFieldName])
-            return;
-
-        if (antiForgery.headerName) {
-            evt.detail.headers[antiForgery.headerName]
-                = antiForgery.requestToken;
-        } else {
-            evt.detail.parameters[antiForgery.formFieldName]
-                = antiForgery.requestToken;
+            if (antiForgery.headerName) {
+                evt.detail.headers[antiForgery.headerName]
+                    = antiForgery.requestToken;
+            } else {
+                evt.detail.parameters[antiForgery.formFieldName]
+                    = antiForgery.requestToken;
+            }
         }
-    }
-});
+    });
+    document.addEventListener("htmx:afterOnLoad", evt => {
+        if (evt.detail.boosted) {
+            const parser = new DOMParser();
+            const html = parser.parseFromString(evt.detail.xhr.responseText, 'text/html');
+            const selector = 'meta[name=htmx-config]';
+            const config = html.querySelector(selector);
+            if (config) {
+                const current = document.querySelector(selector);
+                // only change the anti-forgery token
+                const key = 'antiForgery';
+                htmx.config[key] = JSON.parse(config.attributes['content'].value)[key];
+                // update DOM, probably not necessary, but for sanity's sake
+                current.replaceWith(config);
+            }
+        }
+    });
+    document.body.attributes.__htmx_antiforgery = true;
+}
 ```
 
 You can access the snippet in two ways. The first is to use the `HtmxSnippet` static class in your views.
@@ -183,6 +199,37 @@ This html helper will result in a `<script>` tag along with the previously menti
 
 Note that if the `hx-[get|post|put]` attribute is on a `<form ..>` tag, the ASP.NET Tag Helpers will add the Anti-forgery Token as an `input` element and you do not need to further configure your requests as above. You could also use [`hx-include`](https://htmx.org/attributes/hx-include/) pointing to a form, but this all comes down to a matter of preference.
 
+Additionally, and **the recommended approach** is to use the `HtmxAntiforgeryScriptEndpoint`, which will let you map the JavaScript file to a specific endpoint, and by default it will be `_htmx/antiforgery.js`.
+
+```c#
+app.UseAuthorization();
+// registered here
+app.MapHtmxAntiforgeryScript();
+app.MapRazorPages();
+app.MapControllers();
+```
+
+You can now configure this endpoint with caching, authentication, etc. More importantly, you can use the script in your `head` tag now by applying the `defer` tag, which is preferred to having JavaScript at the end of a `body` element.
+
+```html
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta
+        name="htmx-config"
+        historyCacheSize="20"
+        indicatorClass="htmx-indicator"
+        includeAspNetAntiforgeryToken="true"/>
+    <title>@ViewData["Title"] - Htmx.Sample</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="https://unpkg.com/htmx.org@@1.9.2" defer></script>
+    <!-- this uses the static value in a script tag -->
+    <script src="@HtmxAntiforgeryScriptEndpoints.Path" defer></script>
+</head>
+```
 
 ## License
 

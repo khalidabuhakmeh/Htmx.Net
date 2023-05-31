@@ -1,3 +1,5 @@
+using Htmx.TagHelpers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,7 +22,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.MapHtmxAntiforgeryScript();
 app.MapRazorPages();
 app.MapControllers();
 
