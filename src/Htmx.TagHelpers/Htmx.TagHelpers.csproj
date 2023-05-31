@@ -33,6 +33,9 @@
         <None Include="..\..\icon.png" Pack="true" PackagePath="">
             <Link>Properties\icon.png</Link>
         </None>
+        <None Include="..\..\README.md" Pack="true" PackagePath="">
+            <Link>Properties\README.md</Link>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
