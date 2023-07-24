@@ -10,6 +10,12 @@ public static class HtmxSnippets
     public static string AntiforgeryJavaScript
         => GetString(nameof(AntiforgeryJavaScript));
 
+    public static string AntiforgeryJavaScriptMinified
+        => GetString(nameof(AntiforgeryJavaScriptMinified));
+
+    public static string GetAntiforgeryJavaScript(bool minified) =>
+        minified ? AntiforgeryJavaScriptMinified : AntiforgeryJavaScript;
+
     private static string GetString(string name)
     {
         var assembly = typeof(HtmxSnippets).Assembly;

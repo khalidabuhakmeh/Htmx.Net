@@ -41,6 +41,7 @@
 
     <ItemGroup>
         <EmbeddedResource Include="JavaScript\antiforgerySnippet.js" LogicalName="AntiforgeryJavaScript" />
+        <EmbeddedResource Include="JavaScript\antiforgerySnippet.min.js" LogicalName="AntiforgeryJavaScriptMinified" />
     </ItemGroup>
 
     <ItemGroup>

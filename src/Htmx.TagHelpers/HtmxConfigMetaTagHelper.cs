@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Web;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Antiforgery;
@@ -145,7 +146,7 @@ public class HtmxConfigMetaTagHelper : TagHelper
         }, new JsonSerializerOptions
         {
             WriteIndented = false,
-            IgnoreNullValues = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         });
 
@@ -183,13 +184,12 @@ public class HtmxConfigMetaTagHelper : TagHelper
     {
         public AntiForgeryConfig(AntiforgeryTokenSet? antiforgery)
         {
-            if (antiforgery == null)
-                throw new ArgumentNullException(nameof(antiforgery));
+            ArgumentNullException.ThrowIfNull(antiforgery);
 
             FormFieldName = antiforgery.FormFieldName;
             HeaderName = antiforgery.HeaderName;
             // important or token gets warped
-            RequestToken = HttpUtility.HtmlAttributeEncode(antiforgery.RequestToken);
+            RequestToken = HttpUtility.HtmlAttributeEncode(antiforgery.RequestToken)!;
         }
 
         // Serialized
