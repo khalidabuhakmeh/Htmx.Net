@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
@@ -84,6 +85,12 @@ public class HtmxConfigMetaTagHelper : TagHelper
     public string? SwappingClass { get; set; }
 
     /// <summary>
+    /// defaults to htmx-added
+    /// </summary>
+    [HtmlAttributeName("addedClass")]
+    public string? AddedClass { get; set; }
+
+    /// <summary>
     /// defaults to true
     /// </summary>
     [HtmlAttributeName("allowEval")]
@@ -102,6 +109,12 @@ public class HtmxConfigMetaTagHelper : TagHelper
     public string? WsReconnectDelay { get; set; }
 
     /// <summary>
+    /// defaults to blob
+    /// </summary>
+    [HtmlAttributeName("wsBinaryType")]
+    public string? WsBinaryType { get; set; }
+
+    /// <summary>
     /// defaults to [disable-htmx], [data-disable-htmx], htmx will not process elements with this attribute on it or a parent
     /// </summary>
     [HtmlAttributeName("disableSelector")]
@@ -115,7 +128,54 @@ public class HtmxConfigMetaTagHelper : TagHelper
 
     [HtmlAttributeName("includeAspNetAntiforgeryToken")]
     public bool IncludeAntiForgery { get; set; }
-        
+
+    /// <summary>
+    /// defaults to ""
+    /// </summary>
+    [HtmlAttributeName("inlineScriptNonce")]
+    public string? InlineScriptNonce { get; set; }
+
+    /// <summary>
+    /// defaults to false
+    /// </summary>
+    [HtmlAttributeName("withCredentials")]
+    public bool WithCredentials { get; set; }
+
+    /// <summary>
+    /// defaults to smooth
+    /// </summary>
+    [HtmlAttributeName("scrollBehavior")]
+    public string? ScrollBehavior { get; set; }
+
+    /// <summary>
+    /// defaults to false
+    /// </summary>
+    [HtmlAttributeName("defaultFocusScroll")]
+    public bool DefaultFocusScroll { get; set; }
+
+    /// <summary>
+    /// defaults to false
+    /// </summary>
+    [HtmlAttributeName("getCacheBusterParam")]
+    public bool GetCacheBusterParam { get; set; }
+
+    /// <summary>
+    /// defaults to false
+    /// </summary>
+    [HtmlAttributeName("globalViewTransitions")]
+    public bool GlobalViewTransitions { get; set; }
+
+    /// <summary>
+    /// defaults to ["class", "style", "width", "height"]
+    /// </summary>
+    [HtmlAttributeName("attributesToSettle")]
+    public IEnumerable<string>? AttributesToSettle { get; set; }
+
+    /// <summary>
+    /// defaults to ["get"]
+    /// </summary>
+    [HtmlAttributeName("methodsThatUseUrlParams")]
+    public IEnumerable<string>? MethodsThatUseUrlParams { get; set; }
 
     [ViewContext] 
     public ViewContext ViewContext { get; set; } = null!;
@@ -130,6 +190,7 @@ public class HtmxConfigMetaTagHelper : TagHelper
             DisableSelector,
             HistoryEnabled,
             IndicatorClass,
+            AddedClass,
             RequestClass,
             SettlingClass,
             SwappingClass,
@@ -139,9 +200,18 @@ public class HtmxConfigMetaTagHelper : TagHelper
             HistoryCacheSize,
             IncludeIndicatorStyles,
             UseTemplateFragments,
+            WsBinaryType,
             WsReconnectDelay,
             RefreshOnHistoryMiss,
             Timeout,
+            InlineScriptNonce,
+            WithCredentials,
+            ScrollBehavior,
+            DefaultFocusScroll,
+            GetCacheBusterParam,
+            GlobalViewTransitions,
+            AttributesToSettle,
+            MethodsThatUseUrlParams,
             AntiForgery = TryGetAntiForgeryConfig()
         }, new JsonSerializerOptions
         {
