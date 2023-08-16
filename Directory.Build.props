@@ -1,0 +1,15 @@
+<Project>
+    <PropertyGroup>
+        <!-- Properties that apply to all projects in the solution root -->
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>Latest</LangVersion>
+
+        <!-- Symbols packages -->
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+</Project>
