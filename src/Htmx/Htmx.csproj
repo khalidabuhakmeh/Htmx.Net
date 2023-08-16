@@ -1,12 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
         <OutputType>Library</OutputType>
-        <LangVersion>latest</LangVersion>
         <IsPackable>true</IsPackable>
-        <IncludeSymbols>true</IncludeSymbols>
         <PackageId>Htmx</PackageId>
         <Authors>Khalid Abuhakmeh</Authors>
         <PackageIcon>icon.png</PackageIcon>
