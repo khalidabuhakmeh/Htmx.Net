@@ -28,7 +28,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
-          path: ./nupkgs/*/*
+          path: ./nupkgs/*
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@main
         env:
