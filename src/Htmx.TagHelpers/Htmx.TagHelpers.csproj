@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>Latest</LangVersion>
         <IsPackable>true</IsPackable>
+        <IncludeSymbols>true</IncludeSymbols>
         <PackageId>Htmx.TagHelpers</PackageId>
         <Authors>Khalid Abuhakmeh</Authors>
         <PackageIcon>icon.png</PackageIcon>
