@@ -6,6 +6,7 @@
         <OutputType>Library</OutputType>
         <LangVersion>latest</LangVersion>
         <IsPackable>true</IsPackable>
+        <IncludeSymbols>true</IncludeSymbols>
         <PackageId>Htmx</PackageId>
         <Authors>Khalid Abuhakmeh</Authors>
         <PackageIcon>icon.png</PackageIcon>
