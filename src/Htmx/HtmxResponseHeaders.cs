@@ -183,7 +183,7 @@ public class HtmxResponseHeaders
         }
         else
         {
-            _triggers[timing].Add(eventName, detail ?? string.Empty);
+            _triggers[timing].TryAdd(eventName, detail ?? string.Empty);
         }
 
         return this;
@@ -194,38 +194,64 @@ public class HtmxResponseHeaders
     /// </summary>
     internal HtmxResponseHeaders Process()
     {
-        if (_triggers.ContainsKey(HtmxTriggerTiming.Default))
-        {
-            if (_headers.ContainsKey(Keys.Trigger))
-            {
-                throw new Exception("You must use either WithTrigger(..) or Trigger(..), but not both.");
-            }
+	    if (_triggers.ContainsKey(HtmxTriggerTiming.Default))
+	    {
+		    ParsePossibleExistingTriggers(Keys.Trigger, HtmxTriggerTiming.Default);
 
-            _headers[Keys.Trigger] = BuildTriggerHeader(HtmxTriggerTiming.Default);
-        }
+		    _headers[Keys.Trigger] = BuildTriggerHeader(HtmxTriggerTiming.Default);
+	    }
 
-        if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSettle))
-        {
-            if (_headers.ContainsKey(Keys.TriggerAfterSettle))
-            {
-                throw new Exception("You must use either WithTrigger(..) or TriggerAfterSettle(..), but not both.");
-            }
+	    if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSettle))
+	    {
+		    ParsePossibleExistingTriggers(Keys.TriggerAfterSettle, HtmxTriggerTiming.AfterSettle);
 
-            _headers[Keys.TriggerAfterSettle] = BuildTriggerHeader(HtmxTriggerTiming.AfterSettle);
-        }
+		    _headers[Keys.TriggerAfterSettle] = BuildTriggerHeader(HtmxTriggerTiming.AfterSettle);
+	    }
 
-        // ReSharper disable once InvertIf
-        if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSwap))
-        {
-            if (_headers.ContainsKey(Keys.TriggerAfterSwap))
-            {
-                throw new Exception("You must use either WithTrigger(..) or TriggerAfterSwap(..), but not both.");
-            }
+	    // ReSharper disable once InvertIf
+	    if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSwap))
+	    {
+		    ParsePossibleExistingTriggers(Keys.TriggerAfterSwap, HtmxTriggerTiming.AfterSwap);
 
-            _headers[Keys.TriggerAfterSwap] = BuildTriggerHeader(HtmxTriggerTiming.AfterSwap);
-        }
+		    _headers[Keys.TriggerAfterSwap] = BuildTriggerHeader(HtmxTriggerTiming.AfterSwap);
+	    }
 
-        return this;
+	    return this;
+    }
+
+    /// <summary>
+    /// Checks to see if the response has an existing header defined by headerKey.  If it does the
+    /// header loads all of the triggers locally so they aren't overwritten by Htmx.
+    /// </summary>
+    /// <param name="headerKey"></param>
+    /// <param name="timing"></param>
+    private void ParsePossibleExistingTriggers(string headerKey, HtmxTriggerTiming timing)
+    {
+	    if (!_headers.ContainsKey(headerKey))
+		    return;
+
+	    // Attempt to parse existing header as Json, if fails it is a simplified event key
+	    try
+	    {
+		    var existingTriggers = JsonSerializer.Deserialize<Dictionary<string, object?>>(_headers[headerKey]) ??
+		                           new Dictionary<string, object?>();
+
+		    // Load any existing triggers
+		    foreach (var eventName in existingTriggers.Keys)
+			    WithTrigger(eventName, existingTriggers[eventName], timing);
+	    }
+	    catch (System.Text.Json.JsonException)
+	    {
+		    foreach (var headerValue in _headers[headerKey])
+		    {
+			    if (headerValue is null) continue;
+
+                var eventNames = headerValue.Split(',');
+
+                foreach (var eventName in eventNames)
+				    WithTrigger(eventName, null, timing);
+			}
+		}
     }
 
     private string BuildTriggerHeader(HtmxTriggerTiming timing)
