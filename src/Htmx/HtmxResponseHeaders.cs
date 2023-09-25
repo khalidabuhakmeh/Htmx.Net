@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 
@@ -194,29 +196,29 @@ public class HtmxResponseHeaders
     /// </summary>
     internal HtmxResponseHeaders Process()
     {
-	    if (_triggers.ContainsKey(HtmxTriggerTiming.Default))
-	    {
-		    ParsePossibleExistingTriggers(Keys.Trigger, HtmxTriggerTiming.Default);
+        if (_triggers.ContainsKey(HtmxTriggerTiming.Default))
+        {
+            ParsePossibleExistingTriggers(Keys.Trigger, HtmxTriggerTiming.Default);
 
-		    _headers[Keys.Trigger] = BuildTriggerHeader(HtmxTriggerTiming.Default);
-	    }
+            _headers[Keys.Trigger] = BuildTriggerHeader(HtmxTriggerTiming.Default);
+        }
 
-	    if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSettle))
-	    {
-		    ParsePossibleExistingTriggers(Keys.TriggerAfterSettle, HtmxTriggerTiming.AfterSettle);
+        if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSettle))
+        {
+            ParsePossibleExistingTriggers(Keys.TriggerAfterSettle, HtmxTriggerTiming.AfterSettle);
 
-		    _headers[Keys.TriggerAfterSettle] = BuildTriggerHeader(HtmxTriggerTiming.AfterSettle);
-	    }
+            _headers[Keys.TriggerAfterSettle] = BuildTriggerHeader(HtmxTriggerTiming.AfterSettle);
+        }
 
-	    // ReSharper disable once InvertIf
-	    if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSwap))
-	    {
-		    ParsePossibleExistingTriggers(Keys.TriggerAfterSwap, HtmxTriggerTiming.AfterSwap);
+        // ReSharper disable once InvertIf
+        if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSwap))
+        {
+            ParsePossibleExistingTriggers(Keys.TriggerAfterSwap, HtmxTriggerTiming.AfterSwap);
 
-		    _headers[Keys.TriggerAfterSwap] = BuildTriggerHeader(HtmxTriggerTiming.AfterSwap);
-	    }
+            _headers[Keys.TriggerAfterSwap] = BuildTriggerHeader(HtmxTriggerTiming.AfterSwap);
+        }
 
-	    return this;
+        return this;
     }
 
     /// <summary>
@@ -227,31 +229,33 @@ public class HtmxResponseHeaders
     /// <param name="timing"></param>
     private void ParsePossibleExistingTriggers(string headerKey, HtmxTriggerTiming timing)
     {
-	    if (!_headers.ContainsKey(headerKey))
-		    return;
+        if (!_headers.ContainsKey(headerKey))
+            return;
 
-	    // Attempt to parse existing header as Json, if fails it is a simplified event key
-	    try
-	    {
-		    var existingTriggers = JsonSerializer.Deserialize<Dictionary<string, object?>>(_headers[headerKey]) ??
-		                           new Dictionary<string, object?>();
-
-		    // Load any existing triggers
-		    foreach (var eventName in existingTriggers.Keys)
-			    WithTrigger(eventName, existingTriggers[eventName], timing);
-	    }
-	    catch (System.Text.Json.JsonException)
-	    {
-		    foreach (var headerValue in _headers[headerKey])
-		    {
-			    if (headerValue is null) continue;
+        var header = _headers[headerKey];
+        // Attempt to parse existing header as Json, if fails it is a simplified event key
+        // assume if the string starts with '{' and ends with '}', that it is JSON
+        if (header.Any(h => h is ['{', .., '}']))
+        {
+            var reader = new Utf8JsonReader(Encoding.UTF8.GetBytes(header));
+            // this might still throw :(
+            var jsonObject = JsonNode.Parse(ref reader)?.AsObject();
+            // Load any existing triggers
+            foreach (var (key, value) in jsonObject!) 
+                WithTrigger(key, value, timing);
+        }
+        else
+        {
+            foreach (var headerValue in _headers[headerKey])
+            {
+                if (headerValue is null) continue;
 
                 var eventNames = headerValue.Split(',');
 
                 foreach (var eventName in eventNames)
-				    WithTrigger(eventName, null, timing);
-			}
-		}
+                    WithTrigger(eventName, null, timing);
+            }
+        }
     }
 
     private string BuildTriggerHeader(HtmxTriggerTiming timing)
