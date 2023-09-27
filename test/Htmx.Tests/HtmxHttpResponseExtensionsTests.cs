@@ -122,24 +122,47 @@ public class HtmxHttpResponseExtensionsTests
     }
 
     [Fact]
-    public void Cant_use_legacy_trigger_and_with_trigger()
+    public void Can_use_existing_trigger_with_trigger()
     {
-        Response.Htmx(h => h.Trigger("cool"));
-        Assert.Throws<Exception>(() => Response.Htmx(h => h.WithTrigger("neat")));
+	    const string expected = @"{""neat"":"""",""cool"":""""}";
+
+	    Response.Htmx(h => h.WithTrigger("cool"));
+	    Response.Htmx(h => h.WithTrigger("neat"));
+
+	    Assert.True(Headers.ContainsKey(Keys.Trigger));
+	    Assert.Equal(expected, Headers[Keys.Trigger]);
     }
-        
+
     [Fact]
-    public void Cant_use_legacy_triggeraftersettle_and_with_trigger()
+    public void Can_use_existing_trigger_with_multiple_triggers_with_detail()
     {
-        Response.Htmx(h => h.TriggerAfterSettle("cool"));
-        Assert.Throws<Exception>(() => Response.Htmx(h => h.WithTrigger("neat", timing: HtmxTriggerTiming.AfterSettle)));
+	    const string expected = @"{""cool"":{""magic"":""something""},""neat"":{""moremagic"":false},""wow"":""""}";
+
+	    Response.Htmx(h => h.WithTrigger("wow"));
+	    Response.Htmx(h =>
+	    {
+		    h.WithTrigger("cool", new { magic = "something" });
+		    h.WithTrigger("neat", new { moremagic = false });
+	    });
+
+	    Assert.True(Headers.ContainsKey(Keys.Trigger));
+	    Assert.Equal(expected, Headers[Keys.Trigger]);
     }
-        
+
     [Fact]
-    public void Cant_use_legacy_triggerafterswap_and_with_trigger()
+    public void Can_use_existing_trigger_with_detail_with_multiple_triggers_with_detail()
     {
-        Response.Htmx(h => h.TriggerAfterSwap("cool"));
-        Assert.Throws<Exception>(() => Response.Htmx(h => h.WithTrigger("neat", timing: HtmxTriggerTiming.AfterSwap)));
+	    const string expected = @"{""cool"":{""magic"":""something""},""neat"":{""moremagic"":false},""wow"":{""display"":true}}";
+
+	    Response.Htmx(h => h.WithTrigger("wow", new { display = true }));
+	    Response.Htmx(h =>
+	    {
+		    h.WithTrigger("cool", new { magic = "something" });
+		    h.WithTrigger("neat", new { moremagic = false });
+	    });
+
+	    Assert.True(Headers.ContainsKey(Keys.Trigger));
+	    Assert.Equal(expected, Headers[Keys.Trigger]);
     }
 
     [Fact]
