@@ -82,7 +82,7 @@ Response.Htmx(h => {
 
 #### CORS Policy
 
-By default, all Htmx requests and responses will be blocked by the browser in a cross-origin context. 
+By default, all Htmx requests and responses will be blocked in a cross-origin context. 
 
 If you configure your application in a cross-origin context, then setting a CORS policy in ASP.NET Core also allows you to define specific restrictions on request and response headers, 
 enabling fine-grained control over the data that can be exchanged between your web application and different origins. 
