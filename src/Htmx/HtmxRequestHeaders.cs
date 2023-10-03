@@ -20,6 +20,11 @@ public class HtmxRequestHeaders
         public const string TriggerName = "HX-Trigger-Name";
         public const string Trigger = "HX-Trigger";
         public const string Boosted = "HX-Boosted";
+
+        public static string[] All { get;  } = new[]
+        {
+            CurrentUrl, HistoryRestoreRequest, Prompt, Request, Target, TriggerName, Trigger, Boosted
+        };
     }
 
     public HtmxRequestHeaders(HttpRequest request)

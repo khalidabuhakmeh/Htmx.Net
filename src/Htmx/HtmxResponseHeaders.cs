@@ -32,6 +32,11 @@ public class HtmxResponseHeaders
         public const string Reswap = "HX-Reswap";
         public const string Retarget = "HX-Retarget";
         public const string ReplaceUrl = "HX-Replace-Url";
+
+        public static string[] All { get; } = new[]
+        {
+            PushUrl, Location, Redirect, Refresh, Trigger, TriggerAfterSettle, TriggerAfterSwap, Reswap, Retarget, ReplaceUrl
+        };
     }
 
     internal HtmxResponseHeaders(IHeaderDictionary headers)

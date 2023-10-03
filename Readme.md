@@ -39,6 +39,22 @@ Request.IsHtmx(out var values);
 
 Read more about the other header values on the [official documentation page](https://htmx.org/reference/#request_headers).
 
+#### Browser Caching
+
+As a special note, please be mindful that if your server can render different content for the same URL depending on some other headers, you need to use the Vary response HTTP header. For example, if your server renders the full HTML when Request.IsHtmx() is false, and it renders a fragment of that HTML when Request.IsHtmx() is true, you need to add Vary: HX-Request. That causes the cache to be keyed based on a composite of the response URL and the HX-Request request header — rather than being based just on the response URL.
+
+```c#
+// in a Razor Page
+if (Request.IsHtmx())
+{
+  Response.Headers.Add("Vary", "HX-Request");
+  return Partial("_Form", this)
+}
+
+return Page();
+```
+
+
 ### HttpResponse
 
 We can set Http Response headers using the `Htmx` extension method, which passes an action and `HtmxResponseHeaders` object.
@@ -61,6 +77,32 @@ Response.Htmx(h => {
     h.WithTrigger("yes")
      .WithTrigger("cool", timing: HtmxTriggerTiming.AfterSettle)
      .WithTrigger("neat", new { valueForFrontEnd= 42, status= "Done!" }, timing: HtmxTriggerTiming.AfterSwap);
+});
+```
+
+#### CORS Policy
+
+By default, all Htmx requests and responses will be blocked by the browser in a cross-origin context. 
+
+If you configure your application in a cross-origin context, then setting a CORS policy in ASP.NET Core also allows you to define specific restrictions on request and response headers, 
+enabling fine-grained control over the data that can be exchanged between your web application and different origins. 
+
+This library provides a simple approach to exposing Htmx headers to your CORS policy:
+
+```c#
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy  =>
+                      {
+                          policy.WithOrigins("http://example.com", "http://www.contoso.com")
+                                   .WithHeaders(HtmxRequestHeaders.Keys.All)  // Add htmx request headers
+                                   .WithExposedHeaders(HtmxResponseHeaders.Keys.All)  // Add htmx response headers
+                      });
 });
 ```
 
