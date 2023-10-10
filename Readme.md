@@ -4,6 +4,8 @@
 
 This is a package designed to add server side helper methods for `HttpRequest` and `HttpResponse`. This makes working with [htmx](https://htmx.org/) server-side concepts simpler. You should also consider reading about [Hyperscript](https://hyperscript.org/), an optional companion project for HTMX.
 
+> **If you're new to HTMX, checkout out this series on [getting started with HTMX for ASP.NET Core developer](https://www.jetbrains.com/dotnet/guide/tutorials/htmx-aspnetcore/) which also includes a sample project and patterns that you might find helpful.**
+
 ## Htmx Extension Methods
 
 ### Getting Started
