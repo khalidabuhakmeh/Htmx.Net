@@ -1,0 +1,31 @@
+﻿@page
+@model ResponseModel
+@{
+    ViewData["Title"] = "Response.Htmx()";
+}
+
+<h6>
+    Demonstrate <code>Response.Htmx(headers => headers.WithTrigger())</code> usage.
+</h6>
+<div>
+    <p>
+
+    </p>
+
+    <form hx-post hx-page="./Response" hx-swap="none" hx-indicator="#sending-indicator">
+        <textarea asp-for="Message"></textarea>
+        <br/>
+
+        <p id="sending-indicator" class="htmx-indicator">Sending...</p>
+        <button type="submit">
+            Send to server
+        </button>
+    </form>
+</div>
+
+<script type="text/javascript">
+    window.addEventListener("showMessage", evt => {
+        let message = evt.detail.message;
+        alert('This event is triggered by the server to client side. Message: ' + message)
+    });
+</script>

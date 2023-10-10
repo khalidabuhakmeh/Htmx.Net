@@ -1,0 +1,28 @@
+﻿@page
+@model FormsModel
+@{
+    ViewData["Title"] = "Forms";
+}
+
+<h6>
+    Demonstrate <code>&lt;form&gt;</code> usage.
+</h6>
+<form hx-post hx-page="./Forms" hx-indicator="#login-indicator">
+    <p>
+        For username, you may input any username. <br/>
+        For password any text will get you in, except the word <code>password</code>
+    </p>
+
+    <div>
+        Username: <input asp-for="Username"/> <br/>
+        Password: <input asp-for="Password" type="password"/>
+    </div>
+
+    <div>
+        <p id="login-indicator" class="htmx-indicator">Logging in...</p>
+
+        <button type="submit">Login</button>
+    </div>
+
+    @Html.AntiForgeryToken()
+</form>

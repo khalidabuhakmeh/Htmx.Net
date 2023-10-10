@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Htmx.TagHelpers\Htmx.TagHelpers.csproj" />
+      <ProjectReference Include="..\..\src\Htmx\Htmx.csproj" />
     </ItemGroup>
 
 </Project>
