@@ -1,0 +1,58 @@
+﻿@page
+@using Microsoft.AspNetCore.Antiforgery;
+@inject IAntiforgery antiforgery;
+@model HxRequestsModel
+
+<div>
+    <button type="button"
+            hx-post
+            hx-page="./Headers"
+            hx-headers="@(new { button = 1, key1 = "value1", key2 = "value2" })"
+            hx-swap="innerHTML"
+            hx-target="#post-result">
+        Click me (using hx-headers=new object())
+    </button>
+</div>
+
+<div>
+    <button type="button"
+            hx-post
+            hx-page="./Headers"
+            hx-headers-Button="2"
+            hx-headers-Key1="value1"
+            hx-headers-Key2="value2"
+            hx-swap="innerHTML"
+            hx-target="#post-result">
+        Click me (using hx-headers-key="value")
+    </button>
+</div>
+
+<div>
+    <button type="button"
+            hx-post
+            hx-page="./Headers"
+            hx-headers="@(new { button = 3, key1 = "value1", key2 = "value2" })"
+            hx-headers-Key3="value3"
+            hx-headers-Key4="value4"
+            hx-swap="innerHTML"
+            hx-target="#post-result">
+        Click me (using hx-headers and hx-headers-key="value")
+    </button>
+</div>
+
+<div class="mt-2">
+    <code>requestConfig.headers</code>
+    <textarea class="w-100" id="post-result" rows="10"></textarea>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.addEventListener("htmx:afterRequest", evt => {
+            let headers = evt.detail.requestConfig.headers;
+            let json = JSON.stringify(headers, null, 2);
+
+            document.querySelector('#post-result').innerHTML = json;
+        });
+    </script>
+}
+
