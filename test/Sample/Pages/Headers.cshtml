@@ -28,6 +28,23 @@
     </button>
 </div>
 
+<div>
+    Testing: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+    <br/>
+    <button type="button"
+            hx-post
+            hx-page="./Headers"
+            hx-headers-X-Forwarded-Host="en.wikipedia.org:8080"
+            hx-headers-X-Front-End-Https="on"
+            hx-headers-X-Forwarded-For="client1, proxy1, proxy2"
+            hx-headers-Upgrade-Insecure-Requests="1"
+            hx-headers-X-LongCustom-Header="Stuff"
+            hx-swap="innerHTML"
+            hx-target="#post-result">
+        Click me (List_of_HTTP_header_fields)
+    </button>
+</div>
+
 <div class="mt-2">
     <code>requestConfig.headers</code>
     <textarea class="w-100" id="post-result" rows="10"></textarea>
