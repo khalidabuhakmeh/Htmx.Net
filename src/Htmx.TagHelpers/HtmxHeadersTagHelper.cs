@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
 using System;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Linq;
 
 namespace Htmx.TagHelpers
@@ -13,22 +12,24 @@ namespace Htmx.TagHelpers
     /// https://htmx.org/attributes/hx-headers/
     /// </summary>
     [PublicAPI]
+    [HtmlTargetElement("*", Attributes = "[hx-get]")]
     [HtmlTargetElement("*", Attributes = "[hx-post]")]
     [HtmlTargetElement("*", Attributes = "[hx-put]")]
     [HtmlTargetElement("*", Attributes = "[hx-delete]")]
     [HtmlTargetElement("*", Attributes = "[hx-patch]")]
-    public class HxHeaders : TagHelper
+    public class HtmxHeadersTagHelper : TagHelper
     {
         /// <summary>
-        /// Dictionary of hx-headers's html attributes
+        /// Dictionary of hx-headers
         /// </summary>
         [HtmlAttributeName(DictionaryAttributePrefix = "hx-headers-")]
         public IDictionary<string, string?> HeaderAttributes { get; set; } = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
 
+        /// <inheritdoc />
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var existingHeaders = output.Attributes["hx-headers"]?.Value;
-            if (existingHeaders != null || !HeaderAttributes.Any())
+            var existingHxHeaders = output.Attributes["hx-headers"]?.Value;
+            if (existingHxHeaders != null || !HeaderAttributes.Any())
             {
                 return;
             }
