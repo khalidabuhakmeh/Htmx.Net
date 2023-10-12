@@ -7,17 +7,6 @@
     <button type="button"
             hx-post
             hx-page="./Headers"
-            hx-headers="@(new { button = 1, key1 = "value1", key2 = "value2" })"
-            hx-swap="innerHTML"
-            hx-target="#post-result">
-        Click me (using hx-headers=new object())
-    </button>
-</div>
-
-<div>
-    <button type="button"
-            hx-post
-            hx-page="./Headers"
             hx-headers-Button="2"
             hx-headers-Key1="value1"
             hx-headers-Key2="value2"
@@ -31,12 +20,12 @@
     <button type="button"
             hx-post
             hx-page="./Headers"
-            hx-headers="@(new { button = 3, key1 = "value1", key2 = "value2" })"
-            hx-headers-Key3="value3"
-            hx-headers-Key4="value4"
+            hx-headers='{ "Key1": "ExistingValue1", "Key2": "ExistingValue1" }'
+            hx-headers-Key1="NewValue1"
+            hx-headers-Key2="NewValue2"
             hx-swap="innerHTML"
             hx-target="#post-result">
-        Click me (using hx-headers and hx-headers-key="value")
+        Click me (with existing hx-headers)
     </button>
 </div>
 

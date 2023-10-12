@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Linq;
 
 namespace Htmx.TagHelpers
 {
@@ -19,30 +20,17 @@ namespace Htmx.TagHelpers
     public class HxHeaders : TagHelper
     {
         /// <summary>
-        /// JSON formatted string, a Dictionary or any object.
-        /// </summary>
-        [HtmlAttributeName("hx-headers")]
-        public object Headers { get; set; } = default!;
-
-        /// <summary>
         /// Dictionary of hx-headers's html attributes
         /// </summary>
-        [HtmlAttributeName("hx-headers", DictionaryAttributePrefix = "hx-headers-")]
+        [HtmlAttributeName(DictionaryAttributePrefix = "hx-headers-")]
         public IDictionary<string, string?> HeaderAttributes { get; set; } = new Dictionary<string, string?>(StringComparer.OrdinalIgnoreCase);
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var jsonObject = Headers switch
+            var existingHeaders = output.Attributes["hx-headers"]?.Value;
+            if (existingHeaders != null || !HeaderAttributes.Any())
             {
-                string headerJson => JsonSerializer.Deserialize<JsonObject>(headerJson),
-                null => null,
-                _ => JsonSerializer.Deserialize<JsonObject>(JsonSerializer.Serialize(Headers))
-            } ?? new JsonObject();
-
-            // merge
-            foreach (var jObject in jsonObject)
-            {
-                HeaderAttributes[jObject.Key] = jObject.Value?.ToString();
+                return;
             }
 
             // serialize
