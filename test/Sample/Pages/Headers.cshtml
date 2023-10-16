@@ -1,0 +1,63 @@
+﻿@page
+@using Microsoft.AspNetCore.Antiforgery;
+@inject IAntiforgery antiforgery;
+@model HxRequestsModel
+
+<div>
+    <button type="button"
+            hx-post
+            hx-page="./Headers"
+            hx-headers-New-Key1="NewValue1"
+            hx-headers-New-Key2="NewValue2"
+            hx-swap="innerHTML"
+            hx-target="#post-result">
+        Click me (using hx-headers-key="value")
+    </button>
+</div>
+
+<div>
+    <button type="button"
+            hx-post
+            hx-page="./Headers"
+            hx-headers='{ "Existing-Key1": "ExistingValue1", "Existing-Key2": "ExistingValue1" }'
+            hx-headers-New-Key1="NewValue1"
+            hx-headers-New-Key2="NewValue2"
+            hx-swap="innerHTML"
+            hx-target="#post-result">
+        Click me (with existing hx-headers)
+    </button>
+</div>
+
+<div>
+    Testing: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+    <br/>
+    <button type="button"
+            hx-post
+            hx-page="./Headers"
+            hx-headers-X-Forwarded-Host="en.wikipedia.org:8080"
+            hx-headers-X-Front-End-Https="on"
+            hx-headers-X-Forwarded-For="client1, proxy1, proxy2"
+            hx-headers-Upgrade-Insecure-Requests="1"
+            hx-headers-X-LongCustom-Header="Stuff"
+            hx-swap="innerHTML"
+            hx-target="#post-result">
+        Click me (List_of_HTTP_header_fields)
+    </button>
+</div>
+
+<div class="mt-2">
+    <code>requestConfig.headers</code>
+    <textarea class="w-100" id="post-result" rows="10"></textarea>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        window.addEventListener("htmx:afterRequest", evt => {
+            let headers = evt.detail.requestConfig.headers;
+            let json = JSON.stringify(headers, null, 2);
+
+            document.querySelector('#post-result').innerHTML = json;
+        });
+    </script>
+}
+
