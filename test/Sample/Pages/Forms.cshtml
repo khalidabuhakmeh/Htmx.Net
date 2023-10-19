@@ -26,3 +26,23 @@
 
     @Html.AntiForgeryToken()
 </form>
+
+<div class="container">
+    <div class="col mt-3">
+        <h2> List To Delete Things</h2>
+
+        <ul>
+            @for (var i = 0; i < 5; i++)
+            {
+                <li hx-delete
+                    style="margin: 1em; border: 1px solid black"
+                    hx-page="Forms"
+                    hx-page-handler="Delete"
+                    hx-vals='{ "@nameof(HttpMethod)" : "DELETE" }'>
+                    Happy Item 😁
+                </li>
+            }
+
+        </ul>
+    </div>
+</div>

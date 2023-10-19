@@ -31,5 +31,10 @@ namespace Sample.Pages
                 return Content($"Welcome {Username}!", "text/html");
             }
         }
+
+        public IActionResult OnDelete()
+        {
+            return Content("Deleted 💥");
+        }
     }
 }

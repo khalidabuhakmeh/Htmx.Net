@@ -26,4 +26,9 @@ app.MapHtmxAntiforgeryScript();
 app.MapRazorPages();
 app.MapControllers();
 
+app.UseHttpMethodOverride(new HttpMethodOverrideOptions
+{
+    FormFieldName = nameof(HttpMethod) 
+});
+
 app.Run();
