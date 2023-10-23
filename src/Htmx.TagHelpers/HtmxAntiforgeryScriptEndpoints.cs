@@ -7,9 +7,10 @@ namespace Htmx.TagHelpers;
 public static class HtmxAntiforgeryScriptEndpoints
 {
     /// <summary>
-    /// The path to the antiforgery script that is used from HTML
+    /// The path to the antiforgery script that is used from HTML.
+    /// Note: Be sure it is rooted path ("starts with '/') or else it can break as paths get more nested.
     /// </summary>
-    public static string Path { get; private set; } = "_htmx/antiforgery.js";
+    public static string Path { get; private set; } = "/_htmx/antiforgery.js";
 
     /// <summary>
     /// Register an endpoint that responds with the HTMX antiforgery script.<br/>
