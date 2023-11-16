@@ -1,0 +1,19 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/dotnet
+{
+  "name": "HTMX.NET Environment",
+  "image": "mcr.microsoft.com/devcontainers/dotnet",
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:1": {}
+  },
+
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+   "forwardPorts": [5215, 7221],
+   "portsAttributes": {
+     "7221": {
+       "protocol": "https"
+     }
+   },
+  
+  "postCreateCommand": "dotnet restore && dotnet dev-certs https --trust",
+}
