@@ -91,6 +91,18 @@ public class HtmxConfigMetaTagHelper : TagHelper
     public string? AddedClass { get; set; }
 
     /// <summary>
+    /// defaults to false
+    /// </summary>
+    [HtmlAttributeName("selfRequestsOnly")]
+    public bool SelfRequestsOnly { get; set; }
+
+    /// <summary>
+    /// defaults to true
+    /// </summary>
+    [HtmlAttributeName("allowScriptTags")]
+    public bool AllowScriptTags { get; set; } = true;
+
+    /// <summary>
     /// defaults to true
     /// </summary>
     [HtmlAttributeName("allowEval")]
@@ -187,6 +199,8 @@ public class HtmxConfigMetaTagHelper : TagHelper
         var config = JsonSerializer.Serialize(new
         {
             AllowEval,
+            SelfRequestsOnly,
+            AllowScriptTags,
             DisableSelector,
             HistoryEnabled,
             IndicatorClass,
