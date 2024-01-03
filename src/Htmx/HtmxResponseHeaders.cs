@@ -22,20 +22,32 @@ public class HtmxResponseHeaders
 
     public static class Keys
     {
-        public const string PushUrl = "HX-Push-Url";
+        // Sorted by https://htmx.org/reference/#response_headers to make it easier to update
         public const string Location = "HX-Location";
+        public const string PushUrl = "HX-Push-Url";
         public const string Redirect = "HX-Redirect";
         public const string Refresh = "HX-Refresh";
+        public const string ReplaceUrl = "HX-Replace-Url";
+        public const string Reswap = "HX-Reswap";
+        public const string Retarget = "HX-Retarget";
+        public const string Reselect = "HX-Reselect";
         public const string Trigger = "HX-Trigger";
         public const string TriggerAfterSettle = "HX-Trigger-After-Settle";
         public const string TriggerAfterSwap = "HX-Trigger-After-Swap";
-        public const string Reswap = "HX-Reswap";
-        public const string Retarget = "HX-Retarget";
-        public const string ReplaceUrl = "HX-Replace-Url";
 
         public static string[] All { get; } = new[]
         {
-            PushUrl, Location, Redirect, Refresh, Trigger, TriggerAfterSettle, TriggerAfterSwap, Reswap, Retarget, ReplaceUrl
+            Location,
+            PushUrl, 
+            Redirect,
+            Refresh,
+            ReplaceUrl,
+            Reswap, 
+            Retarget,
+            Reselect,
+            Trigger,
+            TriggerAfterSettle,
+            TriggerAfterSwap,
         };
     }
 
@@ -86,6 +98,19 @@ public class HtmxResponseHeaders
     public HtmxResponseHeaders Reswap(string value)
     {
         _headers[Keys.Reswap] = value;
+        return this;
+    }
+    
+    /// <summary>
+    /// a CSS selector that allows you to choose which part of the response is used to be swapped in.
+    /// Overrides an existing hx-select on the triggering element
+    /// See https://htmx.org/attributes/hx-select/ for hx-select behavior.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public HtmxResponseHeaders Reselect(string value)
+    {
+        _headers[Keys.Reselect] = value;
         return this;
     }
 
@@ -246,7 +271,7 @@ public class HtmxResponseHeaders
             // this might still throw :(
             var jsonObject = JsonNode.Parse(ref reader)?.AsObject();
             // Load any existing triggers
-            foreach (var (key, value) in jsonObject!) 
+            foreach (var (key, value) in jsonObject!)
                 WithTrigger(key, value, timing);
         }
         else
