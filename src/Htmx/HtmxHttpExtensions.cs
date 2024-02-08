@@ -50,6 +50,16 @@ public static class HtmxHttpExtensions
     {
         return request?.Headers.GetValueOrDefault(HtmxRequestHeaders.Keys.Boosted, false) is true;
     }
+    
+    /// <summary>
+    /// true if the request is an HTMX Request that is not HTMX Boosted
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public static bool IsHtmxNonBoosted(this HttpRequest? request)
+    {
+        return request?.IsHtmx() is true && !request.IsHtmxBoosted();
+    }
 
     /// <summary>
     /// Set the Htmx Response Headers
