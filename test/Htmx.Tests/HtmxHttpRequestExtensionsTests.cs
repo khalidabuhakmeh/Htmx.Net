@@ -101,4 +101,37 @@ public class HtmxHttpRequestExtensionsTests
     {
         Assert.True(Request.IsHtmxBoosted());
     }
+    
+    [Fact]
+    public void Can_determine_request_is_htmx_non_boosted()
+    {
+        var request = new FakeHttpRequest();
+        request.Headers.Add(HtmxRequestHeaders.Keys.Request, "true");
+        
+        Assert.True(request.IsHtmxNonBoosted());
+    }
+    
+    [Fact]
+    public void Can_get_values_when_request_is_htmx_non_boosted()
+    {
+        var request = new FakeHttpRequest();
+        request.Headers.Add(HtmxRequestHeaders.Keys.Request, "true");
+        request.Headers.Add(HtmxRequestHeaders.Keys.HistoryRestoreRequest, "true");
+        request.Headers.Add(HtmxRequestHeaders.Keys.Trigger, "trigger");
+        request.Headers.Add(HtmxRequestHeaders.Keys.Prompt, "prompt");
+        request.Headers.Add(HtmxRequestHeaders.Keys.CurrentUrl, "/");
+        request.Headers.Add(HtmxRequestHeaders.Keys.Target, "123");
+        request.Headers.Add(HtmxRequestHeaders.Keys.TriggerName, "trigger-name");
+        request.Headers.Add(HtmxRequestHeaders.Keys.Boosted, "false");
+
+        var isHtmxNonBoosted = request.IsHtmxNonBoosted(out var values);
+        Assert.True(isHtmxNonBoosted);
+        Assert.NotNull(values);
+        Assert.True(values.HistoryRestoreRequest);
+        Assert.Equal("trigger", values.Trigger);
+        Assert.Equal("prompt", values.Prompt);
+        Assert.Equal("/", values.CurrentUrl);
+        Assert.Equal("123", values.Target);
+        Assert.Equal("trigger-name", values.TriggerName);
+    }
 }

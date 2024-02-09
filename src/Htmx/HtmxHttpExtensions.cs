@@ -50,6 +50,29 @@ public static class HtmxHttpExtensions
     {
         return request?.Headers.GetValueOrDefault(HtmxRequestHeaders.Keys.Boosted, false) is true;
     }
+    
+    /// <summary>
+    /// true if the request is an HTMX Request that is not HTMX Boosted
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns></returns>
+    public static bool IsHtmxNonBoosted(this HttpRequest? request)
+    {
+        return request?.IsHtmx() is true && !request.IsHtmxBoosted();
+    }
+    
+    /// <summary>
+    /// true if the request is an HTMX Request that is not HTMX Boosted
+    /// </summary>
+    /// <param name="request">The HTTP Request</param>
+    /// <param name="values">All the potential Htmx Header Values</param>
+    /// <returns></returns>
+    public static bool IsHtmxNonBoosted(this HttpRequest? request, out HtmxRequestHeaders? values)
+    {
+        var isHtmx = request.IsHtmxNonBoosted();
+        values = request is not null && isHtmx ? new HtmxRequestHeaders(request) : null;
+        return isHtmx;
+    }
 
     /// <summary>
     /// Set the Htmx Response Headers
