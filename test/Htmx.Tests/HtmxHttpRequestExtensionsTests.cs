@@ -107,7 +107,6 @@ public class HtmxHttpRequestExtensionsTests
     {
         var request = new FakeHttpRequest();
         request.Headers.Add(HtmxRequestHeaders.Keys.Request, "true");
-        request.Headers.Add(HtmxRequestHeaders.Keys.Boosted, "false");
         
         Assert.True(request.IsHtmxNonBoosted());
     }
