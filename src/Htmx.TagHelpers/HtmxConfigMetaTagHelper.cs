@@ -188,7 +188,25 @@ public class HtmxConfigMetaTagHelper : TagHelper
     /// </summary>
     [HtmlAttributeName("methodsThatUseUrlParams")]
     public IEnumerable<string>? MethodsThatUseUrlParams { get; set; }
-
+    
+    /// <summary>
+    /// If set to `true` htmx will not update the title of the document when a title tag is found in new content
+    /// </summary>
+    [HtmlAttributeName("ignoreTitle")]
+    public bool? IgnoreTitle { get; set; }
+    
+    /// <summary>
+    /// Defaults to true, whether or not the target of a boosted element is scrolled into the viewport. If hx-target is omitted on a boosted element, the target defaults to body, causing the page to scroll to the top.
+    /// </summary>
+    [HtmlAttributeName("scrollIntoViewOnBoost")]
+    public bool? ScrollIntoViewOnBoost { get; set; }
+    
+    /// <summary>
+    /// Pro feature: defaults to null, the cache to store evaluated trigger specifications into, improving parsing performance at the cost of more memory usage.
+    /// </summary>
+    [HtmlAttributeName("triggerSpecsCache")]
+    public HtmxTriggerSpecificationCache? TriggerSpecsCache { get; set; }
+    
     [ViewContext] 
     public ViewContext ViewContext { get; set; } = null!;
 
@@ -226,6 +244,9 @@ public class HtmxConfigMetaTagHelper : TagHelper
             GlobalViewTransitions,
             AttributesToSettle,
             MethodsThatUseUrlParams,
+            IgnoreTitle,
+            ScrollIntoViewOnBoost,
+            TriggerSpecsCache,
             AntiForgery = TryGetAntiForgeryConfig()
         }, new JsonSerializerOptions
         {
@@ -284,4 +305,38 @@ public class HtmxConfigMetaTagHelper : TagHelper
         // ReSharper disable once UnusedAutoPropertyAccessor.Local
         public string RequestToken { get; set; }
     }
+}
+
+public class HtmxTriggerSpecificationCache: Dictionary<string, HtmxTriggerSpecification[]> {}
+
+public class HtmxTriggerSpecification
+{
+    [JsonPropertyName("trigger")]
+    public string Trigger { get;  set; }
+    [JsonPropertyName("sseEvent")]
+    public string? SseEvent { get; set; }
+    [JsonPropertyName("eventFilter")]
+    public string? EventFilter { get; set; }
+    [JsonPropertyName("changed")]
+    public bool? Changed { get; set; }
+    [JsonPropertyName("once")]
+    public bool? Once { get; set; }
+    [JsonPropertyName("consume")]
+    public bool? Consume { get; set; }
+    [JsonPropertyName("from")]
+    public string? From { get; set; }
+    [JsonPropertyName("target")]
+    public string? Target { get; set; }
+    [JsonPropertyName("throttle")]
+    public int? Throttle { get; set; }
+    [JsonPropertyName("queue")]
+    public string? Queue { get; set; }
+    [JsonPropertyName("root")]
+    public string? Root { get; set; }
+    [JsonPropertyName("threshold")]
+    public string? Threshold { get; set; }
+    [JsonPropertyName("delay")]
+    public int? Delay { get; set; }
+    [JsonPropertyName("pollInterval")]
+    public int? PollInterval { get; set; }
 }
