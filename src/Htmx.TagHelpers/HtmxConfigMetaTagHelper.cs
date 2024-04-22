@@ -311,8 +311,8 @@ public class HtmxTriggerSpecificationCache: Dictionary<string, HtmxTriggerSpecif
 
 public class HtmxTriggerSpecification
 {
-    [JsonPropertyName("trigger")]
-    public string Trigger { get;  set; }
+    [JsonPropertyName("trigger")] 
+    public string Trigger { get;  set; } = default!;
     [JsonPropertyName("sseEvent")]
     public string? SseEvent { get; set; }
     [JsonPropertyName("eventFilter")]

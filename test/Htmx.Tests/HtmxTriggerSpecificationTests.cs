@@ -6,8 +6,15 @@ using Xunit.Abstractions;
 
 namespace Htmx.Tests;
 
-public class HtmxTriggerSpecificationTests(ITestOutputHelper outputHelper)
+public class HtmxTriggerSpecificationTests
 {
+    private readonly ITestOutputHelper outputHelper;
+
+    public HtmxTriggerSpecificationTests(ITestOutputHelper outputHelper)
+    {
+        this.outputHelper = outputHelper;
+    }
+    
     private const string Specifications =
         // lang=json
         """
