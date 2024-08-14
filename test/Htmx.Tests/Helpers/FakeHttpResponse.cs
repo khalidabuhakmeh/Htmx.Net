@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace Htmx.Tests.Helpers;
 
+#nullable disable
+
 public class FakeHttpResponse : HttpResponse
 {
     public FakeHttpResponse()

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace Htmx.Tests.Helpers;
 
+#nullable disable
+
 public class FakeHttpRequest : HttpRequest
 {
     public FakeHttpRequest()
