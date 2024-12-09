@@ -2,9 +2,13 @@
 
 ![HTMX Logo](https://github.com/khalidabuhakmeh/Htmx.Net/raw/main/shared/htmx-logo.png)
 
-This is a package designed to add server side helper methods for `HttpRequest` and `HttpResponse`. This makes working with [htmx](https://htmx.org/) server-side concepts simpler. You should also consider reading about [Hyperscript](https://hyperscript.org/), an optional companion project for HTMX.
+> [!IMPORTANT]  
+> **This package works with HTMX 1.x and 2.x**
 
-> **If you're new to HTMX, checkout out this series on [getting started with HTMX for ASP.NET Core developer](https://www.jetbrains.com/dotnet/guide/tutorials/htmx-aspnetcore/) which also includes a sample project and patterns that you might find helpful.**
+This package is designed to add server-side helper methods for `HttpRequest` and `HttpResponse`. This makes working with [htmx](https://htmx.org/) server-side concepts simpler. You should also consider reading about [Hyperscript](https://hyperscript.org/), an optional companion project for HTMX.
+
+> [!NOTE]
+> **If you're new to HTMX, check out this series on [getting started with HTMX for ASP.NET Core developer](https://www.jetbrains.com/dotnet/guide/tutorials/htmx-aspnetcore/) which also includes a sample project and patterns that you might find helpful.**
 
 ## Htmx Extension Methods
 
@@ -24,7 +28,7 @@ Using the `HttpRequest`, we can determine if the request was initiated by Htmx o
 httpContext.Request.IsHtmx()
 ```
 
-This can be used to either return a full page response or a partial page render.
+This can be used to return a full-page response or a partial-page render.
 
 ```c#
 // in a Razor Page
@@ -43,7 +47,7 @@ Read more about the other header values on the [official documentation page](htt
 
 #### Browser Caching
 
-As a special note, please be mindful that if your server can render different content for the same URL depending on some other headers, you need to use the Vary response HTTP header. For example, if your server renders the full HTML when Request.IsHtmx() is false, and it renders a fragment of that HTML when Request.IsHtmx() is true, you need to add Vary: HX-Request. That causes the cache to be keyed based on a composite of the response URL and the HX-Request request header — rather than being based just on the response URL.
+As a special note, please remember that if your server can render different content for the same URL depending on some other headers, you need to use the Vary response HTTP header. For example, if your server renders the full HTML when Request.IsHtmx() is false, and it renders a fragment of that HTML when Request.IsHtmx() is true, you need to add Vary: HX-Request. That causes the cache to be keyed based on a composite of the response URL and the HX-Request request header — rather than being based just on the response URL.
 
 ```c#
 // in a Razor Page
@@ -72,7 +76,7 @@ Read more about the HTTP response headers at the [official documentation site](h
 
 #### Triggering Client-Side Events
 
-You can trigger client side events with HTMX using the `HX-Trigger` header. Htmx.Net provides a `WithTrigger` helper method to configure one or more events that you wish to trigger.
+You can trigger client-side events with HTMX using the `HX-Trigger` header. Htmx.Net provides a `WithTrigger` helper method to configure one or more events you wish to trigger.
 
 ```c#
 Response.Htmx(h => {
