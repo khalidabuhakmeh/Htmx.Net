@@ -212,6 +212,13 @@ public class HtmxConfigMetaTagHelper : TagHelper
 
     private HttpContext HttpContext => ViewContext.HttpContext;
 
+    static JsonSerializerOptions serializerOptions = new()
+    {
+        WriteIndented = false,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+    
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
         var config = JsonSerializer.Serialize(new
@@ -248,12 +255,7 @@ public class HtmxConfigMetaTagHelper : TagHelper
             ScrollIntoViewOnBoost,
             TriggerSpecsCache,
             AntiForgery = TryGetAntiForgeryConfig()
-        }, new JsonSerializerOptions
-        {
-            WriteIndented = false,
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        }, serializerOptions);
 
         output.Attributes.RemoveAll("content");
 
