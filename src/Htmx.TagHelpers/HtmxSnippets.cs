@@ -7,11 +7,9 @@ namespace Htmx.TagHelpers;
 [PublicAPI]
 public static class HtmxSnippets
 {
-    public static string AntiforgeryJavaScript
-        => GetString(nameof(AntiforgeryJavaScript));
+    public static string AntiforgeryJavaScript { get; } = GetString(nameof(AntiforgeryJavaScript));
 
-    public static string AntiforgeryJavaScriptMinified
-        => GetString(nameof(AntiforgeryJavaScriptMinified));
+    public static string AntiforgeryJavaScriptMinified { get; } = GetString(nameof(AntiforgeryJavaScriptMinified));
 
     public static string GetAntiforgeryJavaScript(bool minified) =>
         minified ? AntiforgeryJavaScriptMinified : AntiforgeryJavaScript;
