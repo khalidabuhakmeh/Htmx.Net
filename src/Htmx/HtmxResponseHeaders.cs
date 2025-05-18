@@ -267,11 +267,10 @@ public class HtmxResponseHeaders
         // assume if the string starts with '{' and ends with '}', that it is JSON
         if (header.Any(h => h is ['{', .., '}']))
         {
-            var reader = new Utf8JsonReader(Encoding.UTF8.GetBytes(header));
             // this might still throw :(
-            var jsonObject = JsonNode.Parse(ref reader)?.AsObject();
+            var jsonObject = JsonNode.Parse(header)!.AsObject();
             // Load any existing triggers
-            foreach (var (key, value) in jsonObject!)
+            foreach (var (key, value) in jsonObject)
                 WithTrigger(key, value, timing);
         }
         else
