@@ -206,16 +206,16 @@ public class HtmxResponseHeaders
     public HtmxResponseHeaders WithTrigger(string eventName, object? detail = null,
         HtmxTriggerTiming timing = HtmxTriggerTiming.Default)
     {
-        if (!_triggers.ContainsKey(timing))
+        if (_triggers.TryGetValue(timing, out var trigger))
+        {
+            trigger.TryAdd(eventName, detail ?? string.Empty);
+        }
+        else
         {
             _triggers.Add(timing, new Dictionary<string, object?>
             {
                 { eventName, detail ?? string.Empty }
             });
-        }
-        else
-        {
-            _triggers[timing].TryAdd(eventName, detail ?? string.Empty);
         }
 
         return this;
@@ -259,10 +259,9 @@ public class HtmxResponseHeaders
     /// <param name="timing"></param>
     private void ParsePossibleExistingTriggers(string headerKey, HtmxTriggerTiming timing)
     {
-        if (!_headers.ContainsKey(headerKey))
+        if (!_headers.TryGetValue(headerKey, out var header))
             return;
 
-        var header = _headers[headerKey];
         // Attempt to parse existing header as Json, if fails it is a simplified event key
         // assume if the string starts with '{' and ends with '}', that it is JSON
         if (header.Any(h => h is ['{', .., '}']))
@@ -275,7 +274,7 @@ public class HtmxResponseHeaders
         }
         else
         {
-            foreach (var headerValue in _headers[headerKey])
+            foreach (var headerValue in header)
             {
                 if (headerValue is null) continue;
 
@@ -289,14 +288,15 @@ public class HtmxResponseHeaders
 
     private string BuildTriggerHeader(HtmxTriggerTiming timing)
     {
+        var trigger = _triggers[timing];
         // Reduce the payload if the user has only specified 1 trigger with no value
-        if (_triggers[timing].Count == 1 &&
-            ReferenceEquals(_triggers[timing].First().Value, string.Empty))
+        if (trigger.Count == 1 &&
+            ReferenceEquals(trigger.First().Value, string.Empty))
         {
-            return _triggers[timing].First().Key;
+            return trigger.First().Key;
         }
 
-        var jsonHeader = JsonSerializer.Serialize(_triggers[timing]);
+        var jsonHeader = JsonSerializer.Serialize(trigger);
 #if DEBUG
         System.Diagnostics.Debug.WriteLine(jsonHeader);
 #endif
