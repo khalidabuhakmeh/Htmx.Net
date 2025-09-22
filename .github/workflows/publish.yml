@@ -9,8 +9,9 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # enable GitHub OIDC token issuance for this job
 
     steps:
       - uses: actions/checkout@v4
@@ -18,13 +19,24 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+          
       - name: Restore dependencies
         run: dotnet restore
+        
       - name: Build
         run: dotnet build --no-restore -c Release
+        
       - name: Test
         run: dotnet test -c Release --no-build --verbosity normal
+        
       - name: Pack
         run: dotnet pack -c Release -o ./nupkgs --no-build
+        
+      - name: NuGet login (OIDC -> temp API Key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{secrets.NUGET_USER}}
+          
       - name: Publish
-        run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{secrets.NUGET_API_KEY}}  --skip-duplicate -s https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./nupkgs/*.nupkg --api-key ${{steps.login.outputs.NUGET_API_KEY}}  --skip-duplicate -s https://api.nuget.org/v3/index.json
