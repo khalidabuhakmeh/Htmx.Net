@@ -15,7 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Htmx.TagHelpers;
 
 [PublicAPI]
-[HtmlTargetElement("meta", Attributes = "[name=htmx-config]", TagStructure = TagStructure.NormalOrSelfClosing)]
+[HtmlTargetElement("meta", Attributes = "[name=htmx-config]", TagStructure = TagStructure.WithoutEndTag)]
 public class HtmxConfigMetaTagHelper : TagHelper
 {
     /// <summary>
