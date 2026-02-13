@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using JetBrains.Annotations;
@@ -16,25 +15,109 @@ namespace Htmx;
 [PublicAPI]
 public class HtmxResponseHeaders
 {
-    private readonly IHeaderDictionary _headers;
+    private readonly IHeaderDictionary headers;
 
-    private readonly Dictionary<HtmxTriggerTiming, Dictionary<string, object?>> _triggers = new();
+    private readonly Dictionary<HtmxTriggerTiming, Dictionary<string, object?>> triggers = new();
 
+    /// <summary>
+    /// Represents a collection of constants for HTMX response headers.
+    /// Provides key names for various headers used to control HTMX behaviors,
+    /// such as redirection, swapping content, triggering events, etc.
+    /// Reference: https://htmx.org/reference/#response_headers
+    /// </summary>
     public static class Keys
     {
         // Sorted by https://htmx.org/reference/#response_headers to make it easier to update
+
+        /// <summary>
+        /// Represents the HTMX response header key for specifying a client-side redirection.
+        /// The "HX-Location" header is used to instruct the client to navigate to a new location.
+        /// When included in the server's response, the client will perform a full-page redirect
+        /// to the specified location.
+        /// </summary>
         public const string Location = "HX-Location";
+
+        /// <summary>
+        /// Represents the HTMX response header key used to control URL history management on the client side.
+        /// The "HX-Push-Url" header specifies a URL to replace or add to the browser's history.
+        /// Setting this header allows the server to explicitly define the new URL for the browser history
+        /// during an AJAX request initiated by HTMX.
+        /// </summary>
         public const string PushUrl = "HX-Push-Url";
+
+        /// <summary>
+        /// Represents the HTMX response header key for triggering a client-side redirection
+        /// to a new location without initiating a full-page reload.
+        /// The "HX-Redirect" header is used to specify the URL to which the client should navigate.
+        /// </summary>
         public const string Redirect = "HX-Redirect";
+
+        /// <summary>
+        /// Represents the HTMX response header key for instructing a client-side full-page refresh.
+        /// The "HX-Refresh" header is used to signal that the client should re-fetch and reload the current page.
+        /// This is typically utilized when server-side changes require the client to reset the page state completely.
+        /// Reference: https://htmx.org/reference/#response_headers
+        /// </summary>
         public const string Refresh = "HX-Refresh";
+
+        /// <summary>
+        /// Represents the HTMX response header key used to specify a URL to replace the current browser history entry.
+        /// When included in the server's response, the client will update the browser's address bar without reloading the page.
+        /// </summary>
         public const string ReplaceUrl = "HX-Replace-Url";
+
+        /// <summary>
+        /// Represents the HTMX response header key for specifying how content swapping should occur
+        /// on the client side. The "HX-Reswap" header allows the server to control the swap behavior
+        /// of the content being replaced, enabling finer-grained control over the update process.
+        /// </summary>
         public const string Reswap = "HX-Reswap";
+
+        /// <summary>
+        /// Represents the HTMX response header key for specifying a client-side retargeting of an action.
+        /// The "HX-Retarget" header is used to designate a specific element on the page as the target
+        /// for the response content. This allows dynamic updates to target elements other than the
+        /// default one.
+        /// </summary>
         public const string Retarget = "HX-Retarget";
+
+        /// <summary>
+        /// Represents the HTMX response header key for specifying an element to be reselected
+        /// after an HX operation is completed. The "HX-Reselect" header allows the server to
+        /// instruct the client to focus or reselect a specific element in the DOM following
+        /// the processing of an HTMX request.
+        /// </summary>
         public const string Reselect = "HX-Reselect";
+
+        /// <summary>
+        /// Represents the HTMX response header key for triggering client-side events.
+        /// The "HX-Trigger" header is used to specify one or more event names that
+        /// the client should trigger upon receiving the server's response.
+        /// This facilitates custom client-side behaviors in response to server actions.
+        /// </summary>
         public const string Trigger = "HX-Trigger";
+
+        /// <summary>
+        /// Represents the HTMX response header key used to specify client-side triggers
+        /// that should be executed after the settle phase of an HTMX request.
+        /// The "HX-Trigger-After-Settle" header allows the server to queue specific
+        /// events to trigger once the response has been fully settled by the client.
+        /// </summary>
         public const string TriggerAfterSettle = "HX-Trigger-After-Settle";
+
+        /// <summary>
+        /// Represents the HTMX response header key used to specify client-side triggers
+        /// that should be executed after the "swap" operation completes.
+        /// When included in the server's response, it signals the client to invoke
+        /// the designated trigger(s) at this specific timing in the update lifecycle.
+        /// </summary>
         public const string TriggerAfterSwap = "HX-Trigger-After-Swap";
 
+        /// <summary>
+        /// Represents an array containing all the HTMX response header keys defined in the <see cref="HtmxResponseHeaders.Keys"/> class.
+        /// This property provides a central collection of all supported HTMX header keys, including those used for redirection,
+        /// refreshing, content swaping, targeting, and triggering client-side behaviors in response to server actions.
+        /// </summary>
         public static string[] All { get; } = new[]
         {
             Location,
@@ -53,7 +136,7 @@ public class HtmxResponseHeaders
 
     internal HtmxResponseHeaders(IHeaderDictionary headers)
     {
-        _headers = headers;
+        this.headers = headers;
     }
 
     /// <summary>
@@ -74,7 +157,17 @@ public class HtmxResponseHeaders
     /// <returns></returns>
     public HtmxResponseHeaders PushUrl(string value)
     {
-        _headers[Keys.PushUrl] = value;
+        headers[Keys.PushUrl] = value;
+        return this;
+    }
+
+    /// <summary>
+    /// Prevents the browser history from being updated
+    /// </summary>
+    /// <returns></returns>
+    public HtmxResponseHeaders PreventPush()
+    {
+        headers[Keys.PushUrl] = "false";
         return this;
     }
 
@@ -85,19 +178,20 @@ public class HtmxResponseHeaders
     /// <returns></returns>
     public HtmxResponseHeaders Redirect(string value)
     {
-        _headers[Keys.Redirect] = value;
+        headers[Keys.Redirect] = value;
         return this;
     }
 
     /// <summary>
     /// Allows you to specify how the response will be swapped
-    /// See https://htmx.org/attributes/hx-swap/ for values
+    /// See https://htmx.org/attributes/hx-swap/ for values.
+    /// You can use <see cref="HtmxSwap"/> for constants.
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
     public HtmxResponseHeaders Reswap(string value)
     {
-        _headers[Keys.Reswap] = value;
+        headers[Keys.Reswap] = value;
         return this;
     }
     
@@ -110,7 +204,7 @@ public class HtmxResponseHeaders
     /// <returns></returns>
     public HtmxResponseHeaders Reselect(string value)
     {
-        _headers[Keys.Reselect] = value;
+        headers[Keys.Reselect] = value;
         return this;
     }
 
@@ -121,7 +215,7 @@ public class HtmxResponseHeaders
     /// <returns></returns>
     public HtmxResponseHeaders Location(string value)
     {
-        _headers[Keys.Location] = value;
+        headers[Keys.Location] = value;
         return this;
     }
 
@@ -132,7 +226,17 @@ public class HtmxResponseHeaders
     /// <returns></returns>
     public HtmxResponseHeaders ReplaceUrl(string value)
     {
-        _headers[Keys.ReplaceUrl] = value;
+        headers[Keys.ReplaceUrl] = value;
+        return this;
+    }
+
+    /// <summary>
+    /// Prevents the browser URL from being updated
+    /// </summary>
+    /// <returns></returns>
+    public HtmxResponseHeaders PreventReplace()
+    {
+        headers[Keys.ReplaceUrl] = "false";
         return this;
     }
 
@@ -142,7 +246,7 @@ public class HtmxResponseHeaders
     /// <returns></returns>
     public HtmxResponseHeaders Refresh()
     {
-        _headers[Keys.Refresh] = "true";
+        headers[Keys.Refresh] = "true";
         return this;
     }
 
@@ -155,7 +259,7 @@ public class HtmxResponseHeaders
     [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
     public HtmxResponseHeaders Trigger(string value)
     {
-        _headers[Keys.Trigger] = value;
+        headers[Keys.Trigger] = value;
         return this;
     }
 
@@ -168,7 +272,7 @@ public class HtmxResponseHeaders
     [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
     public HtmxResponseHeaders TriggerAfterSettle(string value)
     {
-        _headers[Keys.TriggerAfterSettle] = value;
+        headers[Keys.TriggerAfterSettle] = value;
         return this;
     }
 
@@ -181,7 +285,7 @@ public class HtmxResponseHeaders
     [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
     public HtmxResponseHeaders TriggerAfterSwap(string value)
     {
-        _headers[Keys.TriggerAfterSwap] = value;
+        headers[Keys.TriggerAfterSwap] = value;
         return this;
     }
 
@@ -192,7 +296,18 @@ public class HtmxResponseHeaders
     /// <returns></returns>
     public HtmxResponseHeaders Retarget(string value)
     {
-        _headers[Keys.Retarget] = value;
+        headers[Keys.Retarget] = value;
+        return this;
+    }
+
+    /// <summary>
+    /// Adds "Vary: HX-Request" to the response headers.
+    /// Essential when serving different content (full page vs partial) to htmx requests vs standard requests.
+    /// </summary>
+    /// <returns></returns>
+    public HtmxResponseHeaders WithVary()
+    {
+        headers.Append("Vary", "HX-Request");
         return this;
     }
 
@@ -206,13 +321,13 @@ public class HtmxResponseHeaders
     public HtmxResponseHeaders WithTrigger(string eventName, object? detail = null,
         HtmxTriggerTiming timing = HtmxTriggerTiming.Default)
     {
-        if (_triggers.TryGetValue(timing, out var trigger))
+        if (triggers.TryGetValue(timing, out var trigger))
         {
             trigger.TryAdd(eventName, detail ?? string.Empty);
         }
         else
         {
-            _triggers.Add(timing, new Dictionary<string, object?>
+            triggers.Add(timing, new Dictionary<string, object?>
             {
                 { eventName, detail ?? string.Empty }
             });
@@ -226,26 +341,26 @@ public class HtmxResponseHeaders
     /// </summary>
     internal HtmxResponseHeaders Process()
     {
-        if (_triggers.ContainsKey(HtmxTriggerTiming.Default))
+        if (triggers.ContainsKey(HtmxTriggerTiming.Default))
         {
             ParsePossibleExistingTriggers(Keys.Trigger, HtmxTriggerTiming.Default);
 
-            _headers[Keys.Trigger] = BuildTriggerHeader(HtmxTriggerTiming.Default);
+            headers[Keys.Trigger] = BuildTriggerHeader(HtmxTriggerTiming.Default);
         }
 
-        if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSettle))
+        if (triggers.ContainsKey(HtmxTriggerTiming.AfterSettle))
         {
             ParsePossibleExistingTriggers(Keys.TriggerAfterSettle, HtmxTriggerTiming.AfterSettle);
 
-            _headers[Keys.TriggerAfterSettle] = BuildTriggerHeader(HtmxTriggerTiming.AfterSettle);
+            headers[Keys.TriggerAfterSettle] = BuildTriggerHeader(HtmxTriggerTiming.AfterSettle);
         }
 
         // ReSharper disable once InvertIf
-        if (_triggers.ContainsKey(HtmxTriggerTiming.AfterSwap))
+        if (triggers.ContainsKey(HtmxTriggerTiming.AfterSwap))
         {
             ParsePossibleExistingTriggers(Keys.TriggerAfterSwap, HtmxTriggerTiming.AfterSwap);
 
-            _headers[Keys.TriggerAfterSwap] = BuildTriggerHeader(HtmxTriggerTiming.AfterSwap);
+            headers[Keys.TriggerAfterSwap] = BuildTriggerHeader(HtmxTriggerTiming.AfterSwap);
         }
 
         return this;
@@ -259,7 +374,7 @@ public class HtmxResponseHeaders
     /// <param name="timing"></param>
     private void ParsePossibleExistingTriggers(string headerKey, HtmxTriggerTiming timing)
     {
-        if (!_headers.TryGetValue(headerKey, out var header))
+        if (!headers.TryGetValue(headerKey, out var header))
             return;
 
         // Attempt to parse existing header as Json, if fails it is a simplified event key
@@ -288,7 +403,7 @@ public class HtmxResponseHeaders
 
     private string BuildTriggerHeader(HtmxTriggerTiming timing)
     {
-        var trigger = _triggers[timing];
+        var trigger = triggers[timing];
         // Reduce the payload if the user has only specified 1 trigger with no value
         if (trigger.Count == 1 &&
             ReferenceEquals(trigger.First().Value, string.Empty))

@@ -5,6 +5,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace Htmx;
 
+/// <summary>
+/// Provides extension methods for handling HttpRequest and HttpResponse objects
+/// in the context of Htmx interactions. These extensions are designed to
+/// simplify the detection and manipulation of Htmx-related headers in HTTP
+/// requests and responses.
+/// </summary>
 [PublicAPI]
 public static class HtmxHttpExtensions
 {
@@ -84,6 +90,15 @@ public static class HtmxHttpExtensions
         var headerContainer = new HtmxResponseHeaders(response.Headers);
         action(headerContainer);
         headerContainer.Process();
+    }
+
+    /// <summary>
+    /// Sets the response status code to 286, which tells htmx to stop polling.
+    /// </summary>
+    /// <param name="response"></param>
+    public static void StopPolling(this HttpResponse response)
+    {
+        response.StatusCode = 286;
     }
 
     internal static T GetValueOrDefault<T>(this IHeaderDictionary headers, string key, T @default)

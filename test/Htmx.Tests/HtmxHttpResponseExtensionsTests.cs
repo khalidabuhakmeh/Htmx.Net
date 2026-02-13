@@ -1,26 +1,17 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using Htmx.Tests.Helpers;
 using Microsoft.AspNetCore.Http;
 using Xunit;
 using Xunit.Abstractions;
 using static Htmx.HtmxResponseHeaders;
-#pragma warning disable CS0618
+
+#pragma warning disable CS9113 // Parameter is unread.
+#pragma warning disable CS0618 // Type or member is obsolete
 
 namespace Htmx.Tests;
 
-public class HtmxHttpResponseExtensionsTests
+public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
 {
-    [SuppressMessage("ReSharper", "NotAccessedField.Local")]
-    private readonly ITestOutputHelper _output;
-
-    public HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
-    {
-        _output = output;
-        Response = new FakeHttpResponse();
-    }
-
-    private HttpResponse Response { get; }
+    private HttpResponse Response { get; } = new FakeHttpResponse();
     private IHeaderDictionary Headers => Response.Headers;
 
     [Fact]
@@ -221,6 +212,37 @@ public class HtmxHttpResponseExtensionsTests
 
         Assert.True(Headers.ContainsKey(Keys.Retarget));
         Assert.Equal(expected, Headers[Keys.Retarget]);
+    }
+
+    [Fact]
+    public void Can_prevent_push()
+    {
+        Response.Htmx(h => h.PreventPush());
+        Assert.True(Headers.ContainsKey(Keys.PushUrl));
+        Assert.Equal("false", Headers[Keys.PushUrl]);
+    }
+
+    [Fact]
+    public void Can_prevent_replace()
+    {
+        Response.Htmx(h => h.PreventReplace());
+        Assert.True(Headers.ContainsKey(Keys.ReplaceUrl));
+        Assert.Equal("false", Headers[Keys.ReplaceUrl]);
+    }
+
+    [Fact]
+    public void Can_add_vary()
+    {
+        Response.Htmx(h => h.WithVary());
+        Assert.True(Headers.ContainsKey("Vary"));
+        Assert.Equal("HX-Request", Headers["Vary"]);
+    }
+
+    [Fact]
+    public void Can_stop_polling()
+    {
+        Response.StopPolling();
+        Assert.Equal(286, Response.StatusCode);
     }
 
 }
