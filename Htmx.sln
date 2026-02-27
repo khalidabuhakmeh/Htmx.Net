@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{49B8F483-7FD2-4FA0-8461-9E951574542F}"
 	ProjectSection(SolutionItems) = preProject
 		shared\JetBrains.Annotations.cs = shared\JetBrains.Annotations.cs
+		shared\Shared.cs = shared\Shared.cs
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample", "test\Sample\Sample.csproj", "{38C328C0-9B25-4C87-B1C5-77FA1B562E9C}"
