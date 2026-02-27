@@ -425,6 +425,9 @@ public class HtmxResponseHeaders
         }
 
         var jsonHeader = JsonSerializer.Serialize(trigger);
+#if DEBUG
+        System.Diagnostics.Debug.WriteLine(jsonHeader);
+#endif
         return jsonHeader;
     }
 }

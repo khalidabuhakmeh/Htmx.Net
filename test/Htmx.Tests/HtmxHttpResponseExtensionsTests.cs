@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Htmx.Tests.Helpers;
 using Microsoft.AspNetCore.Http;
 using Xunit;
@@ -29,8 +28,11 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
     public void Can_add_single_trigger()
     {
         const string expected = "cool";
-        Response.Htmx(h => { h.WithTrigger(expected); });
-
+        Response.Htmx(h =>
+        {
+            h.WithTrigger(expected);
+        });
+            
         Assert.True(Headers.ContainsKey(Keys.Trigger));
         Assert.Equal(expected, Headers[Keys.Trigger]);
     }
@@ -45,7 +47,7 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
                 .WithTrigger(expected, timing: HtmxTriggerTiming.AfterSettle)
                 .WithTrigger(expected, timing: HtmxTriggerTiming.AfterSwap);
         });
-
+            
         Assert.True(Headers.ContainsKey(Keys.Trigger));
         Assert.True(Headers.ContainsKey(Keys.TriggerAfterSettle));
         Assert.True(Headers.ContainsKey(Keys.TriggerAfterSwap));
@@ -97,7 +99,7 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
             h.WithTrigger("cool", new { magic = "something" });
             h.WithTrigger("neat", new { moremagic = false });
         });
-
+            
         Assert.True(Headers.ContainsKey(Keys.Trigger));
         Assert.Equal(expected, Headers[Keys.Trigger]);
     }
@@ -105,26 +107,26 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
     [Fact]
     public void Can_use_existing_trigger_with_trigger()
     {
-        const string expected = @"{""neat"":"""",""cool"":""""}";
+	    const string expected = @"{""neat"":"""",""cool"":""""}";
 
-        Response.Htmx(h => h.WithTrigger("cool"));
-        Response.Htmx(h => h.WithTrigger("neat"));
+	    Response.Htmx(h => h.WithTrigger("cool"));
+	    Response.Htmx(h => h.WithTrigger("neat"));
 
-        Assert.True(Headers.ContainsKey(Keys.Trigger));
-        Assert.Equal(expected, Headers[Keys.Trigger]);
+	    Assert.True(Headers.ContainsKey(Keys.Trigger));
+	    Assert.Equal(expected, Headers[Keys.Trigger]);
     }
 
     [Fact]
     public void Can_use_existing_trigger_with_multiple_triggers_with_detail()
     {
-        const string expected = @"{""cool"":{""magic"":""something""},""neat"":{""moremagic"":false},""wow"":""""}";
+	    const string expected = @"{""cool"":{""magic"":""something""},""neat"":{""moremagic"":false},""wow"":""""}";
 
-        Response.Htmx(h => h.WithTrigger("wow"));
-        Response.Htmx(h =>
-        {
-            h.WithTrigger("cool", new { magic = "something" });
-            h.WithTrigger("neat", new { moremagic = false });
-        });
+	    Response.Htmx(h => h.WithTrigger("wow"));
+	    Response.Htmx(h =>
+	    {
+		    h.WithTrigger("cool", new { magic = "something" });
+		    h.WithTrigger("neat", new { moremagic = false });
+	    });
 
         Assert.True(Headers.ContainsKey(Keys.Trigger));
         Assert.Equal(expected, Headers[Keys.Trigger]);
@@ -448,4 +450,5 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
         Response.StopPolling();
         Assert.Equal(286, Response.StatusCode);
     }
+
 }
