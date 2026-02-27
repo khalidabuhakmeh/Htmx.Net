@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 
@@ -18,6 +19,13 @@ public class HtmxResponseHeaders
     private readonly IHeaderDictionary headers;
 
     private readonly Dictionary<HtmxTriggerTiming, Dictionary<string, object?>> triggers = new();
+
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        WriteIndented = false,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
 
     /// <summary>
     /// Represents a collection of constants for HTMX response headers.
@@ -216,6 +224,17 @@ public class HtmxResponseHeaders
     public HtmxResponseHeaders Location(string value)
     {
         headers[Keys.Location] = value;
+        return this;
+    }
+
+    /// <summary>
+    /// Allows you to do a client-side redirect that does not do a full page reload
+    /// </summary>
+    /// <param name="location"></param>
+    /// <returns></returns>
+    public HtmxResponseHeaders Location(HtmxLocation location)
+    {
+        headers[Keys.Location] = JsonSerializer.Serialize(location, SerializerOptions);
         return this;
     }
 
