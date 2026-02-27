@@ -231,6 +231,23 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
     }
 
     [Fact]
+    public void Can_set_location_with_object()
+    {
+        const string expected = @"{""path"":""/new-location"",""target"":""#target"",""select"":""#content""}";
+        Response.Htmx(h => {
+            h.Location(new HtmxLocation
+            {
+                Path = "/new-location",
+                Target = "#target",
+                Select = "#content"
+            });
+        });
+
+        Assert.True(Headers.ContainsKey(Keys.Location));
+        Assert.Equal(expected, Headers[Keys.Location]);
+    }
+
+    [Fact]
     public void Can_add_vary()
     {
         Response.Htmx(h => h.WithVary());
