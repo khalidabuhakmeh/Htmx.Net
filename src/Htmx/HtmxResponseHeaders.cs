@@ -220,6 +220,19 @@ public class HtmxResponseHeaders
     }
 
     /// <summary>
+    /// Allows you to do a client-side redirect that does not do a full page reload, with a complex object
+    /// https://htmx.org/headers/hx-location/
+    /// </summary>
+    /// <param name="location"></param>
+    /// <returns></returns>
+    public HtmxResponseHeaders Location(HtmxLocation location)
+    {
+        var json = JsonSerializer.Serialize(location, Shared.JsonSerializerOptions);
+        headers[Keys.Location] = json;
+        return this;
+    }
+
+    /// <summary>
     /// Replaces the current URL in the location bar
     /// </summary>
     /// <param name="value"></param>
@@ -412,9 +425,6 @@ public class HtmxResponseHeaders
         }
 
         var jsonHeader = JsonSerializer.Serialize(trigger);
-#if DEBUG
-        System.Diagnostics.Debug.WriteLine(jsonHeader);
-#endif
         return jsonHeader;
     }
 }

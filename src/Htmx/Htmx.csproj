@@ -42,6 +42,9 @@
       <Compile Include="..\..\shared\JetBrains.Annotations.cs">
         <Link>JetBrains.Annotations.cs</Link>
       </Compile>
+      <Compile Include="..\..\shared\Shared.cs">
+        <Link>Shared.cs</Link>
+      </Compile>
     </ItemGroup>
 
     <PropertyGroup>
