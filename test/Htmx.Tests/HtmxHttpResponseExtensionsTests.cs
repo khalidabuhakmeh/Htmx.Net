@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Htmx.Tests.Helpers;
 using Microsoft.AspNetCore.Http;
 using Xunit;

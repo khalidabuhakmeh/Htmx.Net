@@ -206,8 +206,44 @@ public class HtmxConfigMetaTagHelper : TagHelper
     /// </summary>
     [HtmlAttributeName("triggerSpecsCache")]
     public HtmxTriggerSpecificationCache? TriggerSpecsCache { get; set; }
-    
-    [ViewContext] 
+
+    /// <summary>
+    /// defaults to false. If set to true, the inheritance of attributes is completely disabled
+    /// </summary>
+    [HtmlAttributeName("disableInheritance")]
+    public bool? DisableInheritance { get; set; }
+
+    /// <summary>
+    /// defaults to '', meaning that no nonce will be added to inline styles
+    /// </summary>
+    [HtmlAttributeName("inlineStyleNonce")]
+    public string? InlineStyleNonce { get; set; }
+
+    /// <summary>
+    /// Response handling configuration. See https://htmx.org/docs/#response-handling for details.
+    /// </summary>
+    [HtmlAttributeName("responseHandling")]
+    public IEnumerable<HtmxResponseHandling>? ResponseHandling { get; set; }
+
+    /// <summary>
+    /// defaults to true, whether to process OOB swaps on elements that are nested within the main response element
+    /// </summary>
+    [HtmlAttributeName("allowNestedOobSwaps")]
+    public bool? AllowNestedOobSwaps { get; set; }
+
+    /// <summary>
+    /// defaults to true, Whether to treat history cache miss full page reload requests as a HX-Request
+    /// </summary>
+    [HtmlAttributeName("historyRestoreAsHxRequest")]
+    public bool? HistoryRestoreAsHxRequest { get; set; }
+
+    /// <summary>
+    /// defaults to false, Whether to report input validation errors to the end user
+    /// </summary>
+    [HtmlAttributeName("reportValidityOfForms")]
+    public bool? ReportValidityOfForms { get; set; }
+
+    [ViewContext]
     public ViewContext ViewContext { get; set; } = null!;
 
     private HttpContext HttpContext => ViewContext.HttpContext;
@@ -247,6 +283,12 @@ public class HtmxConfigMetaTagHelper : TagHelper
             IgnoreTitle,
             ScrollIntoViewOnBoost,
             TriggerSpecsCache,
+            DisableInheritance,
+            InlineStyleNonce,
+            ResponseHandling,
+            AllowNestedOobSwaps,
+            HistoryRestoreAsHxRequest,
+            ReportValidityOfForms,
             AntiForgery = TryGetAntiForgeryConfig()
         }, Shared.JsonSerializerOptions);
 
@@ -304,9 +346,10 @@ public class HtmxConfigMetaTagHelper : TagHelper
 
 public class HtmxTriggerSpecificationCache: Dictionary<string, HtmxTriggerSpecification[]> {}
 
+[PublicAPI]
 public class HtmxTriggerSpecification
 {
-    [JsonPropertyName("trigger")] 
+    [JsonPropertyName("trigger")]
     public string Trigger { get;  set; } = default!;
     [JsonPropertyName("sseEvent")]
     public string? SseEvent { get; set; }
@@ -334,4 +377,52 @@ public class HtmxTriggerSpecification
     public int? Delay { get; set; }
     [JsonPropertyName("pollInterval")]
     public int? PollInterval { get; set; }
+}
+
+/// <summary>
+/// When htmx receives a response it will iterate in order over
+/// the htmx.config.responseHandling array and test if the code property
+/// of a given object, when treated as a Regular Expression, matches the current response.
+/// If an entry does match the current response code, it will be used to determine
+/// if and how the response will be processed.
+/// https://htmx.org/docs/#response-handling
+/// </summary>
+[PublicAPI]
+public class HtmxResponseHandling
+{
+    /// <summary>
+    /// a String representing a regular expression that will be tested against response codes.
+    /// </summary>
+    [JsonPropertyName("code")]
+    public string Code { get; set; } = default!;
+    /// <summary>
+    /// true if the response should be swapped into the DOM, false otherwise
+    /// </summary>
+    [JsonPropertyName("swap")]
+    public bool? Swap { get; set; }
+    /// <summary>
+    /// true if htmx should treat this response as an error
+    /// </summary>
+    [JsonPropertyName("error")]
+    public bool? Error { get; set; }
+    /// <summary>
+    /// true if htmx should ignore title tags in the response
+    /// </summary>
+    [JsonPropertyName("ignoreTitle")]
+    public bool? IgnoreTitle { get; set; }
+    /// <summary>
+    /// A CSS selector to use to select content from the response
+    /// </summary>
+    [JsonPropertyName("select")]
+    public string? Select { get; set; }
+    /// <summary>
+    /// A CSS selector specifying an alternative target for the response
+    /// </summary>
+    [JsonPropertyName("target")]
+    public string? Target { get; set; }
+    /// <summary>
+    /// An alternative swap mechanism for the response
+    /// </summary>
+    [JsonPropertyName("swapOverride")]
+    public string? SwapOverride { get; set; }
 }
