@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+## . folders are getting out of control
+/.*
+!/.gitignore
+
 # User-specific files
 *.rsuser
 *.suo
