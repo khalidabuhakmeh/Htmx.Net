@@ -48,12 +48,12 @@ public class HtmxUrlTagHelper : TagHelper
 
     private static readonly string[] Verbs = { "get", "post", "put", "patch", "delete" };
 
-    private static readonly List<string> HtmxMethods = Verbs
-        .SelectMany(v => new[] { $"hx-{v}", $"hx-{v}:inherited", $"data-hx-{v}", $"data-hx-{v}:inherited" })
-        .ToList();
+    // O(1) membership test for the accepted verb spellings (plain / :inherited / data- / data-:inherited).
+    private static readonly HashSet<string> HtmxMethods = new(
+        Verbs.SelectMany(v => new[] { $"hx-{v}", $"hx-{v}:inherited", $"data-hx-{v}", $"data-hx-{v}:inherited" }),
+        StringComparer.OrdinalIgnoreCase);
 
-    private static bool IsMethod(string name) =>
-        HtmxMethods.Any(m => string.Equals(m, name, StringComparison.OrdinalIgnoreCase));
+    private static bool IsMethod(string name) => HtmxMethods.Contains(name);
 
     /// <summary>
     /// Creates a new <see cref="AnchorTagHelper"/>.
@@ -184,13 +184,25 @@ public class HtmxUrlTagHelper : TagHelper
             throw new ArgumentNullException(nameof(output));
         }
 
-        if (context.AllAttributes.Count(a => IsMethod(a.Name)) > 1)
+        // Single pass over the authored attributes: find the verb attribute (and reject duplicates)
+        // with O(1) membership checks, instead of two LINQ passes over a linear-scanned list.
+        TagHelperAttribute? hxMethodAttribute = null;
+        foreach (var a in context.AllAttributes)
         {
-            throw new InvalidOperationException(
-                $"Too many htmx method attributes found on element. Use only one of the following: {string.Join(",", HtmxMethods)}");
+            if (!IsMethod(a.Name))
+            {
+                continue;
+            }
+
+            if (hxMethodAttribute != null)
+            {
+                throw new InvalidOperationException(
+                    $"Too many htmx method attributes found on element. Use only one of the following: {string.Join(",", HtmxMethods)}");
+            }
+
+            hxMethodAttribute = a;
         }
 
-        var hxMethodAttribute = context.AllAttributes.FirstOrDefault(a => IsMethod(a.Name));
         if (hxMethodAttribute == null)
         {
             // binding attributes without a verb: nothing to write into
