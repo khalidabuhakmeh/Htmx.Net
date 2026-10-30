@@ -31,6 +31,8 @@
         <None Include="..\..\README.md" Pack="true" PackagePath="">
             <Link>Properties\README.md</Link>
         </None>
+        <!-- Migration aid: warns on leftover hx-* URL binding attributes (now hxn-*). -->
+        <None Include="build\Htmx.TagHelpers.targets" Pack="true" PackagePath="build\;buildTransitive\" />
     </ItemGroup>
 
     <ItemGroup>

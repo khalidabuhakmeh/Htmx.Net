@@ -231,6 +231,10 @@ Unset keys are no longer serialized (bug fix); only the values you set appear in
 <button hx-get hxn-page="/Items" hxn-page-handler="List">Load</button>
 ```
 
+:::tip[The compiler helps you find these]
+`Htmx.TagHelpers` ships a build-time check. If any `.cshtml` still uses a legacy `hx-*` binding attribute, the build prints **`HTMX001`** with the file, line, and the `hxn-*` name to use. Turn it off with `<HtmxMigrationWarnings>false</HtmxMigrationWarnings>`, or silence it with `<NoWarn>$(NoWarn);HTMX001</NoWarn>`. (`hx-action` is also htmx 4's own attribute, so its warning says "if this was the htmx.NET binding, rename it" rather than assuming.)
+:::
+
 - A **valueless `hx-get` is no longer rewritten.** In htmx 4 it is valid and means "request the current URL".
 - URL generation now keys off the routing attributes: `hxn-page`, `hxn-action`, `hxn-controller`, `hxn-route`.
 - The helper supports `:inherited` and `data-hx-` spellings (for example `data-hx-post`, `hx-get:inherited`).

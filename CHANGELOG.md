@@ -51,6 +51,7 @@ All notable changes to htmx.NET are documented here. This project adheres to
   `:inherited` and `data-hx-` spellings. Note: `hx-get:inherited` does not trigger descendant requests
   in htmx 4 — use a direct verb attribute per element, or `hx-boost:inherited` for links/forms.
 - Headers Tag Helper: new `hx-headers-inherited` emits `hx-headers:inherited`.
+- **Migration aid:** the package emits build warning `HTMX001` (with file and line) for any leftover `hx-*` URL binding attribute in `.cshtml`, suggesting the `hxn-*` replacement. Opt out with `<HtmxMigrationWarnings>false</HtmxMigrationWarnings>` or `<NoWarn>HTMX001</NoWarn>`.
 - Antiforgery JavaScript rewritten for htmx 4's `htmx:config:request` pipeline with a `document.baseURI`
   same-origin guard (security-reviewed). **No automatic token refresh**: trigger a full reload after
   mid-session token rotation. DELETE requires header mode. A residual cross-origin-redirect token-leak

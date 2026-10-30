@@ -1,0 +1,95 @@
+<Project>
+
+  <!--
+    htmx.NET 2.x migration aid.
+
+    In 1.x the URL tag helper bound server-side attributes named hx-page,
+    hx-controller, hx-action, hx-route, etc. htmx 4 added a native hx-action
+    attribute and hx-* is htmx's own namespace, so 2.x renamed the binding
+    attributes to hxn-* (hxn-page, hxn-controller, hxn-action, ...). The C#
+    property names (Action, Controller, Page, ...) did not change.
+
+    This target scans the consuming project's .cshtml files at build time and
+    emits warning HTMX001 (with file and line) for any leftover hx-* binding
+    attribute, suggesting the hxn-* replacement.
+
+    Opt out with:  <HtmxMigrationWarnings>false</HtmxMigrationWarnings>
+    Suppress with: <NoWarn>$(NoWarn);HTMX001</NoWarn>
+  -->
+
+  <PropertyGroup>
+    <HtmxMigrationWarnings Condition="'$(HtmxMigrationWarnings)' == ''">true</HtmxMigrationWarnings>
+  </PropertyGroup>
+
+  <UsingTask TaskName="HtmxScanLegacyUrlAttributes"
+             TaskFactory="RoslynCodeTaskFactory"
+             AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <Files ParameterType="Microsoft.Build.Framework.ITaskItem[]" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Text.RegularExpressions" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        // Longest alternatives first so hx-page-handler / hx-all-route-data /
+        // hx-route-* win over the shorter hx-page / hx-route.
+        var rx = new Regex(
+            @"(?<![\w-])hx-(page-handler|all-route-data|route-[A-Za-z0-9_-]+|action|controller|area|page|route|host|protocol|fragment)(?![\w-])",
+            RegexOptions.IgnoreCase);
+
+        const string guide = "https://khalidabuhakmeh.github.io/Htmx.Net/migration/v1-to-v2/";
+
+        foreach (var item in Files)
+        {
+            var path = item.ItemSpec;
+            if (!File.Exists(path)) continue;
+
+            string[] lines;
+            try { lines = File.ReadAllLines(path); }
+            catch { continue; }
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                foreach (Match m in rx.Matches(lines[i]))
+                {
+                    var suffix = m.Groups[1].Value;
+                    var legacy = "hx-" + suffix;
+                    var replacement = "hxn-" + suffix;
+
+                    string message;
+                    if (string.Equals(suffix, "action", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // hx-action is also htmx 4's native attribute, so don't assume.
+                        message = "'" + legacy + "' is both htmx 4's native attribute and htmx.NET 1.x's URL "
+                                + "binding attribute. If this is the htmx.NET URL binding, rename it to '"
+                                + replacement + "'. See " + guide;
+                    }
+                    else
+                    {
+                        message = "'" + legacy + "' is a legacy htmx.NET URL binding attribute and is ignored in "
+                                + "2.x. Rename it to '" + replacement + "'. See " + guide;
+                    }
+
+                    Log.LogWarning(null, "HTMX001", null, path, i + 1, m.Index + 1, 0, 0, message);
+                }
+            }
+        }
+
+        return true;
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="HtmxScanLegacyUrlAttributes"
+          BeforeTargets="BeforeCompile;CoreCompile"
+          Condition="'$(HtmxMigrationWarnings)' == 'true' and '$(DesignTimeBuild)' != 'true'">
+    <ItemGroup>
+      <_HtmxCshtmlFiles Include="$(MSBuildProjectDirectory)\**\*.cshtml"
+                        Exclude="$(MSBuildProjectDirectory)\**\bin\**\*.cshtml;$(MSBuildProjectDirectory)\**\obj\**\*.cshtml" />
+    </ItemGroup>
+    <HtmxScanLegacyUrlAttributes Files="@(_HtmxCshtmlFiles)"
+                                 Condition="'@(_HtmxCshtmlFiles)' != ''" />
+  </Target>
+
+</Project>
