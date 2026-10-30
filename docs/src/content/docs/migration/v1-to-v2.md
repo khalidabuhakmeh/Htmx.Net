@@ -197,17 +197,26 @@ Unset keys are no longer serialized (bug fix); only the values you set appear in
 
 ### URL tag helper (`HtmxUrlTagHelper`)
 
+- **Breaking: binding attributes renamed `hx-*` → `hxn-*`** (htmx + .NET). htmx 4 added a native `hx-action` attribute, and `hx-*` is htmx's namespace, so the helper's server-side URL-binding attributes moved: `hx-action`→`hxn-action`, `hx-controller`→`hxn-controller`, `hx-area`→`hxn-area`, `hx-page`→`hxn-page`, `hx-page-handler`→`hxn-page-handler`, `hx-route`→`hxn-route`, `hx-route-*`→`hxn-route-*`, `hx-host`→`hxn-host`, `hx-protocol`→`hxn-protocol`, `hx-fragment`→`hxn-fragment`, `hx-all-route-data`→`hxn-all-route-data`. C# property names (`Action`, `Controller`, `Page`, …) are unchanged. Verbs (`hx-get`, `hx-post`, …) and `hx-target` stay as-is.
+
+```html
+<!-- before -->
+<button hx-get hx-page="/Items" hx-page-handler="List">Load</button>
+<!-- after -->
+<button hx-get hxn-page="/Items" hxn-page-handler="List">Load</button>
+```
+
 - A **valueless `hx-get` is no longer rewritten.** In htmx 4 it is valid and means "request the current URL".
-- URL generation now keys off the routing attributes: `hx-page`, `hx-action`, `hx-controller`, `hx-route`.
+- URL generation now keys off the routing attributes: `hxn-page`, `hxn-action`, `hxn-controller`, `hxn-route`.
 - The helper supports `:inherited` and `data-hx-` spellings (for example `data-hx-post`, `hx-get:inherited`).
 
 ```html
-<!-- before (v1): bare hx-get was rewritten from hx-page -->
-<button hx-get hx-page="/Items">Load</button>
+<!-- before (v1): bare hx-get was rewritten from hxn-page -->
+<button hx-get hxn-page="/Items">Load</button>
 <!-- after: the routing attribute drives generation; the verb gets the URL -->
-<button hx-get hx-page="/Items">Load</button>   <!-- same markup still works when a routing attribute is present -->
+<button hx-get hxn-page="/Items">Load</button>   <!-- same markup still works when a routing attribute is present -->
 <button hx-get>Reload current URL</button>     <!-- valueless, left untouched -->
-<button data-hx-post hx-controller="Items" hx-action="Save">Save</button>
+<button data-hx-post hxn-controller="Items" hxn-action="Save">Save</button>
 ```
 
 :::caution
@@ -219,7 +228,7 @@ Unset keys are no longer serialized (bug fix); only the values you set appear in
 <div hx-get="/items" hx-trigger="click"> ... </div>
 
 <!-- after: direct verb per element -->
-<button hx-get hx-page="/Items">Load</button>
+<button hx-get hxn-page="/Items">Load</button>
 <!-- or boost links/forms in a container -->
 <nav hx-boost:inherited="true"> <a href="/items">Items</a> </nav>
 ```

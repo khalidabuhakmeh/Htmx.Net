@@ -13,37 +13,37 @@ namespace Htmx.TagHelpers;
 
 /// <summary>
 /// Generates a request URL for an htmx verb attribute when a URL-binding attribute
-/// (<c>hx-page</c>, <c>hx-action</c>, <c>hx-controller</c> or <c>hx-route</c>) is present.
+/// (<c>hxn-page</c>, <c>hxn-action</c>, <c>hxn-controller</c> or <c>hxn-route</c>) is present.
 /// </summary>
 /// <remarks>
+/// The binding attributes use the <c>hxn-</c> prefix (htmx + .NET) rather than <c>hx-</c>, because
+/// <c>hx-action</c> is a native htmx 4 attribute and <c>hx-*</c> is htmx's reserved namespace.
 /// htmx 4 treats a valueless <c>hx-get</c> as valid (it requests the current URL), so this helper
 /// no longer matches on the verb attributes. It only runs when a binding attribute is present and then
 /// writes the URL into whichever spelling of the verb the author used:
 /// <c>hx-get</c>, <c>hx-get:inherited</c>, <c>data-hx-get</c> or <c>data-hx-get:inherited</c>
 /// (verbs: get, post, put, patch, delete). The spelling is detected at runtime from
 /// <c>context.AllAttributes</c>, so no design-time colon matching is needed.
-/// NOTE (docs): the routing attribute names (hx-page, hx-action, hx-controller, hx-route...) are
-/// Htmx.Net conventions and are not htmx 4 attributes; htmx 4 could introduce similar names, so document this.
 /// NOTE: in htmx 4, hx-delete no longer includes form inputs; add hx-include yourself if needed (not automatic).
 /// </remarks>
 [PublicAPI]
-[HtmlTargetElement("*", Attributes = "hx-page")]
-[HtmlTargetElement("*", Attributes = "hx-action")]
-[HtmlTargetElement("*", Attributes = "hx-controller")]
-[HtmlTargetElement("*", Attributes = "hx-route")]
+[HtmlTargetElement("*", Attributes = "hxn-page")]
+[HtmlTargetElement("*", Attributes = "hxn-action")]
+[HtmlTargetElement("*", Attributes = "hxn-controller")]
+[HtmlTargetElement("*", Attributes = "hxn-route")]
 public class HtmxUrlTagHelper : TagHelper
 {
-    private const string ActionAttributeName = "hx-action";
-    private const string ControllerAttributeName = "hx-controller";
-    private const string AreaAttributeName = "hx-area";
-    private const string PageAttributeName = "hx-page";
-    private const string PageHandlerAttributeName = "hx-page-handler";
-    private const string FragmentAttributeName = "hx-fragment";
-    private const string HostAttributeName = "hx-host";
-    private const string ProtocolAttributeName = "hx-protocol";
-    private const string RouteAttributeName = "hx-route";
-    private const string RouteValuesDictionaryName = "hx-all-route-data";
-    private const string RouteValuesPrefix = "hx-route-";
+    private const string ActionAttributeName = "hxn-action";
+    private const string ControllerAttributeName = "hxn-controller";
+    private const string AreaAttributeName = "hxn-area";
+    private const string PageAttributeName = "hxn-page";
+    private const string PageHandlerAttributeName = "hxn-page-handler";
+    private const string FragmentAttributeName = "hxn-fragment";
+    private const string HostAttributeName = "hxn-host";
+    private const string ProtocolAttributeName = "hxn-protocol";
+    private const string RouteAttributeName = "hxn-route";
+    private const string RouteValuesDictionaryName = "hxn-all-route-data";
+    private const string RouteValuesPrefix = "hxn-route-";
     private IDictionary<string, string>? routeValues;
 
     private static readonly string[] Verbs = { "get", "post", "put", "patch", "delete" };

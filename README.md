@@ -70,7 +70,7 @@ Generate ASP.NET Core URLs straight onto htmx attributes, and configure htmx + a
 ```html
 <meta name="htmx-config" includeAspNetAntiforgeryToken="true" defaultSwap="innerHTML" />
 
-<button hx-get hx-page="Index" hx-page-handler="Snippet" hx-target="#result">
+<button hx-get hxn-page="Index" hxn-page-handler="Snippet" hx-target="#result">
     Load
 </button>
 ```

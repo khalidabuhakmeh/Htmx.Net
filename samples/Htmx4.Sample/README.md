@@ -67,8 +67,8 @@ Fragments live in `Controllers/DemoController.cs` (and `AntiforgeryDemoControlle
 |---|---|
 | `HtmxConfigMetaTagHelper` (`<meta name="htmx-config">`): `logAll`, `prefix`, `metaCharacter`, `transitions`, `history`, `mode`, `defaultSwap`, `allowEmptySwapAfterOOB`, `defaultFocusScroll`, `defaultSettleDelay`, `indicatorClass`, `requestClass`, `includeIndicatorCSS`, `defaultTimeout`, `extensions`, `morphIgnore`, `morphSkip`, `morphSkipChildren`, `morphScanLimit`, `noSwap`, `implicitInheritance`, `inlineScriptNonce` | Config |
 | `includeAspNetAntiforgeryToken` | Layout (all pages), Antiforgery, Config |
-| `HtmxUrlTagHelper`: `hx-page`, `hx-page-handler`, `hx-controller`, `hx-action`, `hx-area`, `hx-route`, `hx-route-{values}`, `hx-fragment` | UrlHelper |
-| `hx-host`, `hx-protocol` | UrlHelper (`url-btn-host`, inert) |
+| `HtmxUrlTagHelper`: `hxn-page`, `hxn-page-handler`, `hxn-controller`, `hxn-action`, `hxn-area`, `hxn-route`, `hxn-route-{values}`, `hxn-fragment` | UrlHelper |
+| `hxn-host`, `hxn-protocol` | UrlHelper (`url-btn-host`, inert) |
 | verb spellings `hx-get`, `hx-get:inherited`, `data-hx-get`, `hx-post` | UrlHelper |
 | `HtmxHeadersTagHelper`: `hx-headers-*`, `hx-headers-inherited` | Inherited |
 | `HtmxAntiforgeryScriptEndpoints.MapHtmxAntiforgeryScript` / `.Path` | Program.cs, Layout |

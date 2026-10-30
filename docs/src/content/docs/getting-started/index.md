@@ -94,11 +94,11 @@ A button that loads a server-rendered fragment, plus a form that saves and fires
 <h1>Products</h1>
 
 <!-- GET: the URL is generated from the page handler by the URL tag helper -->
-<button hx-get hx-page="/Products" hx-page-handler="List" hx-target="#list">Load</button>
+<button hx-get hxn-page="/Products" hxn-page-handler="List" hx-target="#list">Load</button>
 <ul id="list"></ul>
 
 <!-- POST: antiforgery token is attached automatically -->
-<form hx-post hx-page="/Products" hx-page-handler="Add" hx-target="#list" hx-swap="beforeend"
+<form hx-post hxn-page="/Products" hxn-page-handler="Add" hx-target="#list" hx-swap="beforeend"
       hx-on:product-added="this.reset()">
     <input name="name" required />
     <button>Add</button>

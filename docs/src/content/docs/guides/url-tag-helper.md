@@ -5,13 +5,17 @@ description: Generate hx-get/hx-post/hx-put/hx-patch/hx-delete URLs from Razor P
 
 Hard-coded URLs like `hx-get="/products/7"` break when routes change. `HtmxUrlTagHelper` brings ASP.NET Core's routing to htmx: you give it a page, controller/action, area or named route and it writes the generated URL into the htmx verb attribute you put on the element. It behaves like the built-in anchor tag helper, but for `hx-get`, `hx-post`, `hx-put`, `hx-patch` and `hx-delete`.
 
+:::note
+The binding attributes use the `hxn-` prefix (htmx + .NET), e.g. `hxn-page`, `hxn-controller`, `hxn-action`. `hx-*` is htmx's own namespace and htmx 4 added a native `hx-action` attribute, so the library no longer uses `hx-*` for its server-side URL binding. The verbs (`hx-get`, `hx-post`, …) and `hx-target` are still plain htmx.
+:::
+
 ```razor
 <!-- samples/Htmx4.Sample/Pages/UrlHelper.cshtml -->
-<button hx-get hx-page="/UrlHelper" hx-page-handler="Fragment" hx-target="#url-result-box">Page</button>
-<button hx-get hx-controller="Demo" hx-action="Echo" hx-route-id="7" hx-target="#url-result-box">MVC</button>
-<button hx-get hx-route="demo-echo" hx-route-id="42" hx-route-p="rv" hx-target="#url-result-box">Named route</button>
-<button hx-get hx-area="Admin" hx-controller="Admin" hx-action="Ping" hx-target="#url-result-box">Area</button>
-<button hx-post hx-page="/UrlHelper" hx-page-handler="Post" hx-target="#url-result-box">POST</button>
+<button hx-get hxn-page="/UrlHelper" hxn-page-handler="Fragment" hx-target="#url-result-box">Page</button>
+<button hx-get hxn-controller="Demo" hxn-action="Echo" hxn-route-id="7" hx-target="#url-result-box">MVC</button>
+<button hx-get hxn-route="demo-echo" hxn-route-id="42" hxn-route-p="rv" hx-target="#url-result-box">Named route</button>
+<button hx-get hxn-area="Admin" hxn-controller="Admin" hxn-action="Ping" hx-target="#url-result-box">Area</button>
+<button hx-post hxn-page="/UrlHelper" hxn-page-handler="Post" hx-target="#url-result-box">POST</button>
 ```
 
 Rendered output (example):
@@ -37,18 +41,18 @@ public IActionResult Echo(string? id, string? p) => /* ... */;
 
 | Attribute | Property | Purpose |
 |---|---|---|
-| `hx-page` | `Page` | Razor Page path, e.g. `/Products/Index` |
-| `hx-page-handler` | `PageHandler` | Page handler name (`OnGetFragment` -> `Fragment`) |
-| `hx-controller` | `Controller` | MVC controller name |
-| `hx-action` | `Action` | MVC action name |
-| `hx-area` | `Area` | MVC area (also valid with pages) |
-| `hx-route` | `Route` | Named route |
-| `hx-route-{key}` | `RouteValues` | Route/query values: `hx-route-id="7"` -> `id=7`. Case-insensitive dictionary. |
-| `hx-host` | `Host` | Makes the URL absolute with this host |
-| `hx-protocol` | `Protocol` | Scheme for an absolute URL (`https`) |
-| `hx-fragment` | `Fragment` | URL `#fragment` |
+| `hxn-page` | `Page` | Razor Page path, e.g. `/Products/Index` |
+| `hxn-page-handler` | `PageHandler` | Page handler name (`OnGetFragment` -> `Fragment`) |
+| `hxn-controller` | `Controller` | MVC controller name |
+| `hxn-action` | `Action` | MVC action name |
+| `hxn-area` | `Area` | MVC area (also valid with pages) |
+| `hxn-route` | `Route` | Named route |
+| `hxn-route-{key}` | `RouteValues` | Route/query values: `hxn-route-id="7"` -> `id=7`. Case-insensitive dictionary. |
+| `hxn-host` | `Host` | Makes the URL absolute with this host |
+| `hxn-protocol` | `Protocol` | Scheme for an absolute URL (`https`) |
+| `hxn-fragment` | `Fragment` | URL `#fragment` |
 
-Other members: `Generator` (the injected `IHtmlGenerator`), `ViewContext` (injected), `Order` (`-1000`, so it runs before other tag helpers) and `Process(...)`. The helper only runs when `hx-page`, `hx-action`, `hx-controller` or `hx-route` is present.
+Other members: `Generator` (the injected `IHtmlGenerator`), `ViewContext` (injected), `Order` (`-1000`, so it runs before other tag helpers) and `Process(...)`. The helper only runs when `hxn-page`, `hxn-action`, `hxn-controller` or `hxn-route` is present.
 
 ### Rules
 
@@ -62,7 +66,7 @@ In htmx 4 an empty `hx-get` is valid: it requests the **current URL**. The helpe
 :::
 
 :::caution[Naming]
-`hx-page`, `hx-action`, `hx-controller`, `hx-route*`, `hx-area`, `hx-host`, `hx-protocol` and `hx-fragment` are Htmx.Net conventions, not htmx attributes. htmx never sees them: the helper consumes them at render time.
+`hxn-page`, `hxn-action`, `hxn-controller`, `hxn-route*`, `hxn-area`, `hxn-host`, `hxn-protocol` and `hxn-fragment` are Htmx.Net conventions, not htmx attributes. htmx never sees them: the helper consumes them at render time.
 :::
 
 ## Spellings: `:inherited` and `data-hx-`
@@ -86,13 +90,13 @@ htmx 4 turned implicit inheritance off. A child sees a parent's attribute only w
 | `hx-get`, `hx-post`, `hx-put`, `hx-patch`, `hx-delete` | **No**: they do not make descendants send requests |
 
 :::caution[`hx-get:inherited` does not trigger descendant requests]
-Only a **direct** verb attribute makes an element fire a request. Writing `hx-get:inherited` on a container does **not** make its children request that URL. The URL tag helper will still write a generated URL into `hx-get:inherited` if you ask it to, but that is not a working trigger pattern. Put the verb (and `hx-page`/`hx-controller`/...) on each element that should request, and share the *context* (`hx-target:inherited`, `hx-headers-...` with `hx-headers-inherited`) from a parent. For links and forms use `hx-boost:inherited`.
+Only a **direct** verb attribute makes an element fire a request. Writing `hx-get:inherited` on a container does **not** make its children request that URL. The URL tag helper will still write a generated URL into `hx-get:inherited` if you ask it to, but that is not a working trigger pattern. Put the verb (and `hxn-page`/`hxn-controller`/...) on each element that should request, and share the *context* (`hx-target:inherited`, `hx-headers-...` with `hx-headers-inherited`) from a parent. For links and forms use `hx-boost:inherited`.
 :::
 
 ```razor
 <section hx-target:inherited="#out" hx-headers-X-Tenant="@tenant" hx-headers-inherited="true">
-    <button hx-get hx-controller="Orders" hx-action="List">Orders</button>
-    <button hx-get hx-controller="Invoices" hx-action="List">Invoices</button>
+    <button hx-get hxn-controller="Orders" hxn-action="List">Orders</button>
+    <button hx-get hxn-controller="Invoices" hxn-action="List">Invoices</button>
 </section>
 <div id="out"></div>
 ```
@@ -106,7 +110,7 @@ htmx 4 serializes `DELETE` data into the query string and does not include enclo
 ```razor
 <form>
     <input name="id" value="7" />
-    <button hx-delete hx-page="/ErrorSwaps" hx-page-handler="Delete"
+    <button hx-delete hxn-page="/ErrorSwaps" hxn-page-handler="Delete"
             hx-include="closest form" hx-target="#del-out">Delete</button>
 </form>
 ```

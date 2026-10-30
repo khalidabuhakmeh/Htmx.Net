@@ -74,6 +74,6 @@ public class RazorExecutionTests
     {
         var html = await RenderAsync();
         Assert.Contains("content='{\"transitions\":true,\"defaultSwap\":\"outerHTML\"}'", html);
-        Assert.True(html.Contains("hx-page=") == false);
+        Assert.True(html.Contains("hxn-page=") == false);
     }
 }

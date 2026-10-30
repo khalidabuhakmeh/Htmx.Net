@@ -94,9 +94,9 @@ public class HtmxUrlTagHelperTests
     [Fact]
     public void Binding_without_any_verb_attribute_does_nothing()
     {
-        var (ctx, output) = Make(("hx-page", "/Index"));
+        var (ctx, output) = Make(("hxn-page", "/Index"));
         Bind("page").Process(ctx, output);
-        Assert.Equal("hx-page", Assert.Single(output.Attributes).Name);
+        Assert.Equal("hxn-page", Assert.Single(output.Attributes).Name);
     }
 
     [Theory]

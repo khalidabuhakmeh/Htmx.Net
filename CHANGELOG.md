@@ -19,6 +19,7 @@ All notable changes to Htmx.Net are documented here. This project adheres to
 
 ### Breaking changes
 
+- **URL tag helper attributes renamed `hx-*` → `hxn-*`** (`hxn-page`, `hxn-page-handler`, `hxn-controller`, `hxn-action`, `hxn-area`, `hxn-route[-*]`, `hxn-host`, `hxn-protocol`, `hxn-fragment`, `hxn-all-route-data`) because htmx 4 added a native `hx-action`.
 **`Htmx` package**
 
 - Request headers: removed `HtmxRequestHeaders.Trigger` and `TriggerName` (compile-error obsolete) —
@@ -45,7 +46,7 @@ All notable changes to Htmx.Net are documented here. This project adheres to
   the `morph*` keys. Unset keys are no longer serialized (previously some defaults were emitted,
   overriding htmx defaults — fixed).
 - URL Tag Helper: a valueless `hx-get` is no longer rewritten (it is valid htmx 4). URL generation now
-  keys off the routing attributes (`hx-page`/`hx-action`/`hx-controller`/`hx-route`) and supports the
+  keys off the routing attributes (`hxn-page`/`hxn-action`/`hxn-controller`/`hxn-route`) and supports the
   `:inherited` and `data-hx-` spellings. Note: `hx-get:inherited` does not trigger descendant requests
   in htmx 4 — use a direct verb attribute per element, or `hx-boost:inherited` for links/forms.
 - Headers Tag Helper: new `hx-headers-inherited` emits `hx-headers:inherited`.
