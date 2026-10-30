@@ -3,21 +3,15 @@
 @{
     ViewData["Title"] = "Triggers";
 
-    var markup = @"<button hx-get=""/demo/trigger/detail"" hx-target=""#trg-result"">
-    WithTrigger(name, object)
-</button>
-<ul id=""event-log""></ul>
+    var without = @"// Without Htmx.Net: assemble the HX-Trigger JSON yourself
+Response.Headers[""HX-Trigger""] = JsonSerializer.Serialize(
+    new Dictionary<string, object> {
+        [""saved""] = new { id = 42, message = ""hello"" }
+    });";
 
-<script>
-  // listen for the server-sent custom event
-  document.addEventListener(""demo-detail"", e => {
-    log(e.detail);   // { id: 42, message: ""hello"" }
-  });
-</script>";
-
-    var server = @"// DemoController.cs
-Response.Htmx(h => h.WithTrigger(""demo-detail"", new { id = 42, message = ""hello"" }));
-// htmx 4 sends:  HX-Trigger: {""demo-detail"":{""id"":42,""message"":""hello""}}";
+    var with = @"// With Htmx.Net: name + detail, serialized and merged for you
+Response.Htmx(h => h.WithTrigger(""saved"", new { id = 42, message = ""hello"" }));
+// htmx 4 sends:  HX-Trigger: {""saved"":{""id"":42,""message"":""hello""}}";
 }
 
 <h1>HX-Trigger</h1>
@@ -36,13 +30,13 @@ Response.Htmx(h => h.WithTrigger(""demo-detail"", new { id = 42, message = ""hel
         the first value.
     </p>
     <div class="code-pair">
-        <figure class="code">
-            <figcaption><span class="file">Triggers.cshtml</span><span class="lang">html</span></figcaption>
-            <pre><code>@markup</code></pre>
+        <figure class="code code--without">
+            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@without</code></pre>
         </figure>
-        <figure class="code">
-            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-            <pre><code>@server</code></pre>
+        <figure class="code code--with">
+            <figcaption><span class="file">With Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@with</code></pre>
         </figure>
     </div>
 </section>

@@ -6,22 +6,19 @@
         "defaultFocusScroll", "defaultSettleDelay", "indicatorClass", "requestClass", "includeIndicatorCSS", "defaultTimeout",
         "extensions", "morphIgnore", "morphSkip", "morphSkipChildren", "morphScanLimit", "noSwap", "implicitInheritance", "inlineScriptNonce" };
 
-    var markup = @"@section HtmxConfig {
-    <meta name=""htmx-config""
-          defaultSwap=""beforeend""
-          defaultTimeout=""45000""
-          mode=""same-origin""
-          noSwap=""@(new object[] { 204, 304, 422 })""
-          morphIgnore=""@(new[] { ""data-htmx-powered"", ""data-keep"" })""
-          implicitInheritance=""false"" />
-}";
+    var without = @"<!-- Without Htmx.Net: hand-write and escape the content JSON -->
+<meta name=""htmx-config""
+      content='{""defaultSwap"":""beforeend"",""defaultTimeout"":45000,
+                ""noSwap"":[204,304,422],""implicitInheritance"":false}' />
+<!-- antiforgery token? wire that up separately -->";
 
-    var effects = @"<!-- no hx-swap: defaultSwap=beforeend appends -->
-<button hx-get=""/demo/config/swap"" hx-target=""#cfg-list"">Add item</button>
-<ul id=""cfg-list""><li>initial</li></ul>
-
-<!-- 422 is in noSwap, so the response is not swapped -->
-<button hx-get=""/demo/status/422"" hx-target=""#cfg-noswap-target"">GET 422</button>";
+    var with = @"<!-- With Htmx.Net: typed attributes, arrays serialized, antiforgery built in -->
+<meta name=""htmx-config""
+      defaultSwap=""beforeend""
+      defaultTimeout=""45000""
+      noSwap=""@(new object[] { 204, 304, 422 })""
+      implicitInheritance=""false""
+      includeAspNetAntiforgeryToken=""true"" />";
 }
 @section HtmxConfig {
     @* Page-scoped config: replaces the layout's global htmx-config meta on this page only. *@
@@ -49,13 +46,13 @@
         <code>htmx.config</code> in a script to fill in the table.
     </p>
     <div class="code-pair">
-        <figure class="code">
-            <figcaption><span class="file">Config.cshtml</span><span class="lang">html</span></figcaption>
-            <pre><code>@markup</code></pre>
+        <figure class="code code--without">
+            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">html</span></figcaption>
+            <pre><code>@without</code></pre>
         </figure>
-        <figure class="code">
-            <figcaption><span class="file">Config.cshtml</span><span class="lang">html</span></figcaption>
-            <pre><code>@effects</code></pre>
+        <figure class="code code--with">
+            <figcaption><span class="file">With Htmx.Net</span><span class="lang">html</span></figcaption>
+            <pre><code>@with</code></pre>
         </figure>
     </div>
 </section>

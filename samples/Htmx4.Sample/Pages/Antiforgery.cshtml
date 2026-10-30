@@ -7,26 +7,22 @@
     ViewData["Title"] = "Antiforgery";
     var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
 
-    var markup = @"<!-- _Layout: ask htmx to attach the ASP.NET antiforgery token -->
+    var without = @"<!-- Without Htmx.Net: write the token-injection script yourself -->
+<meta name=""htmx-config"" content='{ ...your config... }' />
+<script>
+  document.addEventListener(""htmx:config:request"", e => {
+    if (e.detail.ctx.request.method === ""GET"") return;
+    const t = document.querySelector(""input[name=__RequestVerificationToken]"")?.value;
+    if (t) e.detail.ctx.request.headers[""RequestVerificationToken""] = t;
+  });
+</script>";
+
+    var with = @"<!-- With Htmx.Net: opt in on the meta, map the script -->
 <meta name=""htmx-config"" includeAspNetAntiforgeryToken=""true"" />
+<script src=""@HtmxAntiforgeryScriptEndpoints.Path"" defer></script>
 
-<!-- no body form: token goes in the RequestVerificationToken header -->
-<button hx-post=""/demo/af/check"" hx-target=""#af-out"">POST header</button>
-
-<!-- form body: token is added as a hidden form field -->
-<form hx-post=""/demo/af/check"" hx-target=""#af-out"">
-    <input name=""note"" value=""form-post"" />
-    <button type=""submit"">POST form</button>
-</form>";
-
-    var server = @"// DemoController.cs
-[HttpPost(""af/strict""), AutoValidateAntiforgeryToken]
-public IActionResult Strict() => Frag(""strict ok"");
-
-[HttpPost(""af/validate-attr""), ValidateAntiForgeryToken]
-public IActionResult ValidateAttr() => Frag(""validated"");
-
-// A raw fetch(""/demo/af/strict"", { method: ""POST"" }) sends no token -> 400.";
+// Program.cs
+app.MapHtmxAntiforgeryScript();";
 }
 <h1>Antiforgery</h1>
 <p class="demo-lead">
@@ -42,13 +38,13 @@ public IActionResult ValidateAttr() => Frag(""validated"");
         token from htmx's config and decorates each request, so the standard antiforgery attributes work on the server.
     </p>
     <div class="code-pair">
-        <figure class="code">
-            <figcaption><span class="file">Antiforgery.cshtml</span><span class="lang">html</span></figcaption>
-            <pre><code>@markup</code></pre>
+        <figure class="code code--without">
+            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">html</span></figcaption>
+            <pre><code>@without</code></pre>
         </figure>
-        <figure class="code">
-            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-            <pre><code>@server</code></pre>
+        <figure class="code code--with">
+            <figcaption><span class="file">With Htmx.Net</span><span class="lang">html</span></figcaption>
+            <pre><code>@with</code></pre>
         </figure>
     </div>
 </section>

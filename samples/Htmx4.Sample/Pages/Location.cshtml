@@ -3,28 +3,18 @@
 @{
     ViewData["Title"] = "Location";
 
-    var markup = @"<button hx-get=""/Location?handler=Go"" hx-target=""#loc-start"">
-    Navigate via HtmxLocation object
-</button>
-<div id=""loc-dest"">(destination, before)</div>
-<div id=""loc-oob"">(oob before)</div>";
+    var without = @"// Without Htmx.Net: build the HX-Location JSON by hand
+Response.Headers[""HX-Location""] =
+    ""{\""path\"":\""/Location\"",\""target\"":\""#loc-dest\"",""
+  + ""\""swap\"":\""innerHTML\"",\""select\"":\""#loc-incoming\""}"";";
 
-    var server = @"// Location.cshtml.cs
-public IActionResult OnGetGo()
+    var with = @"// With Htmx.Net: typed HtmxLocation (path, target, swap, select, values...)
+Response.Htmx(h => h.Location(new HtmxLocation
 {
-    Response.Htmx(h => h.Location(new HtmxLocation
-    {
-        Path = ""/Location?handler=Landing"",
-        Target = ""#loc-dest"",
-        Swap = HtmxSwap.InnerHtml,
-        Select = ""#loc-incoming"",
-        SelectOob = ""#loc-oob-incoming:#loc-oob"",
-        Values = new Dictionary<string, object> { [""from""] = ""hx-location"", [""n""] = 1 },
-        Transition = true
-    }));
-    return Content(""navigating"");
-}
-
+    Path = ""/Location"", Target = ""#loc-dest"",
+    Swap = HtmxSwap.InnerHtml, Select = ""#loc-incoming"",
+    Values = new() { [""from""] = ""hx-location"" }, Transition = true
+}));
 // string overload: h.Location(""/Location?handler=Landing"")";
 }
 
@@ -42,13 +32,13 @@ public IActionResult OnGetGo()
         request to <code>Path</code> and swaps the result according to the object's properties.
     </p>
     <div class="code-pair">
-        <figure class="code">
-            <figcaption><span class="file">Location.cshtml</span><span class="lang">html</span></figcaption>
-            <pre><code>@markup</code></pre>
+        <figure class="code code--without">
+            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@without</code></pre>
         </figure>
-        <figure class="code">
-            <figcaption><span class="file">Location.cshtml.cs</span><span class="lang">csharp</span></figcaption>
-            <pre><code>@server</code></pre>
+        <figure class="code code--with">
+            <figcaption><span class="file">With Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@with</code></pre>
         </figure>
     </div>
 </section>

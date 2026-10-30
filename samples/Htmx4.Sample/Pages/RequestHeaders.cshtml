@@ -3,27 +3,19 @@
 @{
     ViewData["Title"] = "RequestHeaders";
 
-    var markup = @"<button id=""rh-btn-id""
-        hx-get=""/demo/request-headers?p=rh""
-        hx-target=""#rh-result"">GET with id</button>
-<div id=""rh-result"">(no result yet)</div>
+    var without = @"// Without Htmx.Net: read and parse the raw headers
+var isHtmx = Request.Headers[""HX-Request""] == ""true"";
+var source = Request.Headers[""HX-Source""].ToString();   // ""button#rh-btn-id""
+var hash   = source.IndexOf('#');
+var tag    = hash < 0 ? source : source[..hash];          // ""button""
+var id     = hash < 0 ? null   : source[(hash + 1)..];    // ""rh-btn-id""";
 
-<!-- hx-select makes the request HX-Request-Type: full -->
-<button hx-get=""/demo/request-headers?p=rh3""
-        hx-select=""#rh3-fragment""
-        hx-target=""#rh-full-result"">GET with hx-select</button>";
-
-    var server = @"[HttpGet(""request-headers"")]
-public IActionResult RequestHeadersEcho(string p = ""rh"")
+    var with = @"// With Htmx.Net: one call, typed values (tag#id already parsed)
+if (Request.IsHtmx(out var h))
 {
-    if (Request.IsHtmx(out var h))
-    {
-        var source    = h.Source;                    // ""button#rh-btn-id""
-        var sourceId  = h.SourceElement?.Id;         // ""rh-btn-id""
-        var target    = h.Target;                    // ""div#rh-result""
-        var targetTag = h.TargetElement?.TagName;    // ""div""
-    }
-    // ...echo the values back as an HTML fragment
+    var tag  = h.SourceElement?.TagName;   // ""button""
+    var id   = h.SourceElement?.Id;        // ""rh-btn-id""
+    var kind = h.RequestType;              // Full or Partial
 }";
 }
 <h1>Request headers</h1>
@@ -41,13 +33,13 @@ public IActionResult RequestHeadersEcho(string p = ""rh"")
         The library parses them into an element reference so you don't split strings yourself.
     </p>
     <div class="code-pair">
-        <figure class="code">
-            <figcaption><span class="file">RequestHeaders.cshtml</span><span class="lang">html</span></figcaption>
-            <pre><code>@markup</code></pre>
+        <figure class="code code--without">
+            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@without</code></pre>
         </figure>
-        <figure class="code">
-            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-            <pre><code>@server</code></pre>
+        <figure class="code code--with">
+            <figcaption><span class="file">With Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@with</code></pre>
         </figure>
     </div>
 </section>

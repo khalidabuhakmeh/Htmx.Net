@@ -4,46 +4,42 @@
     ViewData["Title"] = "ResponseHeaders";
     var swaps = new[] { "innerHTML", "outerHTML", "beforebegin", "afterbegin", "beforeend", "afterend", "delete", "none", "outerSync", "innerMorph", "outerMorph", "textContent", "before", "prepend", "append", "after" };
 
-    var markup = @"<button hx-get=""/demo/resp/push-url"" hx-target=""#resp-result"">PushUrl</button>
-<button hx-get=""/demo/resp/retarget"" hx-target=""#resp-result"">Retarget</button>
-<button hx-get=""/demo/resp/reswap"" hx-target=""#resp-result"">Reswap</button>
+    var without = @"// Without Htmx.Net: raw header names + hand-escaped JSON
+Response.Headers[""HX-Push-Url""] = ""/ResponseHeaders?pushed=1"";
+Response.Headers[""HX-Reswap""]   = ""beforeend"";
+Response.Headers[""HX-Retarget""] = ""#resp-retarget-target"";
+Response.Headers[""HX-Location""] =
+    ""{\""path\"":\""/Location\"",\""target\"":\""#resp-result\"",\""swap\"":\""innerHTML\""}"";";
 
-<div id=""resp-result"">(no result yet)</div>
-<div id=""resp-retarget-target"">(retarget target)</div>";
-
-    var server = @"// DemoController.cs
-Response.Htmx(h => h.PushUrl(""/ResponseHeaders?pushed=1""));      // HX-Push-Url
-Response.Htmx(h => h.ReplaceUrl(""/ResponseHeaders?replaced=1"")); // HX-Replace-Url
-Response.Htmx(h => h.PreventPush());                              // HX-Push-Url: false
-Response.Htmx(h => h.Redirect(""/Boosted""));                      // HX-Redirect
-Response.Htmx(h => h.Refresh());                                  // HX-Refresh: true
-Response.Htmx(h => h.Retarget(""#resp-retarget-target""));         // HX-Retarget
-Response.Htmx(h => h.Reswap(HtmxSwap.BeforeEnd));                 // HX-Reswap
-Response.Htmx(h => h.Reselect(""#resp-pick""));                    // HX-Reselect
-Response.Htmx(h => h.Location(new HtmxLocation {
-    Path = ""/Location?handler=Landing"", Target = ""#resp-result"",
-    Swap = HtmxSwap.InnerHtml, Select = ""#loc-incoming"" }));     // HX-Location";
+    var with = @"// With Htmx.Net: typed, fluent, no magic strings
+Response.Htmx(h => h
+    .PushUrl(""/ResponseHeaders?pushed=1"")
+    .Reswap(HtmxSwap.BeforeEnd)
+    .Retarget(""#resp-retarget-target"")
+    .Location(new HtmxLocation {
+        Path = ""/Location"", Target = ""#resp-result"", Swap = HtmxSwap.InnerHtml }));";
 }
 <h1>Response headers</h1>
 <p class="demo-lead">
-    The server can steer htmx from the response: change the URL, redirect, refresh, pick a different target, swap style or
-    selector. <code>Response.Htmx(h =&gt; ...)</code> sets the matching <code>HX-*</code> headers, so the page markup doesn't need to know.
+    Htmx.Net gives you a fluent <code>Response.Htmx(h =&gt; ...)</code> builder for the <code>HX-*</code>
+    response headers, with typed <code>HtmxSwap</code> and <code>HtmxLocation</code> values, so you steer
+    htmx from the server without hand-writing header names or escaped JSON.
 </p>
 
 <section class="how">
     <h2>How it works</h2>
     <p>
-        Every button hits <code>/demo/resp/&lt;name&gt;</code>. The handler writes one response header through the fluent
-        <code>Response.Htmx</code> builder; htmx reads it and overrides what the request attributes asked for.
+        The button markup is plain htmx (<code>hx-get</code> + <code>hx-target</code>); the difference is
+        on the server. Both columns set the same <code>HX-*</code> headers.
     </p>
     <div class="code-pair">
-        <figure class="code">
-            <figcaption><span class="file">ResponseHeaders.cshtml</span><span class="lang">html</span></figcaption>
-            <pre><code>@markup</code></pre>
+        <figure class="code code--without">
+            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@without</code></pre>
         </figure>
-        <figure class="code">
-            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-            <pre><code>@server</code></pre>
+        <figure class="code code--with">
+            <figcaption><span class="file">With Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@with</code></pre>
         </figure>
     </div>
 </section>

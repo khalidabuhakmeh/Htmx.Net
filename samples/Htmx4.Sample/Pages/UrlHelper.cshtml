@@ -3,26 +3,17 @@
 @{
     ViewData["Title"] = "UrlHelper";
 
-    var markup = @"<!-- you write: -->
-<button hx-get hxn-route=""demo-echo"" hxn-route-id=""42"" hxn-route-p=""rv""
-        hx-target=""#url-result-box"">hxn-route + values</button>
+    var without = @"<!-- Without Htmx.Net: hard-code the URL (breaks when routes change) -->
+<button hx-get=""/demo/echo/7?p=ctrl"" hx-target=""#url-result-box"">
+    controller/action
+</button>";
 
-<button hx-get hxn-controller=""Demo"" hxn-action=""Echo"" hxn-route-id=""7""
+    var with = @"<!-- With Htmx.Net: generated from ASP.NET routing, like asp-* -->
+<button hx-get
+        hxn-controller=""Demo"" hxn-action=""Echo""
+        hxn-route-id=""7"" hxn-route-p=""ctrl""
         hx-target=""#url-result-box"">controller/action</button>
-
-<button hx-post hxn-page=""/UrlHelper"" hxn-page-handler=""Post""
-        hx-target=""#url-result-box"">Razor Page handler</button>
-
-<!-- the tag helper renders: -->
-<button hx-get=""/demo/echo/42?p=rv"" ...>hxn-route + values</button>";
-
-    var server = @"// DemoController.cs
-[HttpGet(""echo/{id?}"", Name = ""demo-echo"")]
-public IActionResult Echo(string? id, string? p) =>
-    Frag($""demo-echo id={id} p={p} path={Request.Path}"");
-
-// The URL comes from ASP.NET Core routing (like asp-controller / asp-route),
-// so renaming the route or action updates every button automatically.";
+<!-- renders: hx-get=""/demo/echo/7?p=ctrl"" -->";
 }
 <h1>URL tag helper matrix</h1>
 <p class="demo-lead">
@@ -40,13 +31,13 @@ public IActionResult Echo(string? id, string? p) =>
         <code>hxn-protocol</code>/<code>hxn-host</code> to produce an absolute URL.
     </p>
     <div class="code-pair">
-        <figure class="code">
-            <figcaption><span class="file">UrlHelper.cshtml</span><span class="lang">html</span></figcaption>
-            <pre><code>@markup</code></pre>
+        <figure class="code code--without">
+            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">html</span></figcaption>
+            <pre><code>@without</code></pre>
         </figure>
-        <figure class="code">
-            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-            <pre><code>@server</code></pre>
+        <figure class="code code--with">
+            <figcaption><span class="file">With Htmx.Net</span><span class="lang">html</span></figcaption>
+            <pre><code>@with</code></pre>
         </figure>
     </div>
 </section>
