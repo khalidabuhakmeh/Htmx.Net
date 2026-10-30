@@ -15,16 +15,17 @@
 [HttpGet(""status/{code:int}"")]
 public IActionResult Status(int code) => code switch
 {
-    422 => Frag(""<div class='error'>Validation failed</div>"", 422),
-    500 => Frag(""<div class='error'>Server exploded</div>"", 500),
+    // return HTML with an explicit status code
+    422 => new ContentResult {
+        Content = ""<div class='error'>Validation failed</div>"",
+        ContentType = ""text/html"", StatusCode = 422 },
+    500 => new ContentResult {
+        Content = ""<div class='error'>Server exploded</div>"",
+        ContentType = ""text/html"", StatusCode = 500 },
     204 => NoContent(),        // htmx: no swap
     304 => StatusCode(304),    // htmx: no swap
     _   => NotFound()
-};
-
-// Frag(html, status): this sample's fragment shortcut.
-// Real apps return Partial(""_View"", model)
-// or Content(html, ""text/html"").";
+};";
 }
 
 <h1>Error responses swap by default (htmx 4)</h1>

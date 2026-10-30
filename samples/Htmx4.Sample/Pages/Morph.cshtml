@@ -12,14 +12,10 @@
     var server = @"// DemoController.cs
 case ""outer"":
     Response.Htmx(h => h.Reswap(HtmxSwap.OuterMorph));
-    return Frag($""<div id='{id}'>{inputs}</div>"");
+    return Content($""<div id='{id}'>{inputs}</div>"", ""text/html"");
 case ""inner"":
     Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));
-    return Frag(inputs);
-
-// Frag(html): this sample's HTML-fragment shortcut.
-// Real apps return Partial(""_View"", model)
-// or Content(html, ""text/html"").";
+    return Content(inputs, ""text/html"");";
 }
 
 <h1>Morph vs plain swap</h1>

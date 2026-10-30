@@ -15,15 +15,13 @@ public IActionResult Poll(int n = 0, int stop = 3, string mode = ""load"")
 {
     n++;
     if (n >= stop)   // no hx-trigger in the reply => polling ends
-        return Frag($""<div id='poll-{mode}'>{n} stopped</div>"");
+        return Content($""<div id='poll-{mode}'>{n} stopped</div>"", ""text/html"");
 
-    return Frag($""<div id='poll-{mode}' hx-get='/demo/poll?n={n}&stop={stop}&mode={mode}' "" +
-                $""hx-trigger='every 1s' hx-swap='outerHTML'>{n} polling</div>"");
-}
-
-// Frag(html): this sample's HTML-fragment shortcut.
-// Real apps return Partial(""_View"", model)
-// or Content(html, ""text/html"").";
+    return Content(
+        $""<div id='poll-{mode}' hx-get='/demo/poll?n={n}&stop={stop}&mode={mode}' "" +
+        $""hx-trigger='every 1s' hx-swap='outerHTML'>{n} polling</div>"",
+        ""text/html"");
+}";
 }
 
 <h1>Polling</h1>
