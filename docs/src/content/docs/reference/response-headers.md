@@ -1,6 +1,6 @@
 ---
 title: Response header reference
-description: Response headers written by Htmx.Net and the HtmxResponseHeaders members that set them.
+description: Response headers written by htmx.NET and the HtmxResponseHeaders members that set them.
 ---
 
 | Header | `HtmxResponseHeaders` key const | Helper |

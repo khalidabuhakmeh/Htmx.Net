@@ -7,7 +7,7 @@
     ViewData["Title"] = "Antiforgery";
     var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
 
-    var without = @"<!-- Without Htmx.Net: write the -->
+    var without = @"<!-- Without htmx.NET: write the -->
 <!-- token-injection script yourself -->
 <meta name=""htmx-config"" content='{ ...your config... }' />
 <script>
@@ -18,7 +18,7 @@
   });
 </script>";
 
-    var with = @"<!-- With Htmx.Net: opt in on the meta, map the script -->
+    var with = @"<!-- With htmx.NET: opt in on the meta, map the script -->
 <meta name=""htmx-config"" includeAspNetAntiforgeryToken=""true"" />
 <script src=""@HtmxAntiforgeryScriptEndpoints.Path"" defer></script>
 
@@ -40,11 +40,11 @@ app.MapHtmxAntiforgeryScript();";
     </p>
     <div class="code-pair">
         <figure class="code code--without">
-            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">html</span></figcaption>
+            <figcaption><span class="file">Without htmx.NET</span><span class="lang">html</span></figcaption>
             <pre><code>@without</code></pre>
         </figure>
         <figure class="code code--with">
-            <figcaption><span class="file">With Htmx.Net</span><span class="lang">html</span></figcaption>
+            <figcaption><span class="file">With htmx.NET</span><span class="lang">html</span></figcaption>
             <pre><code>@with</code></pre>
         </figure>
     </div>

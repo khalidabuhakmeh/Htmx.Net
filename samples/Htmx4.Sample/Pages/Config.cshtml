@@ -6,14 +6,14 @@
         "defaultFocusScroll", "defaultSettleDelay", "indicatorClass", "requestClass", "includeIndicatorCSS", "defaultTimeout",
         "extensions", "morphIgnore", "morphSkip", "morphSkipChildren", "morphScanLimit", "noSwap", "implicitInheritance", "inlineScriptNonce" };
 
-    var without = @"<!-- Without Htmx.Net: hand-write and -->
+    var without = @"<!-- Without htmx.NET: hand-write and -->
 <!-- escape the content JSON -->
 <meta name=""htmx-config""
       content='{""defaultSwap"":""beforeend"",""defaultTimeout"":45000,
                 ""noSwap"":[204,304,422],""implicitInheritance"":false}' />
 <!-- antiforgery token? wire that up separately -->";
 
-    var with = @"<!-- With Htmx.Net: typed attributes, -->
+    var with = @"<!-- With htmx.NET: typed attributes, -->
 <!-- arrays serialized, antiforgery built in -->
 <meta name=""htmx-config""
       defaultSwap=""beforeend""
@@ -49,11 +49,11 @@
     </p>
     <div class="code-pair">
         <figure class="code code--without">
-            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">html</span></figcaption>
+            <figcaption><span class="file">Without htmx.NET</span><span class="lang">html</span></figcaption>
             <pre><code>@without</code></pre>
         </figure>
         <figure class="code code--with">
-            <figcaption><span class="file">With Htmx.Net</span><span class="lang">html</span></figcaption>
+            <figcaption><span class="file">With htmx.NET</span><span class="lang">html</span></figcaption>
             <pre><code>@with</code></pre>
         </figure>
     </div>

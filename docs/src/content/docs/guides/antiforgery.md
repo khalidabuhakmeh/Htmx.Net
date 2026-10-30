@@ -3,7 +3,7 @@ title: Antiforgery
 description: Send the ASP.NET Core antiforgery token with htmx 4 requests using the htmx-config tag helper, MapHtmxAntiforgeryScript, HtmxSnippets and Html.HtmxAntiforgeryScript, plus the security limits to know about.
 ---
 
-ASP.NET Core rejects unsafe requests (POST, PUT, PATCH, DELETE) that lack a valid antiforgery token. htmx requests are not form posts, so something must attach the token. Htmx.Net does that with a small script that reads the token from `htmx-config` and decorates each same-origin, non-safe request. You keep using the standard `[AutoValidateAntiforgeryToken]`, `[ValidateAntiForgeryToken]` and `app.UseAntiforgery()`.
+ASP.NET Core rejects unsafe requests (POST, PUT, PATCH, DELETE) that lack a valid antiforgery token. htmx requests are not form posts, so something must attach the token. htmx.NET does that with a small script that reads the token from `htmx-config` and decorates each same-origin, non-safe request. You keep using the standard `[AutoValidateAntiforgeryToken]`, `[ValidateAntiForgeryToken]` and `app.UseAntiforgery()`.
 
 ## Setup
 

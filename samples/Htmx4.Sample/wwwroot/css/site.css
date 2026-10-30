@@ -481,7 +481,7 @@ figure.code {
 .code-pair figure.code { margin: 0; min-width: 0; }
 .code-pair figure.code pre { max-height: 22rem; overflow: auto; }
 
-/* "Without Htmx.Net" vs "With Htmx.Net" comparison: the library side is the hero. */
+/* "Without htmx.NET" vs "With htmx.NET" comparison: the library side is the hero. */
 figure.code.code--with {
     border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
 }

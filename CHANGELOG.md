@@ -1,11 +1,11 @@
 # Changelog
 
-All notable changes to Htmx.Net are documented here. This project adheres to
+All notable changes to htmx.NET are documented here. This project adheres to
 [Semantic Versioning](https://semver.org/).
 
 ## [2.0.0] - Unreleased (htmx 4)
 
-> **Breaking change.** Htmx.Net 2.x targets **[htmx 4](https://four.htmx.org/) only**. htmx 1.x/2.x
+> **Breaking change.** htmx.NET 2.x targets **[htmx 4](https://four.htmx.org/) only**. htmx 1.x/2.x
 > users should remain on the 1.x line. See the full
 > **[Migration guide](https://khalidabuhakmeh.github.io/Htmx.Net/migration/v1-to-v2/)**.
 

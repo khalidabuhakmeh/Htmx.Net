@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "RequestHeaders";
 
-    var without = @"// Without Htmx.Net: parse the raw headers
+    var without = @"// Without htmx.NET: parse the raw headers
 var isHtmx = Request.Headers[""HX-Request""] == ""true"";
 // HX-Source arrives as ""button#rh-btn-id"" — split it:
 var source = Request.Headers[""HX-Source""].ToString();
@@ -11,7 +11,7 @@ var hash   = source.IndexOf('#');
 var tag    = hash < 0 ? source : source[..hash];
 var id     = hash < 0 ? null   : source[(hash + 1)..];";
 
-    var with = @"// With Htmx.Net: one call, typed values
+    var with = @"// With htmx.NET: one call, typed values
 if (Request.IsHtmx(out var h))
 {
     var tag  = h.SourceElement?.TagName;  // button
@@ -35,11 +35,11 @@ if (Request.IsHtmx(out var h))
     </p>
     <div class="code-pair">
         <figure class="code code--without">
-            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <figcaption><span class="file">Without htmx.NET</span><span class="lang">csharp</span></figcaption>
             <pre><code>@without</code></pre>
         </figure>
         <figure class="code code--with">
-            <figcaption><span class="file">With Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <figcaption><span class="file">With htmx.NET</span><span class="lang">csharp</span></figcaption>
             <pre><code>@with</code></pre>
         </figure>
     </div>
@@ -74,7 +74,7 @@ if (Request.IsHtmx(out var h))
 
 <section class="ref-panel">
     <p class="ref-panel__label">Header names</p>
-    <p class="ref-panel__note">Htmx.Net exposes every htmx request header as a constant on <code>HtmxRequestHeaders.Keys</code>:</p>
+    <p class="ref-panel__note">htmx.NET exposes every htmx request header as a constant on <code>HtmxRequestHeaders.Keys</code>:</p>
     <div class="chips">
         <code data-testid="rh-key-request">@HtmxRequestHeaders.Keys.Request</code>
         <code data-testid="rh-key-request-type">@HtmxRequestHeaders.Keys.RequestType</code>

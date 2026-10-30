@@ -17,7 +17,7 @@ namespace Htmx.Tests.TagHelpers;
 
 public class HtmxConfigMetaTagHelperTests
 {
-    // Keys from docs/src/content/docs/reference/htmx4-facts.md section 4 (+ antiForgery, an Htmx.Net extension)
+    // Keys from docs/src/content/docs/reference/htmx4-facts.md section 4 (+ antiForgery, an htmx.NET extension)
     private static readonly string[] Htmx4Keys =
     {
         "logAll", "prefix", "metaCharacter", "transitions", "history", "mode", "defaultSwap",

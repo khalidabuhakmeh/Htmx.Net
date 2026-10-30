@@ -1,10 +1,10 @@
 ---
-title: Htmx.Net v1.x (Previous Version)
-description: Archived documentation for Htmx.Net v1.x, targeting htmx 1.x and 2.x.
+title: htmx.NET v1.x (Previous Version)
+description: Archived documentation for htmx.NET v1.x, targeting htmx 1.x and 2.x.
 ---
 
 :::caution[Previous version]
-This documents **Htmx.Net v1.x** for **htmx 1.x / 2.x**. The current version targets **htmx 4** and has breaking changes. See the [Migration guide](/Htmx.Net/migration/v1-to-v2/) and the current docs.
+This documents **htmx.NET v1.x** for **htmx 1.x / 2.x**. The current version targets **htmx 4** and has breaking changes. See the [Migration guide](/Htmx.Net/migration/v1-to-v2/) and the current docs.
 :::
 
 :::note

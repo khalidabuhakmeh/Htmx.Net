@@ -1,10 +1,10 @@
 ---
 title: Migrating from v1 to v2 (htmx 2 → htmx 4)
-description: Complete map of removed, renamed, and new Htmx.Net APIs when upgrading from v1 (htmx 2) to v2 (htmx 4).
+description: Complete map of removed, renamed, and new htmx.NET APIs when upgrading from v1 (htmx 2) to v2 (htmx 4).
 ---
 
 :::caution
-Htmx.Net 2.0 is a **breaking major release** that targets **htmx 4 only**. If you need htmx 2 support, stay on the v1 package line.
+htmx.NET 2.0 is a **breaking major release** that targets **htmx 4 only**. If you need htmx 2 support, stay on the v1 package line.
 Many changes are client-side and come from htmx itself. Read the official [htmx 4 upgrade guide](https://four.htmx.org/docs/whats-new-in-htmx-4) alongside this page.
 :::
 

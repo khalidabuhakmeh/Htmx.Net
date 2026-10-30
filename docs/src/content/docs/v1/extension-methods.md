@@ -1,10 +1,10 @@
 ---
 title: Htmx Extension Methods (v1.x)
-description: HttpRequest and HttpResponse extension methods, headers, triggers and CORS in Htmx.Net v1.x.
+description: HttpRequest and HttpResponse extension methods, headers, triggers and CORS in htmx.NET v1.x.
 ---
 
 :::caution[Previous version]
-This documents **Htmx.Net v1.x** for **htmx 1.x / 2.x**. The current version targets **htmx 4** and has breaking changes. See the [Migration guide](/Htmx.Net/migration/v1-to-v2/) and the current docs.
+This documents **htmx.NET v1.x** for **htmx 1.x / 2.x**. The current version targets **htmx 4** and has breaking changes. See the [Migration guide](/Htmx.Net/migration/v1-to-v2/) and the current docs.
 :::
 
 :::note
@@ -170,7 +170,7 @@ Response.Htmx(h => {
 
 ### Triggering Client-Side Events
 
-You can trigger client-side events with HTMX using the `HX-Trigger` header. Htmx.Net provides a `WithTrigger` helper method to configure one or more events you wish to trigger.
+You can trigger client-side events with HTMX using the `HX-Trigger` header. htmx.NET provides a `WithTrigger` helper method to configure one or more events you wish to trigger.
 
 ```c#
 Response.Htmx(h => {

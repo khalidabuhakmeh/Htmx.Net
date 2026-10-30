@@ -15,7 +15,7 @@ public class DemoController : Controller
 
     /// <summary>
     /// Sample-only shortcut for returning an inline HTML fragment with an optional status code.
-    /// It is NOT part of Htmx.Net. In a real app you would usually return a partial view
+    /// It is NOT part of htmx.NET. In a real app you would usually return a partial view
     /// (<c>return Partial("_View", model);</c>, an MVC/Razor Pages <c>PartialViewResult</c>) or
     /// a Razor component, rather than building HTML strings by hand. <c>Content(html, "text/html")</c>
     /// is the direct equivalent when you already have the HTML.

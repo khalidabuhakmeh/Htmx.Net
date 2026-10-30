@@ -1,13 +1,13 @@
 ---
 title: htmx 4.0.0 verified facts (Task A4)
-description: Authoritative, citation-backed htmx 4.0.0 contract that all Htmx.Net upgrade tasks must follow.
+description: Authoritative, citation-backed htmx 4.0.0 contract that all htmx.NET upgrade tasks must follow.
 ---
 
 > **Status: VERIFIED (Task A4).** This file is the single source of truth for the htmx 4 upgrade.
 > Implementation code (Phases B, C, D) must follow this document, not memory or the brief.
 > When the official v4 docs and the upgrade skill conflict, the v4 docs win. Every row cites a source.
 
-# htmx 4.0.0 facts for Htmx.Net
+# htmx 4.0.0 facts for htmx.NET
 
 This reference summarizes the official htmx 4 request/response contract and migration points relevant to a server-side helper library. It is based primarily on the htmx v4 reference and upgrade guide; the v4.0.0 release source is used where it clarifies exact request-header construction. Each factual row or statement links to its source.
 

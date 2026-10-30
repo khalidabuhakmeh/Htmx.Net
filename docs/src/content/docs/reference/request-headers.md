@@ -1,6 +1,6 @@
 ---
 title: Request header reference
-description: Request headers read by Htmx.Net and the HtmxRequestHeaders members that expose them.
+description: Request headers read by htmx.NET and the HtmxRequestHeaders members that expose them.
 ---
 
 | Header | `HtmxRequestHeaders` key const | Member | Type |

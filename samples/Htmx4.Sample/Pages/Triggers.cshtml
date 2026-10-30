@@ -3,13 +3,13 @@
 @{
     ViewData["Title"] = "Triggers";
 
-    var without = @"// Without Htmx.Net: build the HX-Trigger JSON
+    var without = @"// Without htmx.NET: build the HX-Trigger JSON
 Response.Headers[""HX-Trigger""] = JsonSerializer.Serialize(
     new Dictionary<string, object> {
         [""saved""] = new { id = 42, message = ""hello"" }
     });";
 
-    var with = @"// With Htmx.Net: name + detail, serialized
+    var with = @"// With htmx.NET: name + detail, serialized
 Response.Htmx(h => h.WithTrigger(""saved"", new { id = 42, message = ""hello"" }));
 // sends HX-Trigger:
 //   {""saved"":{""id"":42,""message"":""hello""}}";
@@ -32,11 +32,11 @@ Response.Htmx(h => h.WithTrigger(""saved"", new { id = 42, message = ""hello"" }
     </p>
     <div class="code-pair">
         <figure class="code code--without">
-            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <figcaption><span class="file">Without htmx.NET</span><span class="lang">csharp</span></figcaption>
             <pre><code>@without</code></pre>
         </figure>
         <figure class="code code--with">
-            <figcaption><span class="file">With Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <figcaption><span class="file">With htmx.NET</span><span class="lang">csharp</span></figcaption>
             <pre><code>@with</code></pre>
         </figure>
     </div>

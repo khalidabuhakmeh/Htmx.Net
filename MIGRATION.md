@@ -1,6 +1,6 @@
-# Migrating to Htmx.Net 2.0
+# Migrating to htmx.NET 2.0
 
-Htmx.Net 2.0 targets **htmx 4** (breaking). It requires `net8.0` or `net10.0`.
+htmx.NET 2.0 targets **htmx 4** (breaking). It requires `net8.0` or `net10.0`.
 
 Full guide: <https://khalidabuhakmeh.github.io/Htmx.Net/migration/v1-to-v2/>
 (source: [`docs/src/content/docs/migration/v1-to-v2.md`](docs/src/content/docs/migration/v1-to-v2.md))

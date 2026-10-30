@@ -3,7 +3,7 @@ title: Getting started
 description: Quick-start for Htmx and Htmx.TagHelpers on htmx 4 - install, wire up Program.cs, the htmx-config meta, antiforgery, and build a first end-to-end ASP.NET Core example.
 ---
 
-Htmx.Net gives ASP.NET Core two packages for **htmx 4**. This page takes you from an empty project to a working htmx interaction with antiforgery protection.
+htmx.NET gives ASP.NET Core two packages for **htmx 4**. This page takes you from an empty project to a working htmx interaction with antiforgery protection.
 
 | Package | Purpose |
 |---|---|

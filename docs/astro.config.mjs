@@ -9,7 +9,7 @@ export default defineConfig({
   base: "/Htmx.Net",
   integrations: [
     starlight({
-      title: "Htmx.Net",
+      title: "htmx.NET",
       customCss: ["./src/styles/htmx.css"],
       // Light code blocks on light theme, dark on dark — matches four.htmx.org.
       expressiveCode: { themes: ["github-light", "github-dark"] },

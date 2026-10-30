@@ -66,7 +66,7 @@ In htmx 4 an empty `hx-get` is valid: it requests the **current URL**. The helpe
 :::
 
 :::caution[Naming]
-`hxn-page`, `hxn-action`, `hxn-controller`, `hxn-route*`, `hxn-area`, `hxn-host`, `hxn-protocol` and `hxn-fragment` are Htmx.Net conventions, not htmx attributes. htmx never sees them: the helper consumes them at render time.
+`hxn-page`, `hxn-action`, `hxn-controller`, `hxn-route*`, `hxn-area`, `hxn-host`, `hxn-protocol` and `hxn-fragment` are htmx.NET conventions, not htmx attributes. htmx never sees them: the helper consumes them at render time.
 :::
 
 ## Spellings: `:inherited` and `data-hx-`

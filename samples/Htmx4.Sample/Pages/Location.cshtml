@@ -3,12 +3,12 @@
 @{
     ViewData["Title"] = "Location";
 
-    var without = @"// Without Htmx.Net: build the HX-Location JSON by hand
+    var without = @"// Without htmx.NET: build the HX-Location JSON by hand
 Response.Headers[""HX-Location""] =
     ""{\""path\"":\""/Location\"",\""target\"":\""#loc-dest\"",""
   + ""\""swap\"":\""innerHTML\"",\""select\"":\""#loc-incoming\""}"";";
 
-    var with = @"// With Htmx.Net: typed HtmxLocation —
+    var with = @"// With htmx.NET: typed HtmxLocation —
 // path, target, swap, select, values...
 Response.Htmx(h => h.Location(new HtmxLocation
 {
@@ -34,11 +34,11 @@ Response.Htmx(h => h.Location(new HtmxLocation
     </p>
     <div class="code-pair">
         <figure class="code code--without">
-            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <figcaption><span class="file">Without htmx.NET</span><span class="lang">csharp</span></figcaption>
             <pre><code>@without</code></pre>
         </figure>
         <figure class="code code--with">
-            <figcaption><span class="file">With Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <figcaption><span class="file">With htmx.NET</span><span class="lang">csharp</span></figcaption>
             <pre><code>@with</code></pre>
         </figure>
     </div>

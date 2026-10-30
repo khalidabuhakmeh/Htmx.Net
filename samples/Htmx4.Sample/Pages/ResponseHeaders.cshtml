@@ -4,14 +4,14 @@
     ViewData["Title"] = "ResponseHeaders";
     var swaps = new[] { "innerHTML", "outerHTML", "beforebegin", "afterbegin", "beforeend", "afterend", "delete", "none", "outerSync", "innerMorph", "outerMorph", "textContent", "before", "prepend", "append", "after" };
 
-    var without = @"// Without Htmx.Net: raw header names + hand-escaped JSON
+    var without = @"// Without htmx.NET: raw header names + hand-escaped JSON
 Response.Headers[""HX-Push-Url""] = ""/ResponseHeaders?pushed=1"";
 Response.Headers[""HX-Reswap""]   = ""beforeend"";
 Response.Headers[""HX-Retarget""] = ""#resp-retarget-target"";
 Response.Headers[""HX-Location""] =
     ""{\""path\"":\""/Location\"",\""target\"":\""#resp-result\"",\""swap\"":\""innerHTML\""}"";";
 
-    var with = @"// With Htmx.Net: typed, fluent, no magic strings
+    var with = @"// With htmx.NET: typed, fluent, no magic strings
 Response.Htmx(h => h
     .PushUrl(""/ResponseHeaders?pushed=1"")
     .Reswap(HtmxSwap.BeforeEnd)
@@ -21,7 +21,7 @@ Response.Htmx(h => h
 }
 <h1>Response headers</h1>
 <p class="demo-lead">
-    Htmx.Net gives you a fluent <code>Response.Htmx(h =&gt; ...)</code> builder for the <code>HX-*</code>
+    htmx.NET gives you a fluent <code>Response.Htmx(h =&gt; ...)</code> builder for the <code>HX-*</code>
     response headers, with typed <code>HtmxSwap</code> and <code>HtmxLocation</code> values, so you steer
     htmx from the server without hand-writing header names or escaped JSON.
 </p>
@@ -34,11 +34,11 @@ Response.Htmx(h => h
     </p>
     <div class="code-pair">
         <figure class="code code--without">
-            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <figcaption><span class="file">Without htmx.NET</span><span class="lang">csharp</span></figcaption>
             <pre><code>@without</code></pre>
         </figure>
         <figure class="code code--with">
-            <figcaption><span class="file">With Htmx.Net</span><span class="lang">csharp</span></figcaption>
+            <figcaption><span class="file">With htmx.NET</span><span class="lang">csharp</span></figcaption>
             <pre><code>@with</code></pre>
         </figure>
     </div>
@@ -82,7 +82,7 @@ Response.Htmx(h => h
 
 <section class="ref-panel">
     <p class="ref-panel__label">Header names</p>
-    <p class="ref-panel__note">Htmx.Net exposes every htmx response header as a constant on <code>HtmxResponseHeaders.Keys</code>:</p>
+    <p class="ref-panel__note">htmx.NET exposes every htmx response header as a constant on <code>HtmxResponseHeaders.Keys</code>:</p>
     <div class="chips">
         <code>@HtmxResponseHeaders.Keys.Location</code>
         <code>@HtmxResponseHeaders.Keys.PushUrl</code>

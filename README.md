@@ -1,4 +1,4 @@
-# Htmx.Net
+# htmx.NET
 
 ![HTMX Logo](https://github.com/khalidabuhakmeh/Htmx.Net/raw/main/shared/htmx-logo.png)
 
@@ -6,9 +6,9 @@
 [![Htmx.TagHelpers](https://img.shields.io/nuget/v/Htmx.TagHelpers?label=Htmx.TagHelpers)](https://www.nuget.org/packages/Htmx.TagHelpers/)
 
 > [!IMPORTANT]
-> **Htmx.Net 2.x targets [htmx 4](https://four.htmx.org/) only.** It is a breaking change from the
+> **htmx.NET 2.x targets [htmx 4](https://four.htmx.org/) only.** It is a breaking change from the
 > 1.x line (which supports htmx 1.x/2.x). See the **[Migration guide](https://khalidabuhakmeh.github.io/Htmx.Net/migration/v1-to-v2/)**.
-> Staying on htmx 1/2? Use Htmx.Net **1.x** and the [previous-version docs](https://khalidabuhakmeh.github.io/Htmx.Net/v1/).
+> Staying on htmx 1/2? Use htmx.NET **1.x** and the [previous-version docs](https://khalidabuhakmeh.github.io/Htmx.Net/v1/).
 
 Server-side ASP.NET Core helpers that make working with [htmx](https://htmx.org/) from `HttpRequest`
 and `HttpResponse` simpler, plus Tag Helpers for URL generation, `htmx-config`, and antiforgery.

@@ -3,13 +3,13 @@
 @{
     ViewData["Title"] = "UrlHelper";
 
-    var without = @"<!-- Without Htmx.Net: hard-code the URL -->
+    var without = @"<!-- Without htmx.NET: hard-code the URL -->
 <!-- (breaks when routes change) -->
 <button hx-get=""/demo/echo/7?p=ctrl"" hx-target=""#url-result-box"">
     controller/action
 </button>";
 
-    var with = @"<!-- With Htmx.Net: generated from -->
+    var with = @"<!-- With htmx.NET: generated from -->
 <!-- ASP.NET routing, like asp-* -->
 <button hx-get
         hxn-controller=""Demo"" hxn-action=""Echo""
@@ -34,11 +34,11 @@
     </p>
     <div class="code-pair">
         <figure class="code code--without">
-            <figcaption><span class="file">Without Htmx.Net</span><span class="lang">html</span></figcaption>
+            <figcaption><span class="file">Without htmx.NET</span><span class="lang">html</span></figcaption>
             <pre><code>@without</code></pre>
         </figure>
         <figure class="code code--with">
-            <figcaption><span class="file">With Htmx.Net</span><span class="lang">html</span></figcaption>
+            <figcaption><span class="file">With htmx.NET</span><span class="lang">html</span></figcaption>
             <pre><code>@with</code></pre>
         </figure>
     </div>
