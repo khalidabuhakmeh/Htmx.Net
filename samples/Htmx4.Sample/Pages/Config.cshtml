@@ -35,10 +35,10 @@
 }
 <h1>Config</h1>
 <p class="demo-lead">
-    htmx is configured through a <code>&lt;meta name="htmx-config"&gt;</code> tag. Here the config tag helper renders it with
+    htmx is configured through a <code>&lt;meta name="htmx-config"&gt;</code> tag. The config tag helper renders it with
     typed attributes, scoped to this page through the <code>HtmxConfig</code> layout section (it replaces the global meta
     from <code>_Layout</code>). The table reads the live <code>htmx.config</code> back so you can see what the browser received.
-    Note: the tag helper types <code>history</code> as a string, so <code>history="true"</code> reads back as <code>"true"</code>.
+    The tag helper types <code>history</code> as a string, so <code>history="true"</code> reads back as <code>"true"</code>.
 </p>
 
 <section class="stage">
@@ -67,9 +67,8 @@
     <button data-testid="cfg-btn-noswap" hx-get="/demo/status/422" hx-target="#cfg-noswap-target">GET 422</button>
 </div>
 <p class="hint">
-    Click <strong>Add item</strong> repeatedly and watch the list <strong>grow</strong> instead of being replaced, because
-    the configured default swap is beforeend. Then click <strong>GET 422</strong> and notice the box stays
-    <strong>untouched</strong>: 422 is listed in noSwap, so htmx skips the swap.
+    Click <strong>Add item</strong> repeatedly and watch the list <strong>grow</strong> instead of being replaced. The configured default swap is beforeend. Then click <strong>GET 422</strong>. The box stays
+    <strong>untouched</strong> because 422 is listed in noSwap.
 </p>
 <div class="result" id="cfg-noswap-target" data-testid="cfg-noswap-target">untouched</div>
 </section>
@@ -78,7 +77,7 @@
     <h2>How it works</h2>
     <p>
         Each attribute on the meta tag maps to an <code>htmx.config</code> key. Array and object values such as
-        <code>morphIgnore</code> and <code>noSwap</code> are serialized to JSON for you. The page then reads
+        <code>morphIgnore</code> and <code>noSwap</code> are serialized to JSON. The page then reads
         <code>htmx.config</code> in a script to fill in the table.
     </p>
     <figure class="code">

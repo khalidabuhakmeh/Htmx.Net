@@ -27,8 +27,7 @@ Response.Htmx(h => h.Location(new HtmxLocation {
 <h1>Response headers</h1>
 <p class="demo-lead">
     The server can steer htmx from the response: change the URL, redirect, refresh, pick a different target, swap style or
-    selector. <code>Response.Htmx(h =&gt; ...)</code> sets the matching <code>HX-*</code> headers, so the markup on the
-    page stays unaware of the decision.
+    selector. <code>Response.Htmx(h =&gt; ...)</code> sets the matching <code>HX-*</code> headers, so the page markup doesn't need to know.
 </p>
 
 <section class="stage">

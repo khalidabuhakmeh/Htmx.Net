@@ -26,7 +26,7 @@ public IActionResult Status(int code) => code switch
 <h1>Error responses swap by default (htmx 4)</h1>
 <p class="demo-lead">
     In htmx 4 the default <code>noSwap</code> list is <code>[204, 304]</code>. Every other status, including 4xx and 5xx,
-    swaps its body into the target, so validation errors render with no extra config. DELETE requests also no longer
+    swaps its body into the target, so validation errors render without extra config. DELETE requests also no longer
     include form inputs unless you add <code>hx-include</code>.
 </p>
 
@@ -71,7 +71,7 @@ public IActionResult Status(int code) => code switch
 <section class="how">
     <h2>How it works</h2>
     <p>
-        The server just returns the right status code with an HTML body. htmx decides whether to swap from the status, so
+        The server returns the right status code with an HTML body. htmx decides whether to swap from the status, so
         the same fragment-returning handler serves success and error cases.
     </p>
     <figure class="code">

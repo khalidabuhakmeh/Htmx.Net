@@ -22,8 +22,7 @@ plain   = @Request.IsHtmxNonBoosted()";
 <h1>Boosted</h1>
 <p class="demo-lead">
     <code>hx-boost</code> turns ordinary links and forms into AJAX requests that swap the page body,
-    so navigation feels instant with no full reload. The server can tell a boosted request apart from a
-    normal one using <code>Request.IsHtmxBoosted()</code>.
+    with no full reload. The server detects a boosted request with <code>Request.IsHtmxBoosted()</code>.
 </p>
 
 <section class="stage">

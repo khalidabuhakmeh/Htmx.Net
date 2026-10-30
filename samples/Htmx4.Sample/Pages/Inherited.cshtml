@@ -34,7 +34,7 @@ public IActionResult InheritedEcho(string p = ""inh"")
 <section class="stage">
 <p class="stage__label">Try it</p>
 <p class="hint">
-    Click each button and read its output well. The <strong>first</strong> button picks up the parent's target and
+    Click each button and read its output. The <strong>first</strong> button picks up the parent's target and
     <strong>X-Demo header</strong>; the <strong>second</strong> inherits nothing, so its target well stays untouched and no header is sent.
     The third sets a header on the button itself.
 </p>
@@ -67,7 +67,7 @@ public IActionResult InheritedEcho(string p = ""inh"")
 <section class="how">
     <h2>How it works</h2>
     <p>
-        The parent declares what children should inherit; the server just reports what actually arrived
+        The parent declares what children should inherit; the server reports what actually arrived
         (the <code>X-Demo</code> request header and the resolved target element).
     </p>
     <figure class="code">

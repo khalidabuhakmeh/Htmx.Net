@@ -25,7 +25,7 @@ public IActionResult Poll(int n = 0, int stop = 3, string mode = ""load"")
 <h1>Polling</h1>
 <p class="demo-lead">
     An element with <code>hx-trigger="every 1s"</code> (or <code>load delay:1s</code>) requests the server repeatedly.
-    htmx 4 has no 286 stop signal; instead the server stops polling by returning content that no longer contains the
+    htmx 4 has no 286 stop signal. The server stops polling by returning content that no longer contains the
     trigger. Here the counter stops at 3.
 </p>
 

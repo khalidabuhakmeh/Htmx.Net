@@ -22,7 +22,7 @@ Response.Htmx(h => h.WithTrigger(""demo-detail"", new { id = 42, message = ""hel
 
 <h1>HX-Trigger</h1>
 <p class="demo-lead">
-    Fire client-side events from the server using the <code>HX-Trigger</code> response header.
+    Fire client-side events from the server with the <code>HX-Trigger</code> response header.
     Each button makes a request; the server attaches one or more events with
     <code>WithTrigger(...)</code>, and htmx dispatches them in the browser after the swap.
 </p>

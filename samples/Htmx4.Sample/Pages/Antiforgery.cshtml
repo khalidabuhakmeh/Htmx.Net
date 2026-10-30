@@ -31,7 +31,7 @@ public IActionResult ValidateAttr() => Frag(""validated"");
 <h1>Antiforgery</h1>
 <p class="demo-lead">
     The layout's <code>htmx-config includeAspNetAntiforgeryToken</code> meta plus the <code>@HtmxAntiforgeryScriptEndpoints.Path</code>
-    script attach ASP.NET Core's antiforgery token to same-origin non-GET requests automatically. Header mode is used when the
+    script attach ASP.NET Core's antiforgery token to same-origin non-GET requests. Header mode is used when the
     request has no form body; form mode when the body is form data (an <code>hx-post</code> inside a form).
 </p>
 
@@ -40,7 +40,7 @@ public IActionResult ValidateAttr() => Frag(""validated"");
 <p class="hint">
     Press any button and read the <strong>Result</strong> well: it reports whether the token arrived in the
     <strong>header</strong> or the <strong>form field</strong>. GET sends none. The raw fetch control should end with status
-    <strong>400</strong>, proving the endpoint really validates.
+    <strong>400</strong>, so you know the endpoint validates.
 </p>
 <p>Token header name: <code data-testid="af-header-name">@tokens.HeaderName</code>; form field: <code data-testid="af-field-name">@tokens.FormFieldName</code>.</p>
 <div class="result" id="af-out" data-testid="af-out">(no result yet)</div>
@@ -97,7 +97,7 @@ public IActionResult ValidateAttr() => Frag(""validated"");
     <h2>How it works</h2>
     <p>
         You write ordinary <code>hx-post</code>/<code>hx-put</code>/<code>hx-patch</code>/<code>hx-delete</code> markup. The script reads the
-        token from htmx's config and decorates each request, so the server's standard antiforgery attributes just work.
+        token from htmx's config and decorates each request, so the standard antiforgery attributes work on the server.
     </p>
     <figure class="code">
         <figcaption><span class="file">Antiforgery.cshtml</span><span class="lang">html</span></figcaption>
