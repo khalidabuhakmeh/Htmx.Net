@@ -5,6 +5,11 @@ All notable changes to htmx.NET are documented here. This project adheres to
 
 ## [2.0.0] - Unreleased (htmx 4)
 
+> **Preview.** 2.0.0 is published to NuGet as a **pre-release** while htmx 4 support settles. Install
+> with `--prerelease` (`dotnet add package Htmx --prerelease`) and share feedback on
+> [GitHub issues](https://github.com/khalidabuhakmeh/Htmx.Net/issues). The stable 2.0.0 follows once
+> the preview feedback is in.
+
 > **Breaking change.** htmx.NET 2.x targets **[htmx 4](https://four.htmx.org/) only**. htmx 1.x/2.x
 > users should remain on the 1.x line. See the full
 > **[Migration guide](https://khalidabuhakmeh.github.io/Htmx.Net/migration/v1-to-v2/)**.

@@ -16,12 +16,18 @@ These packages target **htmx 4 only** (`htmx.org@4.0.0`). htmx 1/2 users should 
 
 ## 1. Install
 
+While 2.x is in preview, add `--prerelease` (NuGet skips pre-release versions otherwise):
+
 ```bash
-dotnet add package Htmx
-dotnet add package Htmx.TagHelpers
+dotnet add package Htmx --prerelease
+dotnet add package Htmx.TagHelpers --prerelease
 ```
 
 Both target `net8.0` and `net10.0`. `Htmx` works in any ASP.NET Core app (minimal APIs, MVC, Razor Pages); `Htmx.TagHelpers` needs Razor (MVC views or Razor Pages).
+
+:::tip[This is a preview]
+2.0.0 is a preview release for htmx 4. Try it out and please report anything rough on [GitHub issues](https://github.com/khalidabuhakmeh/Htmx.Net/issues) — feedback now shapes the stable 2.0.0.
+:::
 
 ## 2. Add htmx 4 to your page
 
