@@ -12,10 +12,11 @@
     var server = @"// DemoController.cs
 case ""outer"":
     Response.Htmx(h => h.Reswap(HtmxSwap.OuterMorph));
-    return Content($""<div id='{id}'>{inputs}</div>"", ""text/html"");
+    // _Box renders <div id='...'>...</div>
+    return Partial(""_Box"", model);
 case ""inner"":
     Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));
-    return Content(inputs, ""text/html"");";
+    return Partial(""_Inputs"", model);";
 }
 
 <h1>Morph vs plain swap</h1>

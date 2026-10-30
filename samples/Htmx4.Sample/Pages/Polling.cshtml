@@ -15,12 +15,10 @@ public IActionResult Poll(int n = 0, int stop = 3, string mode = ""load"")
 {
     n++;
     if (n >= stop)   // no hx-trigger in the reply => polling ends
-        return Content($""<div id='poll-{mode}'>{n} stopped</div>"", ""text/html"");
+        return Partial(""_PollStopped"", new PollModel(n, mode));
 
-    return Content(
-        $""<div id='poll-{mode}' hx-get='/demo/poll?n={n}&stop={stop}&mode={mode}' "" +
-        $""hx-trigger='every 1s' hx-swap='outerHTML'>{n} polling</div>"",
-        ""text/html"");
+    // reply re-arms the poll via hx-trigger='every 1s'
+    return Partial(""_Polling"", new PollModel(n, mode, stop));
 }";
 }
 

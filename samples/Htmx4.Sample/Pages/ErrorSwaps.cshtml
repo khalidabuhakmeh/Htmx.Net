@@ -15,13 +15,11 @@
 [HttpGet(""status/{code:int}"")]
 public IActionResult Status(int code) => code switch
 {
-    // return HTML with an explicit status code
-    422 => new ContentResult {
-        Content = ""<div class='error'>Validation failed</div>"",
-        ContentType = ""text/html"", StatusCode = 422 },
-    500 => new ContentResult {
-        Content = ""<div class='error'>Server exploded</div>"",
-        ContentType = ""text/html"", StatusCode = 500 },
+    // partial view returned with an explicit status code
+    422 => new PartialViewResult {
+        ViewName = ""_Error"", StatusCode = 422 },
+    500 => new PartialViewResult {
+        ViewName = ""_Error"", StatusCode = 500 },
     204 => NoContent(),        // htmx: no swap
     304 => StatusCode(304),    // htmx: no swap
     _   => NotFound()
