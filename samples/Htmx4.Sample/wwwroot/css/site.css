@@ -164,7 +164,8 @@ pre {
     border-left: 3px solid var(--ink);
     border-radius: var(--radius);
     padding: .9rem 1rem;
-    overflow-x: auto;
+    white-space: pre-wrap;       /* wrap long lines instead of scrolling horizontally */
+    overflow-wrap: break-word;   /* break over-long tokens (URLs, JSON) as a last resort */
     line-height: 1.5;
     font-size: .82rem;
 }
@@ -539,6 +540,10 @@ pre code.hljs {
     background: transparent;
     padding: 0;
     color: var(--ink);
+    /* highlight.js theme sets overflow-x:auto; let the <pre> wrap instead */
+    white-space: inherit;
+    overflow-wrap: inherit;
+    overflow-x: visible;
 }
 
 /* Raw serialized config JSON (Config demo) — wrap within the box, don't sprawl inline. */
@@ -549,3 +554,41 @@ pre code.hljs {
     color: var(--muted);
 }
 .meta-raw code { color: inherit; }
+
+/* ---- Reference panel (e.g. "Header names") — supplementary, boxed, chips --- */
+.ref-panel {
+    margin-top: 2.5rem;
+    padding: 1.1rem 1.3rem 1.3rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+.ref-panel__label {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 .4rem;
+}
+.ref-panel__note {
+    font-size: .9rem;
+    color: var(--muted);
+    margin: .5rem 0 0;
+}
+.ref-panel__note code { font-size: .8rem; }
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin: .7rem 0 .2rem;
+}
+.chips code {
+    font-family: var(--font-mono);
+    font-size: .76rem;
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: .18rem .6rem;
+    color: var(--ink);
+}

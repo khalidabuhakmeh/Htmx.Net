@@ -71,13 +71,21 @@ if (Request.IsHtmx(out var h))
     <div class="result" id="rh-full-result" data-testid="rh-full-result">(no result yet)</div>
 </section>
 
-<section>
-    <h2>Header names</h2>
-    <p>HtmxRequestHeaders.Keys.All: <code id="rh-keys" data-testid="rh-keys">@string.Join(", ", HtmxRequestHeaders.Keys.All)</code></p>
-    <p>Individual keys: <code data-testid="rh-key-request">@HtmxRequestHeaders.Keys.Request</code>,
-        <code data-testid="rh-key-request-type">@HtmxRequestHeaders.Keys.RequestType</code>,
-        <code>@HtmxRequestHeaders.Keys.CurrentUrl</code>, <code>@HtmxRequestHeaders.Keys.Source</code>,
-        <code>@HtmxRequestHeaders.Keys.Target</code>, <code>@HtmxRequestHeaders.Keys.Boosted</code>,
-        <code>@HtmxRequestHeaders.Keys.HistoryRestoreRequest</code>, <code>@HtmxRequestHeaders.Keys.Prompt</code></p>
-    <p>Full page load (not htmx): <code data-testid="rh-page-is-htmx">@Request.IsHtmx()</code></p>
+<section class="ref-panel">
+    <p class="ref-panel__label">Header names</p>
+    <p class="ref-panel__note">Htmx.Net exposes every htmx request header as a constant on <code>HtmxRequestHeaders.Keys</code>:</p>
+    <div class="chips">
+        <code data-testid="rh-key-request">@HtmxRequestHeaders.Keys.Request</code>
+        <code data-testid="rh-key-request-type">@HtmxRequestHeaders.Keys.RequestType</code>
+        <code>@HtmxRequestHeaders.Keys.CurrentUrl</code>
+        <code>@HtmxRequestHeaders.Keys.Source</code>
+        <code>@HtmxRequestHeaders.Keys.Target</code>
+        <code>@HtmxRequestHeaders.Keys.Boosted</code>
+        <code>@HtmxRequestHeaders.Keys.HistoryRestoreRequest</code>
+        <code>@HtmxRequestHeaders.Keys.Prompt</code>
+    </div>
+    <p class="ref-panel__note"><code>Keys.All</code> gives the whole set as an array (handy for CORS):
+        <code id="rh-keys" data-testid="rh-keys">@string.Join(", ", HtmxRequestHeaders.Keys.All)</code></p>
+    <p class="ref-panel__note">This request was a full page load, not htmx:
+        <code data-testid="rh-page-is-htmx">@Request.IsHtmx()</code></p>
 </section>

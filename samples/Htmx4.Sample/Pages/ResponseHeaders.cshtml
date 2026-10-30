@@ -80,10 +80,20 @@ Response.Htmx(h => h
     </div>
 </section>
 
-<h2>Header names</h2>
-<p>HtmxResponseHeaders.Keys.All: <code data-testid="resp-keys">@string.Join(", ", HtmxResponseHeaders.Keys.All)</code></p>
-<p>Keys: <code>@HtmxResponseHeaders.Keys.Location</code>, <code>@HtmxResponseHeaders.Keys.PushUrl</code>,
-    <code>@HtmxResponseHeaders.Keys.Redirect</code>, <code>@HtmxResponseHeaders.Keys.Refresh</code>,
-    <code>@HtmxResponseHeaders.Keys.ReplaceUrl</code>, <code>@HtmxResponseHeaders.Keys.Reswap</code>,
-    <code>@HtmxResponseHeaders.Keys.Retarget</code>, <code>@HtmxResponseHeaders.Keys.Reselect</code>,
-    <code>@HtmxResponseHeaders.Keys.Trigger</code></p>
+<section class="ref-panel">
+    <p class="ref-panel__label">Header names</p>
+    <p class="ref-panel__note">Htmx.Net exposes every htmx response header as a constant on <code>HtmxResponseHeaders.Keys</code>:</p>
+    <div class="chips">
+        <code>@HtmxResponseHeaders.Keys.Location</code>
+        <code>@HtmxResponseHeaders.Keys.PushUrl</code>
+        <code>@HtmxResponseHeaders.Keys.Redirect</code>
+        <code>@HtmxResponseHeaders.Keys.Refresh</code>
+        <code>@HtmxResponseHeaders.Keys.ReplaceUrl</code>
+        <code>@HtmxResponseHeaders.Keys.Reswap</code>
+        <code>@HtmxResponseHeaders.Keys.Retarget</code>
+        <code>@HtmxResponseHeaders.Keys.Reselect</code>
+        <code>@HtmxResponseHeaders.Keys.Trigger</code>
+    </div>
+    <p class="ref-panel__note"><code>Keys.All</code> gives the whole set as an array (handy for CORS):
+        <code data-testid="resp-keys">@string.Join(", ", HtmxResponseHeaders.Keys.All)</code></p>
+</section>
