@@ -53,8 +53,9 @@ htmx 4 swaps **all** responses except `204` and `304`. So a `422` validation fra
 [HttpGet("status/{code:int}")]
 public IActionResult Status(int code) => code switch
 {
-    422 => Frag("<div class=\"error\">Validation failed: name is required</div>", 422),
-    500 => Frag("<div class=\"error\">Server exploded</div>", 500),
+    // error fragments with an explicit status code
+    422 => new PartialViewResult { ViewName = "_ValidationError", StatusCode = 422 },
+    500 => new PartialViewResult { ViewName = "_Error", StatusCode = 500 },
     // not swapped
     204 => NoContent(),
     // not swapped
@@ -101,12 +102,12 @@ You can also set it client-side: `hx-swap="outerMorph"`. The sample's MVC action
 // DemoController.cs — morph/{kind}
 case "outer":
     Response.Htmx(h => h.Reswap(HtmxSwap.OuterMorph));
-    // same id as the target
-    return Frag($"<div id=\"morph-outer-box\">{inputs}</div>");
+    // _Box renders a div with the same id as the target
+    return Partial("_Box", model);
 case "inner":
     Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));
     // children only
-    return Frag(inputs);
+    return Partial("_Inputs", model);
 ```
 
 :::caution

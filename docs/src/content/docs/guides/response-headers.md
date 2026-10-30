@@ -148,9 +148,10 @@ public IActionResult Poll(int n = 0, int stop = 3)
     n++;
     // no hx-trigger in the reply => polling ends
     if (n >= stop)
-        return Frag($"<div id=\"poll\">{n} stopped</div>");
+        return Partial("_PollStopped", new PollModel(n));
 
-    return Frag($"<div id=\"poll\" hx-get=\"/demo/poll?n={n}&stop={stop}\" hx-trigger=\"load delay:1s\" hx-swap=\"outerHTML\">{n} polling</div>");
+    // the reply re-arms the poll via hx-trigger="load delay:1s"
+    return Partial("_Polling", new PollModel(n, stop));
 }
 ```
 
