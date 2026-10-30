@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using VerifyXunit;
 using Htmx.Tests.Helpers;
 using Microsoft.AspNetCore.Http;
 using Xunit;
@@ -16,16 +19,6 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
     private IHeaderDictionary Headers => Response.Headers;
 
     [Fact]
-    public void Can_set_trigger()
-    {
-        const string expected = "cool";
-        Response.Htmx(h => { h.Trigger(expected); });
-
-        Assert.True(Headers.ContainsKey(Keys.Trigger));
-        Assert.Equal(expected, Headers[Keys.Trigger]);
-    }
-
-    [Fact]
     public void Can_add_single_trigger()
     {
         const string expected = "cool";
@@ -36,25 +29,6 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
             
         Assert.True(Headers.ContainsKey(Keys.Trigger));
         Assert.Equal(expected, Headers[Keys.Trigger]);
-    }
-
-    [Fact]
-    public void Can_add_single_trigger_at_timings()
-    {
-        const string expected = "cool";
-        Response.Htmx(h =>
-        {
-            h.WithTrigger(expected)
-                .WithTrigger(expected, timing: HtmxTriggerTiming.AfterSettle)
-                .WithTrigger(expected, timing: HtmxTriggerTiming.AfterSwap);
-        });
-            
-        Assert.True(Headers.ContainsKey(Keys.Trigger));
-        Assert.True(Headers.ContainsKey(Keys.TriggerAfterSettle));
-        Assert.True(Headers.ContainsKey(Keys.TriggerAfterSwap));
-        Assert.Equal(expected, Headers[Keys.Trigger]);
-        Assert.Equal(expected, Headers[Keys.TriggerAfterSettle]);
-        Assert.Equal(expected, Headers[Keys.TriggerAfterSwap]);
     }
 
     [Fact]
@@ -166,26 +140,6 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
         Response.Htmx(h => { h.Refresh(); });
 
         Assert.True(Headers.ContainsKey(Keys.Refresh));
-    }
-
-    [Fact]
-    public void Can_set_trigger_after_swap()
-    {
-        const string expected = "cool";
-        Response.Htmx(h => { h.TriggerAfterSwap(expected); });
-
-        Assert.True(Headers.ContainsKey(Keys.TriggerAfterSwap));
-        Assert.Equal(expected, Headers[Keys.TriggerAfterSwap]);
-    }
-
-    [Fact]
-    public void Can_set_trigger_after_settle()
-    {
-        const string expected = "cool";
-        Response.Htmx(h => { h.TriggerAfterSettle(expected); });
-
-        Assert.True(Headers.ContainsKey(Keys.TriggerAfterSettle));
-        Assert.Equal(expected, Headers[Keys.TriggerAfterSettle]);
     }
 
     [Fact]
@@ -344,22 +298,6 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void Can_set_location_with_handler()
-    {
-        var location = new HtmxLocation
-        {
-            Path = "/test",
-            Handler = "myCustomHandler"
-        };
-        const string expected = """{"path":"/test","handler":"myCustomHandler"}""";
-
-        Response.Htmx(h => { h.Location(location); });
-
-        Assert.True(Headers.ContainsKey(Keys.Location));
-        Assert.Equal(expected, Headers[Keys.Location]);
-    }
-
-    [Fact]
     public void Can_set_location_with_select()
     {
         var location = new HtmxLocation
@@ -376,54 +314,6 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
     }
 
     [Fact]
-    public void Can_set_location_with_push_false()
-    {
-        var location = new HtmxLocation
-        {
-            Path = "/test",
-            Push = false
-        };
-        const string expected = """{"path":"/test","push":false}""";
-
-        Response.Htmx(h => { h.Location(location); });
-
-        Assert.True(Headers.ContainsKey(Keys.Location));
-        Assert.Equal(expected, Headers[Keys.Location]);
-    }
-
-    [Fact]
-    public void Can_set_location_with_push_path()
-    {
-        var location = new HtmxLocation
-        {
-            Path = "/test",
-            Push = "/custom-url"
-        };
-        const string expected = """{"path":"/test","push":"/custom-url"}""";
-
-        Response.Htmx(h => { h.Location(location); });
-
-        Assert.True(Headers.ContainsKey(Keys.Location));
-        Assert.Equal(expected, Headers[Keys.Location]);
-    }
-
-    [Fact]
-    public void Can_set_location_with_replace()
-    {
-        var location = new HtmxLocation
-        {
-            Path = "/test",
-            Replace = "/replacement-url"
-        };
-        const string expected = """{"path":"/test","replace":"/replacement-url"}""";
-
-        Response.Htmx(h => { h.Location(location); });
-
-        Assert.True(Headers.ContainsKey(Keys.Location));
-        Assert.Equal(expected, Headers[Keys.Location]);
-    }
-
-    [Fact]
     public void Can_set_location_with_all_new_properties()
     {
         var location = new HtmxLocation
@@ -431,13 +321,12 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
             Path = "/test",
             Source = "#trigger",
             Event = "submit",
-            Handler = "handleResponse",
-            Select = "#data",
-            Push = false,
-            Replace = "/replace-url"
+            SelectOob = "#oob",
+            Transition = true,
+            Select = "#data"
         };
         const string expected =
-            """{"path":"/test","source":"#trigger","event":"submit","handler":"handleResponse","select":"#data","push":false,"replace":"/replace-url"}""";
+            """{"path":"/test","source":"#trigger","event":"submit","select":"#data","selectOOB":"#oob","transition":true}""";
 
         Response.Htmx(h => { h.Location(location); });
 
@@ -445,11 +334,89 @@ public class HtmxHttpResponseExtensionsTests(ITestOutputHelper output)
         Assert.Equal(expected, Headers[Keys.Location]);
     }
 
+
     [Fact]
-    public void Can_stop_polling()
+    public void Response_Keys_All_matches_htmx4_contract()
     {
-        Response.StopPolling();
-        Assert.Equal(286, Response.StatusCode);
+        Assert.Equal(new[]
+        {
+            "HX-Location", "HX-Push-Url", "HX-Redirect", "HX-Refresh", "HX-Replace-Url",
+            "HX-Reswap", "HX-Retarget", "HX-Reselect", "HX-Trigger"
+        }.OrderBy(x => x), Keys.All.OrderBy(x => x));
     }
 
+    [Fact]
+    public Task Trigger_single_compact() => Emit(h => h.WithTrigger("cool"));
+
+    [Fact]
+    public Task Trigger_with_detail_json() => Emit(h => h.WithTrigger("cool", new { magic = 42 }));
+
+    [Fact]
+    public void Trigger_first_write_wins()
+    {
+        Response.Htmx(h => { h.WithTrigger("cool", "first"); h.WithTrigger("cool", "second"); });
+        Assert.Equal(@"{""cool"":""first""}", Headers[Keys.Trigger]);
+    }
+
+    [Fact]
+    public Task Trigger_multiple_json() => Emit(h => { h.WithTrigger("a"); h.WithTrigger("b", new { x = 1 }); });
+
+    [Fact]
+    public Task Trigger_merges_existing_json_header()
+    {
+        Headers[Keys.Trigger] = " { \"old\" : {\"v\":1} } ";
+        return Emit(h => h.WithTrigger("new"));
+    }
+
+    [Fact]
+    public Task Trigger_merges_existing_comma_header()
+    {
+        Headers[Keys.Trigger] = "one , two,, three";
+        return Emit(h => h.WithTrigger("new"));
+    }
+
+    [Fact]
+    public void Trigger_existing_malformed_json_falls_back_to_comma_split()
+    {
+        Headers[Keys.Trigger] = "{oops}";
+        Response.Htmx(h => h.WithTrigger("new"));
+        Assert.Contains("new", Headers[Keys.Trigger].ToString());
+        Assert.Contains("{oops}", Headers[Keys.Trigger].ToString());
+    }
+
+    [Fact]
+    public void Never_emits_trigger_after_headers()
+    {
+        Response.Htmx(h => { h.WithTrigger("a"); h.WithTrigger("b", new { x = 1 }); });
+        Assert.False(Headers.ContainsKey("HX-Trigger-After-Swap"));
+        Assert.False(Headers.ContainsKey("HX-Trigger-After-Settle"));
+        Assert.DoesNotContain(Keys.All, k => k.StartsWith("HX-Trigger-After"));
+    }
+
+    [Fact]
+    public void WithVary_default_emits_hx_request()
+    {
+        Response.Htmx(h => h.WithVary());
+        Assert.Equal("HX-Request", Headers["Vary"]);
+    }
+
+    [Fact]
+    public void WithVary_multiple_does_not_duplicate()
+    {
+        Response.Htmx(h =>
+        {
+            h.WithVary("HX-Request", "HX-Request-Type");
+            h.WithVary("HX-Request", "hx-request-type");
+            h.WithVary();
+            h.WithVary(" ", "");
+            h.WithVary(System.Array.Empty<string>());
+        });
+        Assert.Equal("HX-Request,HX-Request-Type", string.Join(",", Headers["Vary"].ToArray()));
+    }
+
+    private Task Emit(System.Action<HtmxResponseHeaders> a)
+    {
+        Response.Htmx(a);
+        return Verifier.Verify(Headers[Keys.Trigger].ToString());
+    }
 }

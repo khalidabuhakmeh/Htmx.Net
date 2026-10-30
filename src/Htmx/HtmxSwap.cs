@@ -4,7 +4,7 @@ namespace Htmx;
 
 /// <summary>
 /// Standard HTMX Swap styles
-/// https://htmx.org/attributes/hx-swap/
+/// https://four.htmx.org/reference/attributes/hx-swap
 /// </summary>
 [PublicAPI]
 public static class HtmxSwap
@@ -48,4 +48,44 @@ public static class HtmxSwap
     /// Does not swap the content
     /// </summary>
     public const string None = "none";
+
+    /// <summary>
+    /// Morphs the target's attributes, then replaces its children, retaining the target (htmx 4)
+    /// </summary>
+    public const string OuterSync = "outerSync";
+
+    /// <summary>
+    /// Morphs the target's inner content (htmx 4)
+    /// </summary>
+    public const string InnerMorph = "innerMorph";
+
+    /// <summary>
+    /// Morphs the target element itself (htmx 4)
+    /// </summary>
+    public const string OuterMorph = "outerMorph";
+
+    /// <summary>
+    /// Sets the target's text content, without parsing HTML (htmx 4)
+    /// </summary>
+    public const string TextContent = "textContent";
+
+    /// <summary>
+    /// Alias of <see cref="BeforeBegin"/> (htmx 4)
+    /// </summary>
+    public const string Before = "before";
+
+    /// <summary>
+    /// Alias of <see cref="AfterBegin"/> (htmx 4)
+    /// </summary>
+    public const string Prepend = "prepend";
+
+    /// <summary>
+    /// Alias of <see cref="BeforeEnd"/> (htmx 4)
+    /// </summary>
+    public const string Append = "append";
+
+    /// <summary>
+    /// Alias of <see cref="AfterEnd"/> (htmx 4)
+    /// </summary>
+    public const string After = "after";
 }

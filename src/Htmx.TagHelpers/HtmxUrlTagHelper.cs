@@ -206,7 +206,7 @@ public class HtmxUrlTagHelper : TagHelper
         RouteValueDictionary? values = null;
         if (routeValues is {Count: >0})
         {
-            values = new RouteValueDictionary(routeValues);
+            values = new RouteValueDictionary((IEnumerable<KeyValuePair<string, string?>>)routeValues!);
         }
 
         if (Area != null)

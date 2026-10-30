@@ -31,12 +31,6 @@ public class HtmxLocation
     public string? Event { get; set; }
 
     /// <summary>
-    /// A callback that will handle the response HTML.
-    /// </summary>
-    [JsonPropertyName("handler")]
-    public string? Handler { get; set; }
-
-    /// <summary>
     /// The target element to load the response into.
     /// </summary>
     [JsonPropertyName("target")]
@@ -68,14 +62,14 @@ public class HtmxLocation
     public string? Select { get; set; }
 
     /// <summary>
-    /// Set to 'false' or a path string to prevent or override the URL pushed to browser location history.
+    /// Select out-of-band content from the response (htmx.ajax <c>selectOOB</c> option).
     /// </summary>
-    [JsonPropertyName("push")]
-    public object? Push { get; set; }
+    [JsonPropertyName("selectOOB")]
+    public string? SelectOob { get; set; }
 
     /// <summary>
-    /// A path string to replace the URL in the browser location history.
+    /// Whether to use view transitions for the swap (htmx.ajax <c>transition</c> option).
     /// </summary>
-    [JsonPropertyName("replace")]
-    public string? Replace { get; set; }
+    [JsonPropertyName("transition")]
+    public bool? Transition { get; set; }
 }

@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Http;
 
@@ -46,16 +47,14 @@ public class HtmxRequestHeaders
         public const string Target = "HX-Target";
 
         /// <summary>
-        /// Represents the key for the `HX-Trigger-Name` header, which specifies the name of the triggered element
-        /// that initiated the request in an HTMX-enabled application.
+        /// Represents the key for the htmx 4 `HX-Source` header (<c>tag#id</c> of the element that triggered the request).
         /// </summary>
-        public const string TriggerName = "HX-Trigger-Name";
+        public const string Source = "HX-Source";
 
         /// <summary>
-        /// Represents the key for the `HX-Trigger` header, which specifies the value of the `id` attribute
-        /// of the HTML element that triggered the request in an HTMX-enabled application.
+        /// Represents the key for the htmx 4 `HX-Request-Type` header (<c>full</c> or <c>partial</c>).
         /// </summary>
-        public const string Trigger = "HX-Trigger";
+        public const string RequestType = "HX-Request-Type";
 
         /// <summary>
         /// Represents the key for the `HX-Boosted` header, which indicates whether the request was triggered
@@ -70,7 +69,7 @@ public class HtmxRequestHeaders
         /// </summary>
         public static string[] All { get; } =
         [
-            CurrentUrl, HistoryRestoreRequest, Prompt, Request, Target, TriggerName, Trigger, Boosted
+            Request, RequestType, CurrentUrl, Source, Target, Boosted, HistoryRestoreRequest, Prompt
         ];
     }
 
@@ -84,8 +83,10 @@ public class HtmxRequestHeaders
         HistoryRestoreRequest = headers.GetValueOrDefault(Keys.HistoryRestoreRequest, false);
         Prompt = headers.GetValueOrDefault(Keys.Prompt, string.Empty);
         Target = headers.GetValueOrDefault(Keys.Target, string.Empty);
-        TriggerName = headers.GetValueOrDefault(Keys.TriggerName, string.Empty);
-        Trigger = headers.GetValueOrDefault(Keys.Trigger, string.Empty);
+        TargetElement = HtmxElementReference.TryParse(Target, out var t) ? t : null;
+        Source = headers.GetValueOrDefault(Keys.Source, string.Empty);
+        SourceElement = HtmxElementReference.TryParse(Source, out var s) ? s : null;
+        RequestType = HtmxRequestTypeParser.Parse(headers.GetValueOrDefault(Keys.RequestType, string.Empty));
         Boosted = headers.GetValueOrDefault(Keys.Boosted, false);
     }
 
@@ -98,21 +99,38 @@ public class HtmxRequestHeaders
     /// </summary>
     public bool HistoryRestoreRequest { get; }
     /// <summary>
-    /// the user response to an hx-prompt on the client
+    /// the user response to an hx-prompt on the client.
+    /// Not sent by htmx 4 core; only sent when the hx-prompt extension is installed.
     /// </summary>
     public string Prompt { get; }
     /// <summary>
-    /// the id of the target element if it exists
+    /// the raw HX-Target value, in <c>tag#id</c> format (or bare <c>tag</c> when there is no id)
     /// </summary>
     public string Target { get; }
     /// <summary>
-    /// the name of the triggered element if it exists
+    /// the parsed HX-Target, or null when absent
     /// </summary>
-    public string TriggerName { get; }
+    public HtmxElementReference? TargetElement { get; }
     /// <summary>
-    /// the id of the triggered element if it exists
+    /// the raw HX-Source value (<c>tag#id</c>, or bare <c>tag</c>); replaces HX-Trigger in htmx 4
     /// </summary>
-    public string Trigger { get; }
+    public string Source { get; }
+    /// <summary>
+    /// the parsed HX-Source, or null when absent
+    /// </summary>
+    public HtmxElementReference? SourceElement { get; }
+    /// <summary>
+    /// the HX-Request-Type (full or partial); Unknown when missing or unrecognized
+    /// </summary>
+    public HtmxRequestType RequestType { get; }
+
+    /// <summary>Removed in htmx 4.</summary>
+    [Obsolete("Use Source / SourceElement (the HX-Source header replaces HX-Trigger in htmx 4).", error: true)]
+    public string Trigger => throw new NotSupportedException();
+
+    /// <summary>Removed in htmx 4.</summary>
+    [Obsolete("HX-Trigger-Name was removed in htmx 4. Use Source / SourceElement.", error: true)]
+    public string TriggerName => throw new NotSupportedException();
         
     /// <summary>
     /// Determines if the request was Boosted looking at "Hx-Boosted" header

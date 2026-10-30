@@ -4,6 +4,7 @@ namespace Htmx;
 /// Defines when a trigger runs
 /// https://htmx.org/headers/hx-trigger/
 /// </summary>
+[System.Obsolete("htmx 4 only supports the HX-Trigger response header. Trigger-after-swap/settle timings were removed in htmx 4.", error: true)]
 public enum HtmxTriggerTiming
 {
     /// <summary>

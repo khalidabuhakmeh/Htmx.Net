@@ -17,7 +17,8 @@ public class HtmxResponseHeaders
 {
     private readonly IHeaderDictionary headers;
 
-    private readonly Dictionary<HtmxTriggerTiming, Dictionary<string, object?>> triggers = new();
+    // htmx 4 only supports HX-Trigger. Keyed by event name; first write wins.
+    private readonly Dictionary<string, object?> triggers = new();
 
     /// <summary>
     /// Represents a collection of constants for HTMX response headers.
@@ -98,22 +99,6 @@ public class HtmxResponseHeaders
         public const string Trigger = "HX-Trigger";
 
         /// <summary>
-        /// Represents the HTMX response header key used to specify client-side triggers
-        /// that should be executed after the settle phase of an HTMX request.
-        /// The "HX-Trigger-After-Settle" header allows the server to queue specific
-        /// events to trigger once the response has been fully settled by the client.
-        /// </summary>
-        public const string TriggerAfterSettle = "HX-Trigger-After-Settle";
-
-        /// <summary>
-        /// Represents the HTMX response header key used to specify client-side triggers
-        /// that should be executed after the "swap" operation completes.
-        /// When included in the server's response, it signals the client to invoke
-        /// the designated trigger(s) at this specific timing in the update lifecycle.
-        /// </summary>
-        public const string TriggerAfterSwap = "HX-Trigger-After-Swap";
-
-        /// <summary>
         /// Represents an array containing all the HTMX response header keys defined in the <see cref="HtmxResponseHeaders.Keys"/> class.
         /// This property provides a central collection of all supported HTMX header keys, including those used for redirection,
         /// refreshing, content swaping, targeting, and triggering client-side behaviors in response to server actions.
@@ -129,25 +114,12 @@ public class HtmxResponseHeaders
             Retarget,
             Reselect,
             Trigger,
-            TriggerAfterSettle,
-            TriggerAfterSwap,
         };
     }
 
     internal HtmxResponseHeaders(IHeaderDictionary headers)
     {
         this.headers = headers;
-    }
-
-    /// <summary>
-    ///	pushes a new url into the history stack
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [Obsolete("HX-Push was replaced with HX-Push-Url, use PushUrl(value) instead")]
-    public HtmxResponseHeaders Push(string value)
-    {
-        return PushUrl(value);
     }
 
     /// <summary>
@@ -264,45 +236,6 @@ public class HtmxResponseHeaders
     }
 
     /// <summary>
-    /// allows you to trigger client side events
-    /// https://htmx.org/headers/hx-trigger
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
-    public HtmxResponseHeaders Trigger(string value)
-    {
-        headers[Keys.Trigger] = value;
-        return this;
-    }
-
-    /// <summary>
-    /// allows you to trigger client side events after a settle
-    /// https://htmx.org/headers/hx-trigger
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
-    public HtmxResponseHeaders TriggerAfterSettle(string value)
-    {
-        headers[Keys.TriggerAfterSettle] = value;
-        return this;
-    }
-
-    /// <summary>
-    /// allows you to trigger client side events after a swap
-    /// https://htmx.org/headers/hx-trigger
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    [Obsolete("WithTrigger(name, val?, timing?) provides more options for configuring triggers.")]
-    public HtmxResponseHeaders TriggerAfterSwap(string value)
-    {
-        headers[Keys.TriggerAfterSwap] = value;
-        return this;
-    }
-
-    /// <summary>
     /// A header that allows you to change the default target of returned content
     /// </summary>
     /// <param name="value">CSS Selector of target</param>
@@ -318,35 +251,60 @@ public class HtmxResponseHeaders
     /// Essential when serving different content (full page vs partial) to htmx requests vs standard requests.
     /// </summary>
     /// <returns></returns>
-    public HtmxResponseHeaders WithVary()
+    public HtmxResponseHeaders WithVary() => WithVary(HtmxRequestHeaders.Keys.Request);
+
+    /// <summary>
+    /// Appends one or more request header names to the "Vary" response header without duplicating
+    /// values already present. Use this when the server renders different content based on headers
+    /// such as <c>HX-Request</c> or <c>HX-Request-Type</c> so caches key on the composite correctly.
+    /// </summary>
+    /// <param name="headerNames">
+    /// The request header names to vary on (for example <c>HX-Request</c>, <c>HX-Request-Type</c>).
+    /// </param>
+    /// <returns></returns>
+    public HtmxResponseHeaders WithVary(params string[] headerNames)
     {
-        headers.Append("Vary", "HX-Request");
+        if (headerNames is not { Length: > 0 })
+            return this;
+
+        var existing = headers.TryGetValue("Vary", out var current)
+            ? new HashSet<string>(
+                current.ToString().Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+                StringComparer.OrdinalIgnoreCase)
+            : new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var name in headerNames)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                continue;
+
+            if (existing.Add(name.Trim()))
+                headers.Append("Vary", name.Trim());
+        }
+
         return this;
     }
 
     /// <summary>
-    /// Trigger a client side event named <paramref name="eventName"/> at different stages of the HTMX lifecycle.
+    /// Trigger a client side event named <paramref name="eventName"/> via the HX-Trigger response header.
+    /// If the same event name is added more than once, the first value wins.
     /// </summary>
     /// <param name="eventName">Event name</param>
     /// <param name="detail">Detail to be sent with the event, string or other JSON mappable object</param>
-    /// <param name="timing">The HTMX request lifecycle step to run the trigger at</param>
     /// <returns></returns>
-    public HtmxResponseHeaders WithTrigger(string eventName, object? detail = null,
-        HtmxTriggerTiming timing = HtmxTriggerTiming.Default)
+    public HtmxResponseHeaders WithTrigger(string eventName, object? detail = null)
     {
-        if (triggers.TryGetValue(timing, out var trigger))
-        {
-            trigger.TryAdd(eventName, detail ?? string.Empty);
-        }
-        else
-        {
-            triggers.Add(timing, new Dictionary<string, object?>
-            {
-                { eventName, detail ?? string.Empty }
-            });
-        }
-
+        triggers.TryAdd(eventName, detail ?? string.Empty);
         return this;
+    }
+
+    /// <summary>
+    /// Removed: htmx 4 only supports HX-Trigger.
+    /// </summary>
+    [Obsolete("htmx 4 only supports HX-Trigger; HX-Trigger-After-Swap/Settle were removed. Use WithTrigger(name, detail).", error: true)]
+    public HtmxResponseHeaders WithTrigger(string eventName, object? detail, HtmxTriggerTiming timing)
+    {
+        throw new NotSupportedException("htmx 4 only supports HX-Trigger.");
     }
 
     /// <summary>
@@ -354,77 +312,63 @@ public class HtmxResponseHeaders
     /// </summary>
     internal HtmxResponseHeaders Process()
     {
-        if (triggers.ContainsKey(HtmxTriggerTiming.Default))
-        {
-            ParsePossibleExistingTriggers(Keys.Trigger, HtmxTriggerTiming.Default);
+        if (triggers.Count == 0)
+            return this;
 
-            headers[Keys.Trigger] = BuildTriggerHeader(HtmxTriggerTiming.Default);
-        }
-
-        if (triggers.ContainsKey(HtmxTriggerTiming.AfterSettle))
-        {
-            ParsePossibleExistingTriggers(Keys.TriggerAfterSettle, HtmxTriggerTiming.AfterSettle);
-
-            headers[Keys.TriggerAfterSettle] = BuildTriggerHeader(HtmxTriggerTiming.AfterSettle);
-        }
-
-        // ReSharper disable once InvertIf
-        if (triggers.ContainsKey(HtmxTriggerTiming.AfterSwap))
-        {
-            ParsePossibleExistingTriggers(Keys.TriggerAfterSwap, HtmxTriggerTiming.AfterSwap);
-
-            headers[Keys.TriggerAfterSwap] = BuildTriggerHeader(HtmxTriggerTiming.AfterSwap);
-        }
-
+        ParsePossibleExistingTriggers();
+        headers[Keys.Trigger] = BuildTriggerHeader();
         return this;
     }
 
     /// <summary>
-    /// Checks to see if the response has an existing header defined by headerKey.  If it does the
-    /// header loads all of the triggers locally so they aren't overwritten by Htmx.
+    /// Loads any HX-Trigger header already set on the response so it isn't overwritten.
+    /// Existing entries are added after the ones set through Htmx(), preserving first-wins semantics.
     /// </summary>
-    /// <param name="headerKey"></param>
-    /// <param name="timing"></param>
-    private void ParsePossibleExistingTriggers(string headerKey, HtmxTriggerTiming timing)
+    private void ParsePossibleExistingTriggers()
     {
-        if (!headers.TryGetValue(headerKey, out var header))
+        if (!headers.TryGetValue(Keys.Trigger, out var header))
             return;
 
-        // Attempt to parse existing header as Json, if fails it is a simplified event key
-        // assume if the string starts with '{' and ends with '}', that it is JSON
-        if (header.Any(h => h is ['{', .., '}']))
+        foreach (var headerValue in header)
         {
-            // this might still throw :(
-            var jsonObject = JsonNode.Parse(header)!.AsObject();
-            // Load any existing triggers
-            foreach (var (key, value) in jsonObject)
-                WithTrigger(key, value, timing);
-        }
-        else
-        {
-            foreach (var headerValue in header)
+            if (string.IsNullOrWhiteSpace(headerValue)) continue;
+
+            var trimmed = headerValue.Trim();
+            if (trimmed is ['{', .., '}'])
             {
-                if (headerValue is null) continue;
+                try
+                {
+                    if (JsonNode.Parse(trimmed) is JsonObject jsonObject)
+                    {
+                        foreach (var (key, value) in jsonObject)
+                            WithTrigger(key, value);
+                        continue;
+                    }
+                }
+                catch (JsonException)
+                {
+                    // fall through to comma-split
+                }
+            }
 
-                var eventNames = headerValue.Split(',');
-
-                foreach (var eventName in eventNames)
-                    WithTrigger(eventName, null, timing);
+            foreach (var eventName in headerValue.Split(','))
+            {
+                var name = eventName.Trim();
+                if (name.Length > 0)
+                    WithTrigger(name);
             }
         }
     }
 
-    private string BuildTriggerHeader(HtmxTriggerTiming timing)
+    private string BuildTriggerHeader()
     {
-        var trigger = triggers[timing];
         // Reduce the payload if the user has only specified 1 trigger with no value
-        if (trigger.Count == 1 &&
-            ReferenceEquals(trigger.First().Value, string.Empty))
+        if (triggers.Count == 1 &&
+            ReferenceEquals(triggers.First().Value, string.Empty))
         {
-            return trigger.First().Key;
+            return triggers.First().Key;
         }
 
-        var jsonHeader = JsonSerializer.Serialize(trigger);
-        return jsonHeader;
+        return JsonSerializer.Serialize(triggers);
     }
 }

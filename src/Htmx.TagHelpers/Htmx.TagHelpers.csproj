@@ -11,12 +11,12 @@
         <PackageTags>web,javascript</PackageTags>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Description>
-            Adds ASP.NET Core tag helpers to make generating urls for Htmx (https://htmx.org) easier. Mimics the ASP.NET Core url tag helpers.
+            Adds ASP.NET Core tag helpers to make generating urls for htmx 4 (https://htmx.org) easier. Mimics the ASP.NET Core url tag helpers.
         </Description>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MinVer" Version="2.5.0">
+        <PackageReference Include="MinVer" Version="6.0.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

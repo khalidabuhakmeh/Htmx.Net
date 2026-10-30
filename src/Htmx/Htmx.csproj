@@ -12,7 +12,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Description>
-            Adds helper methods to HttpResponse and HttpRequest to make working with Htmx (https://htmx.org) easier.
+            Adds helper methods to HttpResponse and HttpRequest to make working with htmx 4 (https://htmx.org) easier.
         </Description>
     </PropertyGroup>
 
@@ -22,11 +22,10 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="MinVer" Version="2.5.0">
+		<PackageReference Include="MinVer" Version="6.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="System.Text.Json" Version="6.0.10" />
     </ItemGroup>
 
     <ItemGroup>
