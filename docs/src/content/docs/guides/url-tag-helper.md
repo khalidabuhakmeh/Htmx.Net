@@ -122,3 +122,5 @@ For antiforgery on `DELETE` see the [Antiforgery guide](/Htmx.Net/guides/antifor
 See the live demos: run `dotnet run --project samples/Htmx4.Sample` and open `/UrlHelper` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/UrlHelper.cshtml)) and `/Inherited` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Inherited.cshtml)).
 
 Related: [Headers tag helper](/Htmx.Net/guides/headers-tag-helper/), [Config tag helper](/Htmx.Net/guides/config/), [htmx 4 reference: attribute model](/Htmx.Net/reference/htmx4-facts/#6-attribute-model-and-empty-hx-get).
+
+**From the blog:** [HTMX With ASP.NET Core](https://khalidabuhakmeh.com/posts/htmx-with-aspnet-core/) covers the URL tag helpers alongside the rest of the library.

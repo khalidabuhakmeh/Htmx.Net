@@ -79,3 +79,5 @@ Checking the result in a browser: DevTools > Network > the response headers shou
 See it live: the `/ResponseHeaders` demo sets `Vary` through `WithVary()` and `WithVary("HX-Source", "HX-Target")` (run `dotnet run --project samples/Htmx4.Sample`; [source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/ResponseHeaders.cshtml)).
 
 Related: [Request detection](/Htmx.Net/guides/request-detection/), [Response headers](/Htmx.Net/guides/response-headers/).
+
+**From the blog:** [Dynamic Htmx Islands with ASP.NET Core](https://khalidabuhakmeh.com/posts/dynamic-htmx-islands-with-aspnet-core/) pairs response/output caching with dynamic islands.

@@ -50,3 +50,14 @@ Fragments are served by Razor Page handlers and by `Controllers/DemoController.c
 - `test/Htmx.Tests` holds unit and snapshot tests.
 
 New here? Start with [Getting started](/Htmx.Net/getting-started/).
+
+## More recipes on the blog
+
+Worked examples that combine htmx.NET with other libraries and patterns:
+
+- [HTMX, ASP.NET Core, and Bootstrap Modals](https://khalidabuhakmeh.com/posts/htmx-aspnet-core-and-bootstrap-modals/)
+- [Confirmation Dialogs with Htmx and SweetAlert](https://khalidabuhakmeh.com/posts/confirmation-dialogs-with-htmx-and-sweetalert/)
+- [How to Integrate HTMX and Shoelace Web Components](https://khalidabuhakmeh.com/posts/how-to-integrate-htmx-and-shoelace-web-components/)
+- [Blazor Server-Rendered Components with HTMX](https://khalidabuhakmeh.com/posts/how-to-use-blazor-server-rendered-components-with-htmx/)
+- [View Transitions API with ASP.NET Core and HTMX](https://khalidabuhakmeh.com/posts/view-transitions-api-with-aspnet-core-and-htmx/)
+- [Htmx and Playwright Tests in C#](https://khalidabuhakmeh.com/posts/htmx-and-playwright-tests-in-csharp/)

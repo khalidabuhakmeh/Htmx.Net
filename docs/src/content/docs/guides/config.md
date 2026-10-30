@@ -125,3 +125,5 @@ Examples you will feel on the server:
 See the live demo: run `dotnet run --project samples/Htmx4.Sample` and open `/Config` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Config.cshtml)). It reads `htmx.config` back so you can see what the browser received.
 
 Related: [htmx 4 reference: configuration](/Htmx.Net/reference/htmx4-facts/#4-configuration), [Antiforgery](/Htmx.Net/guides/antiforgery/), [Partials and morph](/Htmx.Net/guides/partials-and-morph/).
+
+**From the blog:** [JSON in HTML Attributes with ASP.NET Core TagHelpers](https://khalidabuhakmeh.com/posts/json-in-html-attributes-with-aspnet-core-taghelpers/) explains the `htmx-config` meta tag helper.

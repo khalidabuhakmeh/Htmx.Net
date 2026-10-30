@@ -164,3 +164,5 @@ See also the [migration guide](/Htmx.Net/migration/v1-to-v2/) for removed helper
 ---
 
 See the live demos: run `dotnet run --project samples/Htmx4.Sample` and open `/ResponseHeaders` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/ResponseHeaders.cshtml)), `/Location` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Location.cshtml)) and `/Polling` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Polling.cshtml)).
+
+**From the blog:** [HTMX and ASP.NET Core Swapping Techniques](https://khalidabuhakmeh.com/posts/htmx-and-aspnet-core-swapping-techniques/) and [Update HTML Elements with Htmx Triggers and ASP.NET Core](https://khalidabuhakmeh.com/posts/update-html-elements-with-htmx-triggers-and-aspnet-core/).

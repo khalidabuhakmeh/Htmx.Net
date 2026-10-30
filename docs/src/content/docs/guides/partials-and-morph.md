@@ -127,3 +127,5 @@ Opt elements out of morphing with the config attributes `morphIgnore`, `morphSki
 See the live demos: run `dotnet run --project samples/Htmx4.Sample` and open `/Partials` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Partials.cshtml)), `/Morph` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Morph.cshtml)) and `/ErrorSwaps` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/ErrorSwaps.cshtml)).
 
 Related: [Response headers](/Htmx.Net/guides/response-headers/), [Config tag helper](/Htmx.Net/guides/config/), [htmx 4 reference](/Htmx.Net/reference/htmx4-facts/).
+
+**From the blog:** [HTMX and ASP.NET Core Swapping Techniques](https://khalidabuhakmeh.com/posts/htmx-and-aspnet-core-swapping-techniques/) compares normal, out-of-band, and document-level swaps.

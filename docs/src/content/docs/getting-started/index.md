@@ -163,3 +163,5 @@ What happens: clicking **Load** sends `GET /Products?handler=List` with `HX-Requ
 | Browse working demos | [Samples](/Htmx.Net/samples/) |
 
 Run the full sample with `dotnet run --project samples/Htmx4.Sample`.
+
+**From the blog:** [HTMX With ASP.NET Core](https://khalidabuhakmeh.com/posts/htmx-with-aspnet-core/) walks through the library and NuGet packages end to end.

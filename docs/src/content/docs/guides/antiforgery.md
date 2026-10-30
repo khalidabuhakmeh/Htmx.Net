@@ -118,3 +118,5 @@ You can build the script's own endpoint into tests with `HtmxSnippets.Antiforger
 See the live demo: run `dotnet run --project samples/Htmx4.Sample` and open `/Antiforgery` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Antiforgery.cshtml)).
 
 Related: [Config tag helper](/Htmx.Net/guides/config/), [htmx 4 reference: `htmx:config:request`](/Htmx.Net/reference/htmx4-facts/#5-events-and-event-detail), [Getting started](/Htmx.Net/getting-started/).
+
+**From the blog:** [HTMX Boosts and ASP.NET Core Anti-Forgery Tokens](https://khalidabuhakmeh.com/posts/htmx-boosts-and-aspnet-core-anti-forgery-tokens/) and [HTMX Requests with ASP.NET Core Anti-Forgery Tokens](https://khalidabuhakmeh.com/posts/htmx-requests-with-aspnet-core-anti-forgery-tokens/).

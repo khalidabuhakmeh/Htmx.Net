@@ -92,3 +92,5 @@ Response headers are ignored on `3xx` responses. Use a `2xx` response such as `N
 See the live demo: run `dotnet run --project samples/Htmx4.Sample` and open `/Triggers` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Triggers.cshtml)).
 
 Related: [Response headers](/Htmx.Net/guides/response-headers/), [htmx 4 reference: HX-Trigger](/Htmx.Net/reference/htmx4-facts/#hx-trigger-json-detail), [migration guide](/Htmx.Net/migration/v1-to-v2/).
+
+**From the blog:** [Update HTML Elements with Htmx Triggers and ASP.NET Core](https://khalidabuhakmeh.com/posts/update-html-elements-with-htmx-triggers-and-aspnet-core/).
