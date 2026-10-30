@@ -53,7 +53,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAntiforgery();
 
-app.MapHtmxAntiforgeryScript();   // serves /_htmx/antiforgery.js
+// serves /_htmx/antiforgery.js
+app.MapHtmxAntiforgeryScript();
 app.MapRazorPages();
 app.MapControllers();
 
@@ -93,7 +94,7 @@ A button that loads a server-rendered fragment, plus a form that saves and fires
 
 <h1>Products</h1>
 
-<!-- GET: the URL is generated from the page handler by the URL tag helper -->
+<!-- GET: the URL comes from the page handler via the tag helper -->
 <button hx-get hxn-page="/Products" hxn-page-handler="List" hx-target="#list">Load</button>
 <ul id="list"></ul>
 
@@ -116,19 +117,23 @@ public class ProductsModel : PageModel
 {
     private static readonly List<string> Items = ["Chai", "Chang"];
 
-    public void OnGet() { }   // the full page
+    // the full page
+    public void OnGet() { }
 
     public IActionResult OnGetList()
     {
-        if (!Request.IsHtmx()) return RedirectToPage();            // direct visits get the full page
-        Response.Htmx(h => h.WithVary());                          // cache-safe: Vary: HX-Request
+        // direct visits get the full page
+        if (!Request.IsHtmx()) return RedirectToPage();
+        // cache-safe: Vary: HX-Request
+        Response.Htmx(h => h.WithVary());
         return Content(string.Concat(Items.Select(i => $"<li>{i}</li>")), "text/html");
     }
 
     public IActionResult OnPostAdd(string name)
     {
         Items.Add(name);
-        Response.Htmx(h => h.WithTrigger("product-added"));        // HX-Trigger -> reset the form
+        // HX-Trigger -> reset the form
+        Response.Htmx(h => h.WithTrigger("product-added"));
         return Content($"<li>{System.Net.WebUtility.HtmlEncode(name)}</li>", "text/html");
     }
 }

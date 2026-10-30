@@ -40,7 +40,7 @@ htmx does not process these headers on `3xx` responses. Return a `2xx` (for exam
 ### Examples from the sample
 
 ```csharp
-// samples/Htmx4.Sample/Controllers/DemoController.cs  (resp/{name})
+// DemoController.cs — resp/{name}
 Response.Htmx(h => h.PushUrl("/ResponseHeaders?pushed=1").WithVary());
 Response.Htmx(h => h.PreventPush().WithVary("HX-Source", "HX-Target"));
 Response.Htmx(h => h.ReplaceUrl("/ResponseHeaders?replaced=1"));
@@ -58,9 +58,11 @@ public IActionResult OnPost(ProductInput input)
 {
     if (!ModelState.IsValid)
     {
-        // Show the form again, in place of the whole form, even if the button targeted something else.
+        // Show the form again in place,
+        // even if the button targeted something else.
         Response.Htmx(h => h.Retarget("#product-form").Reswap(HtmxSwap.OuterHtml));
-        return Partial("_Form", input);   // 422 bodies swap by default in htmx 4
+        // 422 bodies swap by default in htmx 4
+        return Partial("_Form", input);
     }
 
     Response.Htmx(h => h.PushUrl("/products").WithTrigger("product-saved"));
@@ -73,7 +75,7 @@ public IActionResult OnPost(ProductInput input)
 `Location("/path")` sends the path as a plain string. Pass an `HtmxLocation` to also send options (serialized as JSON, `null` members omitted). The `Path` is required.
 
 ```csharp
-// samples/Htmx4.Sample/Pages/Location.cshtml.cs
+// Location.cshtml.cs
 Response.Htmx(h => h.Location(new HtmxLocation
 {
     Path = "/Location?handler=Landing",
@@ -139,12 +141,13 @@ String constants for `Reswap(...)`, `HtmxLocation.Swap`, or your own markup.
 ```
 
 ```csharp
-// samples/Htmx4.Sample/Controllers/DemoController.cs
+// DemoController.cs
 [HttpGet("poll")]
 public IActionResult Poll(int n = 0, int stop = 3)
 {
     n++;
-    if (n >= stop)   // no hx-trigger in the reply => polling ends
+    // no hx-trigger in the reply => polling ends
+    if (n >= stop)
         return Frag($"<div id=\"poll\">{n} stopped</div>");
 
     return Frag($"<div id=\"poll\" hx-get=\"/demo/poll?n={n}&stop={stop}\" hx-trigger=\"load delay:1s\" hx-swap=\"outerHTML\">{n} polling</div>");

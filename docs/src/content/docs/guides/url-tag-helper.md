@@ -28,7 +28,7 @@ Rendered output (example):
 The matching handlers:
 
 ```csharp
-// samples/Htmx4.Sample/Pages/UrlHelper.cshtml.cs
+// UrlHelper.cshtml.cs
 public IActionResult OnGetFragment() => Content("page handler Fragment", "text/html");
 public IActionResult OnPostPost() => Content("page handler Post ok", "text/html");
 

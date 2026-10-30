@@ -14,9 +14,12 @@ var id     = hash < 0 ? null   : source[(hash + 1)..];";
     var with = @"// With htmx.NET: one call, typed values
 if (Request.IsHtmx(out var h))
 {
-    var tag  = h.SourceElement?.TagName;  // button
-    var id   = h.SourceElement?.Id;       // rh-btn-id
-    var kind = h.RequestType;             // Full/Partial
+    // button
+    var tag = h.SourceElement?.TagName;
+    // rh-btn-id
+    var id = h.SourceElement?.Id;
+    // Full/Partial
+    var kind = h.RequestType;
 }";
 }
 <h1>Request headers</h1>

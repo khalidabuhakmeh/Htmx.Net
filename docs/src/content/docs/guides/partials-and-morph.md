@@ -24,7 +24,7 @@ One response can update several targets. Server markup (a Razor partial or a con
 In a Razor Page:
 
 ```csharp
-// samples/Htmx4.Sample/Pages/Partials.cshtml.cs  (OnGetOnly returns only partials)
+// Partials.cshtml.cs — OnGetOnly returns only partials
 public IActionResult OnGetOnly() => Content(
     "<hx-partial hx-target=\"#part-a\"><span>only partials</span></hx-partial>", "text/html");
 ```
@@ -49,14 +49,16 @@ In htmx 4 the **main content swaps first**; OOB swaps and `<hx-partial>` swaps t
 htmx 4 swaps **all** responses except `204` and `304`. So a `422` validation fragment renders where you expect, with no extra setup:
 
 ```csharp
-// samples/Htmx4.Sample/Controllers/DemoController.cs
+// DemoController.cs
 [HttpGet("status/{code:int}")]
 public IActionResult Status(int code) => code switch
 {
     422 => Frag("<div class=\"error\">Validation failed: name is required</div>", 422),
     500 => Frag("<div class=\"error\">Server exploded</div>", 500),
-    204 => NoContent(),        // not swapped
-    304 => StatusCode(304),    // not swapped
+    // not swapped
+    204 => NoContent(),
+    // not swapped
+    304 => StatusCode(304),
     _   => NotFound()
 };
 ```
@@ -67,7 +69,8 @@ public IActionResult OnPostValidate(string? name)
     if (string.IsNullOrWhiteSpace(name))
     {
         Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
-        return Partial("_Errors");   // swapped by htmx 4
+        // swapped by htmx 4
+        return Partial("_Errors");
     }
     return Partial("_Saved");
 }
@@ -84,21 +87,26 @@ Upgrading from htmx 2? Error responses used to be ignored. If a `4xx`/`5xx` page
 Morphing updates the existing DOM in place, preserving focus, typed input, scroll and CSS transitions:
 
 ```csharp
-Response.Htmx(h => h.Reswap(HtmxSwap.OuterMorph));   // morph the target itself
-Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));   // morph the target's children
-Response.Htmx(h => h.Reswap(HtmxSwap.OuterSync));    // morph target attributes, then replace children
+// morph the target itself
+Response.Htmx(h => h.Reswap(HtmxSwap.OuterMorph));
+// morph the target's children
+Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));
+// morph target attributes, then replace children
+Response.Htmx(h => h.Reswap(HtmxSwap.OuterSync));
 ```
 
 You can also set it client-side: `hx-swap="outerMorph"`. The sample's MVC action:
 
 ```csharp
-// samples/Htmx4.Sample/Controllers/DemoController.cs  (morph/{kind})
+// DemoController.cs — morph/{kind}
 case "outer":
     Response.Htmx(h => h.Reswap(HtmxSwap.OuterMorph));
-    return Frag($"<div id=\"morph-outer-box\">{inputs}</div>");   // same id as the target
+    // same id as the target
+    return Frag($"<div id=\"morph-outer-box\">{inputs}</div>");
 case "inner":
     Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));
-    return Frag(inputs);                                          // children only
+    // children only
+    return Frag(inputs);
 ```
 
 :::caution
@@ -108,7 +116,8 @@ With `outerMorph` / `outerHTML` / `outerSync`, the replacement element must keep
 Opt elements out of morphing with the config attributes `morphIgnore`, `morphSkip` and `morphSkipChildren` ([Config tag helper](/Htmx.Net/guides/config/)), or in markup:
 
 ```html
-<input hx-morph-skip /> <!-- element left alone by morph -->
+<!-- element left alone by morph -->
+<input hx-morph-skip />
 <div hx-morph-skip-children>...</div>
 ```
 

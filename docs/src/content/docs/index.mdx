@@ -45,8 +45,10 @@ Read the incoming htmx request and answer with typed response headers — no str
 // Detect an htmx request and read the element that triggered it.
 if (Request.IsHtmx(out var htmx))
 {
-    var id = htmx.SourceElement?.Id;   // e.g. "save-button"
-    var type = htmx.RequestType;       // Full or Partial
+    // e.g. "save-button"
+    var id = htmx.SourceElement?.Id;
+    // Full or Partial
+    var type = htmx.RequestType;
 }
 
 // Set HX-* response headers fluently instead of building strings.

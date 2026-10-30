@@ -14,7 +14,8 @@
 public IActionResult Poll(int n = 0, int stop = 3, string mode = ""load"")
 {
     n++;
-    if (n >= stop)   // no hx-trigger in the reply => polling ends
+    // no hx-trigger in the reply => polling ends
+    if (n >= stop)
         return Partial(""_PollStopped"", new PollModel(n, mode));
 
     // reply re-arms the poll via hx-trigger='every 1s'

@@ -9,7 +9,8 @@ If the same URL returns a full page to normal requests and a fragment to htmx re
 
 ```csharp
 public IActionResult OnGet() =>
-    Request.IsHtmx() ? Partial("_List") : Page();   // same URL, two representations
+    // same URL, two representations
+    Request.IsHtmx() ? Partial("_List") : Page();
 ```
 
 1. A user clicks an `hx-get` link; the browser caches the **fragment** for `/products`.
@@ -20,7 +21,8 @@ public IActionResult OnGet() =>
 ```csharp
 public IActionResult OnGet()
 {
-    Response.Htmx(h => h.WithVary());   // Vary: HX-Request
+    // Vary: HX-Request
+    Response.Htmx(h => h.WithVary());
     return Request.IsHtmx() ? Partial("_List") : Page();
 }
 ```
@@ -43,7 +45,7 @@ public IActionResult Index()
 `WithVary(params string[] headerNames)` appends exactly the headers you name. Names already present in `Vary` are not duplicated, and other `Vary` values you set earlier are preserved.
 
 ```csharp
-// samples/Htmx4.Sample/Controllers/DemoController.cs
+// DemoController.cs
 Response.Htmx(h => h.PreventPush().WithVary("HX-Source", "HX-Target"));
 ```
 

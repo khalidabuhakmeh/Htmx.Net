@@ -9,9 +9,11 @@ The server can tell the browser "something happened" by firing a DOM event after
 using Htmx;
 
 Response.Htmx(h => h.WithTrigger("saved"));
-Response.Htmx(h => h.WithTrigger("demo-scalar", "plain-value"));          // event.detail.value
+// event.detail.value
+Response.Htmx(h => h.WithTrigger("demo-scalar", "plain-value"));
 Response.Htmx(h => h.WithTrigger("demo-detail", new { id = 42, message = "hello" }));
-Response.Htmx(h => h.WithTrigger("a").WithTrigger("b", new { n = 2 }));   // multiple events
+// multiple events
+Response.Htmx(h => h.WithTrigger("a").WithTrigger("b", new { n = 2 }));
 ```
 
 Signature: `WithTrigger(string eventName, object? detail = null)`. Detail is serialized with `System.Text.Json`.
@@ -56,7 +58,8 @@ public IActionResult OnPostAdd(int id)
 {
     cart.Add(id);
     Response.Htmx(h => h.WithTrigger("item-added", new { id }));
-    return NoContent();   // 204 is not swapped, headers are still processed
+    // 204 is not swapped, headers are still processed
+    return NoContent();
 }
 ```
 
@@ -67,9 +70,10 @@ public IActionResult OnPostAdd(int id)
 - **First wins.** Calling `WithTrigger` twice with the same event name keeps the first detail.
 
 ```csharp
-// samples/Htmx4.Sample/Controllers/DemoController.cs  (merge cases)
+// DemoController.cs — merge cases
 Response.Headers["HX-Trigger"] = "demo-pre-a, demo-pre-b";
-Response.Htmx(h => h.WithTrigger("demo-added", new { n = 1 }));   // names + JSON merged
+// names + JSON merged
+Response.Htmx(h => h.WithTrigger("demo-added", new { n = 1 }));
 
 Response.Htmx(h => h.WithTrigger("demo-dup", new { v = "first" }).WithTrigger("demo-dup", new { v = "second" }));
 // -> demo-dup detail is { v: "first" }

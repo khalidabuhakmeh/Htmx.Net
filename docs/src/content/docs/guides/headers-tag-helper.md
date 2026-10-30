@@ -70,8 +70,10 @@ The server side of that demo reports what actually arrived:
 public IActionResult InheritedEcho(string p = "inh")
 {
     Request.IsHtmx(out var h);
-    var header = Request.Headers["X-Demo"].ToString();   // "from-parent" or empty
-    var target = h?.TargetElement;                       // div#inh-out, or the button itself
+    // "from-parent" or empty
+    var header = Request.Headers["X-Demo"].ToString();
+    // div#inh-out, or the button itself
+    var target = h?.TargetElement;
     // ...
 }
 ```

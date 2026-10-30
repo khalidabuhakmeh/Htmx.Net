@@ -53,7 +53,7 @@ There are additional extension methods for common htmx request checks:
 // Was the request boosted via hx-boost?
 Request.IsHtmxBoosted()
 
-// Is this a non-boosted htmx request? (htmx request that is NOT boosted)
+// Is this a non-boosted htmx request?
 Request.IsHtmxNonBoosted()
 
 // Also available with out parameter for header values
@@ -218,8 +218,10 @@ builder.Services.AddCors(options =>
                       policy  =>
                       {
                           policy.WithOrigins("http://example.com", "http://www.contoso.com")
-                                   .WithHeaders(HtmxRequestHeaders.Keys.All)  // Add htmx request headers
-                                   .WithExposedHeaders(HtmxResponseHeaders.Keys.All)  // Add htmx response headers
+                                   // Add htmx request headers
+                                   .WithHeaders(HtmxRequestHeaders.Keys.All)
+                                   // Add htmx response headers
+                                   .WithExposedHeaders(HtmxResponseHeaders.Keys.All)
                       });
 });
 ```

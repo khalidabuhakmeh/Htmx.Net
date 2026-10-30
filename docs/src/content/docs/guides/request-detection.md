@@ -39,7 +39,7 @@ public class ProductsModel : PageModel
 ### MVC controllers
 
 ```csharp
-// samples/Htmx4.Sample/Controllers/DemoController.cs
+// DemoController.cs
 [HttpGet("request-headers")]
 public IActionResult RequestHeadersEcho()
 {
@@ -121,7 +121,8 @@ if (Request.IsHtmx(out var h) && h!.SourceElement is { TagName: "button", Id: "s
 
 if (HtmxElementReference.TryParse("input#my%20field", out var el))
 {
-    // el.TagName == "input", el.Id == "my%20field", el.DecodedId == "my field"
+    // el.TagName == "input", el.Id == "my%20field"
+    // el.DecodedId == "my field"
 }
 ```
 
@@ -130,7 +131,7 @@ if (HtmxElementReference.TryParse("input#my%20field", out var el))
 `HX-Request-Type` is `full` when the request targets `body` or uses `hx-select`, and `partial` otherwise. That is the cleanest way to choose between a full layout and a fragment. Boosted links (`hx-boost`) typically swap the whole `body`, so they arrive as `full` and `IsHtmxBoosted()` is `true`:
 
 ```csharp
-// samples/Htmx4.Sample/Pages/Boosted.cshtml.cs
+// Boosted.cshtml.cs
 public void OnGet() => RequestType = Request.IsHtmx(out var h) ? h!.RequestType.ToString() : "n/a";
 ```
 

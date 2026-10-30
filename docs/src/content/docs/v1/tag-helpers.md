@@ -196,7 +196,7 @@ if (!document.body.attributes.__htmx_antiforgery) {
                 // only change the anti-forgery token
                 const key = 'antiForgery';
                 htmx.config[key] = JSON.parse(config.attributes['content'].value)[key];
-                // update DOM, probably not necessary, but for sanity's sake
+                // update DOM (usually unnecessary)
                 current.replaceWith(config);
             }
         }

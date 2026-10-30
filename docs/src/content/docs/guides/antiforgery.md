@@ -18,7 +18,8 @@ var app = builder.Build();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAntiforgery();
-app.MapHtmxAntiforgeryScript();   // default path "/_htmx/antiforgery.js"
+// default path "/_htmx/antiforgery.js"
+app.MapHtmxAntiforgeryScript();
 app.MapRazorPages();
 ```
 
@@ -34,7 +35,7 @@ app.MapRazorPages();
 Then write ordinary htmx markup:
 
 ```razor
-<!-- no body form: token goes in the RequestVerificationToken header -->
+<!-- no body form: token goes in the header -->
 <button hx-post="/demo/af/check" hx-target="#af-out">POST header</button>
 
 <!-- form body: the token is added as a hidden form field -->
@@ -45,7 +46,7 @@ Then write ordinary htmx markup:
 ```
 
 ```csharp
-// samples/Htmx4.Sample/Controllers/DemoController.cs
+// DemoController.cs
 [Route("demo/af")]
 [AutoValidateAntiforgeryToken]
 public class AntiforgeryDemoController : Controller
@@ -76,7 +77,8 @@ A raw `fetch("/demo/af/strict", { method: "POST" })` sends no token and gets `40
 
 ```csharp
 app.MapHtmxAntiforgeryScript("/assets/htmx-af.js", minified: false)
-   .RequireHost("app.example.com");   // it is an IEndpointConventionBuilder
+   // it is an IEndpointConventionBuilder
+   .RequireHost("app.example.com");
 ```
 
 ```razor

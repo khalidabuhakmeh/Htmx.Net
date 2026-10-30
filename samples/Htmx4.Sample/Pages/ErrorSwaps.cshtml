@@ -20,8 +20,10 @@ public IActionResult Status(int code) => code switch
         ViewName = ""_Error"", StatusCode = 422 },
     500 => new PartialViewResult {
         ViewName = ""_Error"", StatusCode = 500 },
-    204 => NoContent(),        // htmx: no swap
-    304 => StatusCode(304),    // htmx: no swap
+    // htmx: no swap
+    204 => NoContent(),
+    // htmx: no swap
+    304 => StatusCode(304),
     _   => NotFound()
 };";
 }

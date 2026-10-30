@@ -58,22 +58,28 @@ htmx 4 core requests also send a standard `Accept: text/html` request header (th
 
 ```csharp
 // before
-var id = Request.Htmx().Trigger;          // "save-button"
+// "save-button"
+var id = Request.Htmx().Trigger;
 var name = Request.Htmx().TriggerName;
-var target = Request.Htmx().Target;       // "results"
+// "results"
+var target = Request.Htmx().Target;
 
 // after
-var src = Request.Htmx().SourceElement;   // HtmxElementReference? { TagName = "button", Id = "save-button" }
+// HtmxElementReference? { TagName = "button", Id = "save-button" }
+var src = Request.Htmx().SourceElement;
 var id = src?.Id;
-var raw = Request.Htmx().Source;          // "button#save-button"
-var targetId = Request.Htmx().TargetElement?.Id; // Target is now "div#results"
+// "button#save-button"
+var raw = Request.Htmx().Source;
+// Target is now "div#results"
+var targetId = Request.Htmx().TargetElement?.Id;
 ```
 
 ```csharp
 // new: distinguish partial and full requests
 if (Request.IsHtmxPartial()) return PartialView("_List", model);
 if (Request.IsHtmxFullRequest()) { /* render full page */ }
-var type = Request.Htmx().RequestType; // HtmxRequestType.Partial
+// HtmxRequestType.Partial
+var type = Request.Htmx().RequestType;
 ```
 
 `HtmxHttpExtensions` gained `IsHtmxPartial(this HttpRequest?)` and `IsHtmxFullRequest(this HttpRequest?)`.
@@ -109,7 +115,7 @@ Response.Htmx(h => h
 Response.Htmx(h => h.StopPolling());
 return Content("Done");
 
-// after: respond with markup that no longer contains the polling element
+// after: return markup without the polling element
 // (replace the element that carries hx-trigger="every 2s")
 return Content("<div id=\"status\">Done</div>", "text/html");
 ```
@@ -232,9 +238,11 @@ Unset keys are no longer serialized (bug fix); only the values you set appear in
 ```html
 <!-- before (v1): bare hx-get was rewritten from hxn-page -->
 <button hx-get hxn-page="/Items">Load</button>
-<!-- after: the routing attribute drives generation; the verb gets the URL -->
-<button hx-get hxn-page="/Items">Load</button>   <!-- same markup still works when a routing attribute is present -->
-<button hx-get>Reload current URL</button>     <!-- valueless, left untouched -->
+<!-- the routing attribute drives generation -->
+<!-- same markup still works when a routing attribute is present -->
+<button hx-get hxn-page="/Items">Load</button>
+<!-- valueless, left untouched -->
+<button hx-get>Reload current URL</button>
 <button data-hx-post hxn-controller="Items" hxn-action="Save">Save</button>
 ```
 
