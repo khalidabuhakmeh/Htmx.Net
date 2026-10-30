@@ -23,7 +23,7 @@ htmx.NET is a **server-side** helper. It does not ship the htmx JavaScript. Upda
 
 Pin the version and add a Subresource Integrity hash; vendoring the file is recommended. See [Getting started](/Htmx.Net/getting-started/) for the vendored layout and the SHA-384 for the `htmx.org@4.0.0` build.
 
-## Overview
+## Package and framework changes
 
 - Both packages (`Htmx`, `Htmx.TagHelpers`) now target htmx 4 semantics.
 - Target frameworks changed to `net8.0;net10.0`. `net6.0` and `net7.0` are no longer supported.
