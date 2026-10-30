@@ -3,11 +3,15 @@ title: Samples
 description: Index of the 13 demos in the Htmx4.Sample app, what each shows, and links to the source and matching guide.
 ---
 
-`samples/Htmx4.Sample/` is a Razor Pages + MVC app on htmx 4.0.0 (vendored in `wwwroot/lib/htmx/`). Run it:
+The sample lives in this project's GitHub repository, [khalidabuhakmeh/Htmx.Net](https://github.com/khalidabuhakmeh/Htmx.Net). Clone it, then run the app:
 
 ```bash
+git clone https://github.com/khalidabuhakmeh/Htmx.Net.git
+cd Htmx.Net
 dotnet run --project samples/Htmx4.Sample
 ```
+
+`samples/Htmx4.Sample/` is a Razor Pages + MVC app on htmx 4.0.0 (vendored in `wwwroot/lib/htmx/`).
 
 Then open the demo you want (each is at `/<Name>`). The sample's `Demos.cs` lists the pages and the layout renders the navigation from it. Each demo ends with a "How it works" panel showing its key markup and server code.
 
