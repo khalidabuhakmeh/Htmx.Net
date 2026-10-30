@@ -112,6 +112,21 @@ h1#_top {
     border-radius: 10px;
 }
 
+/* A framed block with a VISIBLE header (terminal dots, or a filename tab) must
+   read as one window: round the header's top corners and flatten the code
+   body's top so the bar and the body share a single radius. Frameless blocks
+   (their header is display:none) keep all four corners rounded. */
+.expressive-code .frame.is-terminal .header,
+.expressive-code .frame:has(.title) .header {
+    border-start-start-radius: 10px;
+    border-start-end-radius: 10px;
+}
+.expressive-code .frame.is-terminal pre,
+.expressive-code .frame:has(.title) pre {
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+}
+
 /* ---- Wrap code instead of scrolling horizontally ------------------------ */
 /* Expressive Code sets overflow on the <pre> and keeps each .ec-line on one
    line. Override both so long attribute lists / URLs / JSON break and fit the
