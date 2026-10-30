@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main, feat/htmx-4]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Assumption: 10.0.x is GA on the stable feed (global.json pins 10.0.100).
+      # Fallback if unavailable: add `dotnet-quality: preview` or pin an exact version.
+      - name: Setup .NET 8 and 10 SDKs
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+          dotnet-quality: ga
+
+      - name: Restore
+        run: dotnet restore Htmx.sln
+
+      - name: Build (Release)
+        run: dotnet build Htmx.sln -c Release --no-restore
+
+      - name: Unit + integration tests (excluding E2E)
+        run: dotnet test Htmx.sln -c Release --no-build --filter "Category!=E2E"
+
+      - name: Install Playwright browsers
+        shell: pwsh
+        run: |
+          $script = Get-ChildItem -Path test/Htmx.E2ETests/bin/Release -Filter playwright.ps1 -Recurse | Select-Object -First 1
+          if (-not $script) { throw "playwright.ps1 not found; E2E project did not build." }
+          & $script.FullName install --with-deps chromium
+          if ($LASTEXITCODE -ne 0) { throw "Playwright browser install failed." }
+
+      - name: E2E tests
+        run: dotnet test test/Htmx.E2ETests -c Release --no-build --filter "Category=E2E"
+
+      - name: Pack Htmx
+        run: dotnet pack src/Htmx -c Release --no-build -o ./artifacts
+
+      - name: Pack Htmx.TagHelpers
+        run: dotnet pack src/Htmx.TagHelpers -c Release --no-build -o ./artifacts
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+          if-no-files-found: error
+
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diagnostics
+          path: |
+            test/Htmx.E2ETests/**/playwright-traces/**
+            **/*.received.*
+          if-no-files-found: ignore

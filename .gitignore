@@ -6,6 +6,9 @@
 ## . folders are getting out of control
 /.*
 !/.gitignore
+# ...but GitHub config (workflows, templates) must be tracked.
+!/.github/
+!/.github/**
 
 # User-specific files
 *.rsuser
