@@ -190,60 +190,21 @@ h1#_top {
     max-width: 40ch;
 }
 
-/* Wordmark: htmx's blue "x" as a direct homage, with a soft underglow. */
+/* Wordmark: htmx's blue "x" as a direct homage. */
 .hero h1 .wm-x {
     color: var(--sl-color-accent);
-    text-shadow: 0 0 28px color-mix(in oklab, var(--sl-color-accent) 32%, transparent);
 }
 
-/* Depth behind the wordmark: a soft accent glow (::before) over a faded
-   graph-paper matrix (::after) that evokes a design canvas and recalls the
-   htmx 4 hero, masked so it dissolves before it reaches the edges or text. */
-.page:has(.home) .hero::before,
-.page:has(.home) .hero::after {
-    content: "";
-    position: absolute;
-    inset: -2rem 0 0;
-    z-index: -1;
-    pointer-events: none;
-}
-.page:has(.home) .hero::before {
-    background: radial-gradient(
-        ellipse 46% 52% at 50% 34%,
-        color-mix(in oklab, var(--sl-color-accent) 20%, transparent),
-        transparent 70%
-    );
-}
-.page:has(.home) .hero::after {
-    background-image: radial-gradient(
-        circle,
-        color-mix(in oklab, var(--sl-color-accent) 24%, transparent) 1px,
-        transparent 1.4px
-    );
-    background-size: 24px 24px;
-    background-position: center;
-    -webkit-mask-image: radial-gradient(ellipse 52% 60% at 50% 36%, #000 0%, transparent 68%);
-    mask-image: radial-gradient(ellipse 52% 60% at 50% 36%, #000 0%, transparent 68%);
-    opacity: 0.6;
-}
-
-/* One authored entrance: the wordmark/tagline/actions rise in, the depth
-   fades up behind them. Exponential ease-out, disabled for reduced motion. */
+/* One authored entrance: the wordmark/tagline/actions rise in.
+   Exponential ease-out, disabled for reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
     .page:has(.home) .hero .stack {
         animation: hero-rise 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
-    }
-    .page:has(.home) .hero::before,
-    .page:has(.home) .hero::after {
-        animation: hero-fade 1.1s ease-out both;
     }
 }
 @keyframes hero-rise {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: none; }
-}
-@keyframes hero-fade {
-    from { opacity: 0; }
 }
 
 
