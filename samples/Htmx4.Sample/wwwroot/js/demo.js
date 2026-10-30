@@ -1,5 +1,22 @@
-// Progressive enhancement for the sample: adds a "copy" button to each code figure.
+// Progressive enhancement for the sample:
+//  - syntax-highlights each "How it works" code figure (highlight.js)
+//  - adds a "copy" button to each code figure
 (function () {
+    // Map the figcaption's .lang label to a highlight.js language.
+    var LANGS = { html: "xml", razor: "cshtml", cshtml: "cshtml", csharp: "csharp", cs: "csharp", js: "javascript", json: "json", css: "css" };
+
+    function highlightCode() {
+        if (!window.hljs) return;
+        document.querySelectorAll("figure.code").forEach(function (fig) {
+            var code = fig.querySelector("pre code");
+            if (!code || code.dataset.highlighted) return;
+            var langLabel = (fig.querySelector(".lang")?.textContent || "").trim().toLowerCase();
+            var lang = LANGS[langLabel];
+            if (lang) code.classList.add("language-" + lang);
+            try { window.hljs.highlightElement(code); } catch (e) { /* leave plain */ }
+        });
+    }
+
     function addCopyButtons() {
         document.querySelectorAll("figure.code > figcaption").forEach(function (cap) {
             if (cap.querySelector(".copy-btn")) return;
@@ -20,6 +37,9 @@
             cap.appendChild(btn);
         });
     }
-    if (document.readyState !== "loading") addCopyButtons();
-    else document.addEventListener("DOMContentLoaded", addCopyButtons);
+
+    function enhance() { highlightCode(); addCopyButtons(); }
+
+    if (document.readyState !== "loading") enhance();
+    else document.addEventListener("DOMContentLoaded", enhance);
 })();

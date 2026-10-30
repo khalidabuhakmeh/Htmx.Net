@@ -56,13 +56,15 @@ Response.Htmx(h => h.Location(new HtmxLocation {
     <div id="resp-retarget-target" data-testid="resp-retarget-target">(retarget target)</div>
 
     <h2>HtmxSwap matrix (Reswap with every constant)</h2>
-    @foreach (var s in swaps)
-    {
-        <div data-testid="swap-case-@s">
-            <button data-testid="swap-btn-@s" hx-get="/demo/swap/@s" hx-target="#swap-@s">@s</button>
-            <div id="swap-@s" data-testid="swap-target-@s">original</div>
-        </div>
-    }
+    <div class="swap-grid">
+        @foreach (var s in swaps)
+        {
+            <div class="swap-case" data-testid="swap-case-@s">
+                <button data-testid="swap-btn-@s" hx-get="/demo/swap/@s" hx-target="#swap-@s">@s</button>
+                <div id="swap-@s" data-testid="swap-target-@s" class="swap-out">original</div>
+            </div>
+        }
+    </div>
 </section>
 
 <section class="how">

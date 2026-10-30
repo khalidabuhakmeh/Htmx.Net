@@ -372,21 +372,71 @@ th { color: var(--ink); font-weight: 700; }
     color: var(--muted);
 }
 
-/* "Watch this" hint callout */
+/* "Watch this" hint callout — block flow so inline <strong>/<code> don't become flex items */
 .hint {
-    display: flex;
-    gap: .55rem;
-    align-items: flex-start;
-    background: color-mix(in oklab, var(--accent) 8%, var(--surface));
-    border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line));
-    border-left: 4px solid var(--accent);
+    position: relative;
+    background: color-mix(in oklab, var(--accent) 6%, var(--surface));
+    border: 1px solid color-mix(in oklab, var(--accent) 28%, var(--line));
+    border-left: 3px solid var(--accent);
     border-radius: 6px;
-    padding: .65rem .8rem;
-    font-size: .92rem;
+    padding: .7rem .85rem .7rem 2.4rem;
+    font-size: .93rem;
+    line-height: 1.55;
     color: var(--text);
     margin: 0;
 }
-.hint::before { content: "👀"; }
+.hint::before {
+    content: "";
+    position: absolute;
+    left: .82rem;
+    top: .9rem;
+    width: 1.1em;
+    height: 1.1em;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%231f3f85'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M2%2012s3.5-7%2010-7%2010%207%2010%207-3.5%207-10%207-10-7-10-7Z'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='3'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+.hint code { background: color-mix(in oklab, var(--accent) 12%, var(--surface)); }
+
+/* Sub-headings inside a stage: lighter than top-level h2 (no rule, less air) */
+.stage h2 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    border-bottom: none;
+    padding: 0;
+    margin: .3rem 0 .1rem;
+}
+
+/* HtmxSwap matrix — compact responsive grid instead of a tall vertical stack */
+.swap-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    gap: .6rem;
+}
+.swap-case {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+    padding: .55rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+.swap-case button {
+    width: 100%;
+    box-shadow: none;
+    font-size: .82rem;
+    padding: .35rem .5rem;
+}
+.swap-out {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--muted);
+    background: var(--code-bg);
+    border-radius: 5px;
+    padding: .3rem .45rem;
+    min-height: 1.5rem;
+    overflow-x: auto;
+}
+
 
 /* How it works + code figures */
 .how { margin-top: 2.5rem; }
@@ -434,3 +484,12 @@ figure.code pre { margin: 0; border: none; border-radius: 0; box-shadow: none; }
 .copy-btn:active { transform: none; }
 .copy-btn.copied { color: var(--ok); border-color: var(--ok); }
 
+
+/* ---- Syntax highlighting (highlight.js) --------------------------------- */
+/* Keep the figure's own light background; let the theme colour only tokens. */
+figure.code pre code.hljs,
+pre code.hljs {
+    background: transparent;
+    padding: 0;
+    color: var(--ink);
+}
