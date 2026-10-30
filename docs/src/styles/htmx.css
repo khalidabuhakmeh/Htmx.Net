@@ -1,0 +1,137 @@
+/* ---------------------------------------------------------------------------
+   Htmx.Net docs theme — matches the htmx 4 site (four.htmx.org):
+   warm near-white, Inter body, ChicagoFLF display, JetBrains Mono code,
+   light code blocks, restrained htmx-blue accent. Overrides Starlight tokens.
+   --------------------------------------------------------------------------- */
+
+@font-face {
+    font-family: "ChicagoFLF";
+    /* Served from docs/public/fonts under the configured base path. */
+    src: url("/Htmx.Net/fonts/ChicagoFLF.ttf") format("truetype");
+    font-display: swap;
+}
+
+:root {
+    --sl-font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    --sl-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+    --htmx-display: "ChicagoFLF", "Inter", system-ui, sans-serif;
+
+    /* htmx brand blue — used sparingly for accents, focus, active nav. */
+    --sl-color-accent-low: #d7e2f6;
+    --sl-color-accent: #3d72d7;
+    --sl-color-accent-high: #1f3f85;
+
+    --sl-content-width: 50rem;
+}
+
+/* ---- Light theme (the faithful htmx match) ------------------------------ */
+:root[data-theme="light"] {
+    --sl-color-white: #141414;              /* "white" in Starlight = strongest text */
+    --sl-color-gray-1: #262626;
+    --sl-color-gray-2: #434343;
+    --sl-color-gray-3: #6f6d67;
+    --sl-color-gray-4: #8a8780;
+    --sl-color-gray-5: #c7c3b9;
+    --sl-color-gray-6: #e7e4dc;
+    --sl-color-gray-7: #f1efe9;
+    --sl-color-black: #fdfdfc;              /* "black" in Starlight = page bg */
+
+    --sl-color-text: #434343;
+    --sl-color-text-accent: #1f3f85;
+    --sl-color-bg: #fdfdfc;
+    --sl-color-bg-nav: #fdfdfccc;
+    --sl-color-bg-sidebar: #fbfaf7;
+    --sl-color-bg-inline-code: #eceae3;
+    --sl-color-hairline: #e7e4dc;
+    --sl-color-hairline-light: #efece5;
+    --sl-color-hairline-shade: #e2dfd6;
+    --sl-color-accent-low: #dde7f7;
+    --sl-color-accent: #3d72d7;
+    --sl-color-accent-high: #1f3f85;
+}
+
+/* ---- Dark theme (tasteful inverse, same voice) -------------------------- */
+:root[data-theme="dark"] {
+    --sl-color-accent-low: #15294d;
+    --sl-color-accent: #5b8def;
+    --sl-color-accent-high: #cdddfb;
+    --sl-color-text-accent: #8fb3f6;
+    --sl-color-bg-inline-code: #23262d;
+}
+
+/* ---- Site title (top-left) + content headings -> ChicagoFLF ------------- */
+.site-title,
+a.site-title {
+    font-family: var(--htmx-display);
+    font-size: 1.45rem;
+    letter-spacing: -0.5px;
+}
+
+.sl-markdown-content h1,
+.hero h1,
+h1#_top {
+    font-family: var(--htmx-display);
+    letter-spacing: -1.5px;
+    line-height: 1.04;
+    font-weight: 700;
+}
+.sl-markdown-content h2,
+.sl-markdown-content h3 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+/* More air above a heading than below it (craft floor). */
+.sl-markdown-content :is(h2, h3) {
+    margin-top: 2.4rem;
+    margin-bottom: 0.6rem;
+}
+
+/* ---- Body links: htmx-style underline with offset ----------------------- */
+.sl-markdown-content a {
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--sl-color-hairline-shade);
+    transition: text-decoration-color 0.12s ease, color 0.12s ease;
+}
+.sl-markdown-content a:hover {
+    text-decoration-color: var(--sl-color-accent);
+}
+
+/* ---- Inline code -------------------------------------------------------- */
+.sl-markdown-content :not(pre) > code {
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 5px;
+    font-size: 0.86em;
+}
+
+/* ---- Expressive Code / code blocks: light, bordered, soft depth --------- */
+.expressive-code .frame {
+    border-radius: 10px;
+}
+.sl-markdown-content pre {
+    border-radius: 10px;
+}
+
+/* ---- Hero (splash) wordmark -------------------------------------------- */
+.hero h1 {
+    font-size: clamp(2.6rem, 8vw, 4.6rem);
+}
+
+/* ---- Browser surfaces (craft floor: theme what you didn't draw) --------- */
+:root { accent-color: var(--sl-color-accent); }
+::selection {
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-accent-high);
+}
+*:focus-visible {
+    outline: 2px solid var(--sl-color-accent);
+    outline-offset: 2px;
+}
+* { scrollbar-color: var(--sl-color-gray-5) transparent; }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-thumb {
+    background: var(--sl-color-gray-5);
+    border: 3px solid var(--sl-color-bg);
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--sl-color-gray-4); }
