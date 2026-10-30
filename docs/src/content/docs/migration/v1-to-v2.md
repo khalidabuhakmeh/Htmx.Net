@@ -8,6 +8,21 @@ htmx.NET 2.0 is a **breaking major release** that targets **htmx 4 only**. If yo
 Many changes are client-side and come from htmx itself. Read the official [htmx 4 upgrade guide](https://four.htmx.org/docs/whats-new-in-htmx-4) alongside this page.
 :::
 
+## Step 0: update the htmx client script
+
+:::danger[Do this first]
+htmx.NET is a **server-side** helper. It does not ship the htmx JavaScript. Updating the NuGet package and your C# is not enough — if the browser still loads htmx 2, nothing on this page applies and your app will break. **Replace your htmx 2 `<script>` with htmx 4.0.0 before anything else.**
+:::
+
+```html
+<!-- before (htmx 2) -->
+<script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.min.js" defer></script>
+<!-- after (htmx 4) -->
+<script src="https://unpkg.com/htmx.org@4.0.0/dist/htmx.min.js" defer></script>
+```
+
+Pin the version and add a Subresource Integrity hash; vendoring the file is recommended. See [Getting started](/Htmx.Net/getting-started/) for the vendored layout and the SHA-384 for the `htmx.org@4.0.0` build.
+
 ## Overview
 
 - Both packages (`Htmx`, `Htmx.TagHelpers`) now target htmx 4 semantics.
@@ -31,11 +46,15 @@ Many changes are client-side and come from htmx itself. Read the official [htmx 
 | `Trigger` (`HX-Trigger`) | `Source` / `SourceElement` | Compile-error stub. `HX-Source` uses `tag#id` format. |
 | `TriggerName` (`HX-Trigger-Name`) | `Source` / `SourceElement` | Compile-error stub. Header removed in htmx 4. |
 | `Keys.Trigger`, `Keys.TriggerName` constants | `Keys.Source` (`HX-Source`) | Constants removed. |
-| *(none)* | `RequestType`, `Keys.RequestType` | New `HX-Request-Type` header: `Full` or `Partial`. |
+| *(none)* | `RequestType`, `Keys.RequestType` | New `HX-Request-Type` header: `Full` or `Partial`. `HtmxRequestType` is `Unknown = 0`, `Full = 1`, `Partial = 2`; a non-htmx request (or a missing header) reads as `Unknown`, so `IsHtmxPartial()` and `IsHtmxFullRequest()` are both `false`. htmx sends `full` when the target is `body` or `hx-select` is used, and `partial` otherwise. |
 | `Target` (element id) | `Target` (`tag#id`) + `TargetElement` | Value is now `tag#id`. Use `TargetElement.Id` for the id. |
 
 New helper type `HtmxElementReference(string TagName, string? Id, string Raw)` with `DecodedId` and `TryParse(string?, out HtmxElementReference)`.
 New enum `HtmxRequestType` (`Full`, `Partial`). `HtmxRequestHeaders.Keys.All` (used for CORS `Access-Control-Allow/Expose-Headers`) now lists the htmx 4 request headers.
+
+:::note[New `Accept` header]
+htmx 4 core requests also send a standard `Accept: text/html` request header (the `hx-sse` extension adds `text/event-stream`). It is not an `HX-*` header and has no helper, but if you configure CORS `Access-Control-Allow-Headers` explicitly or do content negotiation, account for it.
+:::
 
 ```csharp
 // before
