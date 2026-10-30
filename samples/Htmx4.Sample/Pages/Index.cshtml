@@ -2,12 +2,43 @@
 @model Htmx4.Sample.Pages.IndexModel
 @{
     ViewData["Title"] = "Home";
+
+    var descriptions = new Dictionary<string, string>
+    {
+        ["RequestHeaders"] = "Read HX-Source, HX-Request-Type & friends server-side.",
+        ["ResponseHeaders"] = "Push URLs, retarget, reswap, redirect, refresh.",
+        ["Triggers"] = "Fire client events via the HX-Trigger header.",
+        ["Config"] = "Render htmx-config with the typed tag helper.",
+        ["UrlHelper"] = "Generate ASP.NET routes onto hx-get/post attributes.",
+        ["Inherited"] = "Explicit :inherited attributes in htmx 4.",
+        ["Antiforgery"] = "ASP.NET Core CSRF tokens on htmx requests.",
+        ["Boosted"] = "hx-boost navigation detected server-side.",
+        ["Partials"] = "<hx-partial> updating several targets at once.",
+        ["Morph"] = "Morph swaps that preserve focus & state.",
+        ["ErrorSwaps"] = "htmx 4 swaps 4xx/5xx by default (not 204/304).",
+        ["Location"] = "Client navigation via the HX-Location header.",
+        ["Polling"] = "Load polling and how to stop it in htmx 4.",
+    };
 }
-<h1>Htmx.Net + htmx 4 sample</h1>
-<p>Demo pages (added in D2):</p>
-<ul data-testid="demo-index">
+
+<section class="hero">
+    <h1 class="wordmark">Htmx.Net <span class="x">×</span> htmx&nbsp;4</h1>
+    <p class="lead">Server-side ASP.NET Core helpers for htmx 4 — request detection, response headers, Tag Helpers, and antiforgery, each demonstrated below.</p>
+    <div class="badges">
+        <span class="pill">htmx 4.0.0</span>
+        <span class="pill">net8.0 · net10.0</span>
+        <span class="pill">@descriptions.Count demos</span>
+    </div>
+</section>
+
+<ul class="cards" data-testid="demo-index">
     @foreach (var d in Demos.All)
     {
-        <li><a href="/@d" data-testid="index-link-@d">@d</a></li>
+        <li>
+            <a href="/@d" data-testid="index-link-@d">
+                <span class="card-title">@d</span>
+                <span class="card-desc">@(descriptions.TryGetValue(d, out var desc) ? desc : "")</span>
+            </a>
+        </li>
     }
 </ul>

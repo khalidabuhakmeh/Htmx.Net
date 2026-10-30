@@ -1,5 +1,322 @@
-body { font-family: system-ui, sans-serif; margin: 0; color: #222; }
-nav { display: flex; flex-wrap: wrap; gap: 1rem; padding: .75rem 1rem; background: #f2f2f2; }
-main { padding: 1rem; max-width: 60rem; }
-.htmx-indicator { opacity: 0; }
-.htmx-request .htmx-indicator, .htmx-request.htmx-indicator { opacity: 1; }
+/* ---------------------------------------------------------------------------
+   Htmx4.Sample theme — inspired by the htmx 4 site (four.htmx.org):
+   ChicagoFLF display wordmark, Inter body, JetBrains Mono code,
+   warm near-white background, near-black ink, thick underlines.
+   --------------------------------------------------------------------------- */
+
+@font-face {
+    font-family: "ChicagoFLF";
+    src: url("/fonts/ChicagoFLF.ttf") format("truetype");
+    font-display: swap;
+}
+
+:root {
+    --bg: #fdfdfc;
+    --surface: #ffffff;
+    --text: #434343;
+    --ink: #141414;
+    --muted: #6f6d67;
+    --line: #e7e4dc;
+    --line-strong: #141414;
+    --code-bg: #f5f3ee;
+    --accent: #3d72d7;      /* htmx brand blue, used sparingly */
+    --accent-ink: #1f3f85;
+    --ok: #1a7f52;
+    --warn: #b23b2e;
+
+    --font-sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    --font-display: "ChicagoFLF", "Inter", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+
+    --radius: 8px;
+    --maxw: 68rem;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* ---- Links -------------------------------------------------------------- */
+a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--line);
+    transition: text-decoration-color .12s ease, color .12s ease;
+}
+a:hover { text-decoration-color: var(--accent); color: var(--accent-ink); }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+/* ---- Header / nav ------------------------------------------------------- */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in oklab, var(--surface) 88%, transparent);
+    backdrop-filter: saturate(1.2) blur(8px);
+    border-bottom: 2px solid var(--line-strong);
+}
+.site-header__bar {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding: .7rem 1.25rem;
+    flex-wrap: wrap;
+}
+.brand {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: -1px;
+    white-space: nowrap;
+}
+.brand:hover { color: var(--ink); }
+.brand .x { color: var(--accent); }
+.brand small {
+    font-family: var(--font-sans);
+    font-size: .62rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-left: .35rem;
+    vertical-align: middle;
+}
+
+nav.demo-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .15rem .35rem;
+    margin-left: auto;
+    align-items: center;
+}
+nav.demo-nav a {
+    font-size: .85rem;
+    text-decoration: none;
+    color: var(--muted);
+    padding: .2rem .5rem;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+nav.demo-nav a:hover { color: var(--ink); background: var(--code-bg); }
+nav.demo-nav a[aria-current="page"] { color: var(--ink); background: var(--code-bg); font-weight: 600; }
+
+/* ---- Layout ------------------------------------------------------------- */
+main {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+}
+main > * + * { margin-top: 1rem; }
+
+/* ---- Typography --------------------------------------------------------- */
+h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -1.5px;
+    line-height: 1.02;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    margin: .2rem 0 .6rem;
+}
+h2 {
+    font-family: var(--font-sans);
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -.02em;
+    font-size: 1.5rem;
+    margin: 2.2rem 0 .4rem;
+    padding-bottom: .3rem;
+    border-bottom: 1px solid var(--line);
+}
+h3 { font-weight: 700; color: var(--ink); font-size: 1.12rem; margin: 1.4rem 0 .3rem; }
+p { margin: .5rem 0; }
+.lead { font-size: 1.2rem; color: var(--muted); max-width: 46ch; }
+
+hr { border: none; border-top: 1px solid var(--line); margin: 2rem 0; }
+
+/* ---- Code --------------------------------------------------------------- */
+code, kbd, pre, samp { font-family: var(--font-mono); font-size: .88em; }
+:not(pre) > code {
+    background: var(--code-bg);
+    padding: .12em .4em;
+    border-radius: 5px;
+    border: 1px solid var(--line);
+}
+pre {
+    background: var(--code-bg);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ink);
+    border-radius: var(--radius);
+    padding: .9rem 1rem;
+    overflow-x: auto;
+    line-height: 1.5;
+    font-size: .82rem;
+}
+pre code { background: none; border: none; padding: 0; }
+kbd {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    padding: .05em .4em;
+    color: var(--ink);
+}
+
+/* ---- Buttons ------------------------------------------------------------ */
+button,
+.btn,
+input[type="submit"],
+input[type="button"] {
+    font-family: var(--font-sans);
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--ink);
+    border-radius: var(--radius);
+    padding: .45rem .9rem;
+    cursor: pointer;
+    transition: transform .06s ease, background .12s ease, color .12s ease, box-shadow .12s ease;
+    box-shadow: 2px 2px 0 var(--ink);
+}
+button:hover,
+.btn:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    background: var(--ink);
+    color: var(--surface);
+}
+button:active,
+.btn:active,
+input[type="submit"]:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 var(--ink);
+}
+button:focus-visible,
+.btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+/* ---- Forms -------------------------------------------------------------- */
+input[type="text"],
+input[type="search"],
+input[type="email"],
+input[type="number"],
+select,
+textarea {
+    font-family: var(--font-sans);
+    font-size: .95rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line);
+    border-radius: 6px;
+    padding: .4rem .6rem;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--ink);
+}
+label { font-weight: 600; color: var(--ink); }
+form { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
+
+/* ---- Tables ------------------------------------------------------------- */
+table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+th, td { text-align: left; padding: .5rem .6rem; border-bottom: 1px solid var(--line); }
+th { color: var(--ink); font-weight: 700; }
+
+/* ---- Hero + demo cards (Index) ----------------------------------------- */
+.hero {
+    padding: 1.5rem 0 1rem;
+    border-bottom: 2px solid var(--line-strong);
+    margin-bottom: 1.5rem;
+}
+.hero .wordmark {
+    font-family: var(--font-display);
+    font-size: clamp(2.8rem, 10vw, 6rem);
+    line-height: .95;
+    letter-spacing: -2.5px;
+    color: var(--ink);
+    margin: 0;
+}
+.hero .wordmark .x { color: var(--accent); }
+.hero .badges { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+.pill {
+    font-family: var(--font-mono);
+    font-size: .74rem;
+    padding: .2rem .55rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+.cards {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: .9rem;
+}
+.cards li { margin: 0; }
+.cards a {
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: .9rem 1rem;
+    box-shadow: 3px 3px 0 var(--line-strong);
+    transition: transform .08s ease, box-shadow .08s ease;
+}
+.cards a:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--accent);
+}
+.cards .card-title { font-weight: 800; font-size: 1.02rem; display: flex; align-items: center; gap: .4rem; }
+.cards .card-title::before { content: "›"; color: var(--accent); font-weight: 700; }
+.cards .card-desc { color: var(--muted); font-size: .85rem; margin-top: .25rem; }
+
+/* ---- Result / output helpers (used across demos) ------------------------ */
+[data-testid$="result"], [data-testid$="-out"], [data-testid$="-result"], .result {
+    scroll-margin-top: 5rem;
+}
+
+/* ---- htmx indicator + request state ------------------------------------ */
+.htmx-indicator { opacity: 0; transition: opacity .2s ease; }
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator { opacity: 1; }
+.htmx-request { cursor: progress; }
+
+/* ---- Footer ------------------------------------------------------------- */
+.site-footer {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: .85rem;
+    margin-top: 2rem;
+}
+.site-footer a { color: var(--muted); text-decoration-color: var(--line); }
+
+/* ---- Reduced motion ----------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+}
