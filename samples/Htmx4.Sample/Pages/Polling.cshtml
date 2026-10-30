@@ -2,14 +2,61 @@
 @model Htmx4.Sample.Pages.PollingModel
 @{
     ViewData["Title"] = "Polling";
+
+    var markup = @"<div id=""poll-every""
+     hx-get=""/demo/poll?n=0&stop=3&mode=every""
+     hx-trigger=""every 1s""
+     hx-swap=""outerHTML"">
+    <span>0</span> <span>polling</span>
+</div>";
+
+    var server = @"// DemoController.cs
+public IActionResult Poll(int n = 0, int stop = 3, string mode = ""load"")
+{
+    n++;
+    if (n >= stop)   // no hx-trigger in the reply => polling ends
+        return Frag($""<div id='poll-{mode}'>{n} stopped</div>"");
+
+    return Frag($""<div id='poll-{mode}' hx-get='/demo/poll?n={n}&stop={stop}&mode={mode}' "" +
+                $""hx-trigger='every 1s' hx-swap='outerHTML'>{n} polling</div>"");
+}";
 }
+
 <h1>Polling</h1>
-<p>htmx 4 has no 286 stop signal. Stop by returning content without the poller. Counter stops at 3.</p>
-<h2>Load polling (each response replaces the poller)</h2>
-<div id="poll-load" data-testid="poll-load-box" hx-get="/demo/poll?n=0&amp;stop=3&amp;mode=load" hx-trigger="load delay:1s" hx-swap="outerHTML">
-    <span data-testid="poll-load-count">0</span> <span data-testid="poll-load-running">polling</span>
-</div>
-<h2>hx-trigger="every 1s" (stopped by replacing the element)</h2>
-<div id="poll-every" data-testid="poll-every-box" hx-get="/demo/poll?n=0&amp;stop=3&amp;mode=every" hx-trigger="every 1s" hx-swap="outerHTML">
-    <span data-testid="poll-every-count">0</span> <span data-testid="poll-every-running">polling</span>
-</div>
+<p class="demo-lead">
+    An element with <code>hx-trigger="every 1s"</code> (or <code>load delay:1s</code>) requests the server repeatedly.
+    htmx 4 has no 286 stop signal; instead the server stops polling by returning content that no longer contains the
+    trigger. Here the counter stops at 3.
+</p>
+
+<section class="stage">
+    <p class="stage__label">Watch it</p>
+    <p class="hint">
+        Nothing to click: <strong>each counter ticks</strong> once a second, then the label changes to
+        <strong>stopped</strong> at 3 because the final response has no poller. Reload the page to run it again.
+    </p>
+    <h2>Load polling (each response replaces the poller)</h2>
+    <div class="result" id="poll-load" data-testid="poll-load-box" hx-get="/demo/poll?n=0&amp;stop=3&amp;mode=load" hx-trigger="load delay:1s" hx-swap="outerHTML">
+        <span data-testid="poll-load-count">0</span> <span data-testid="poll-load-running">polling</span>
+    </div>
+    <h2>hx-trigger="every 1s" (stopped by replacing the element)</h2>
+    <div class="result" id="poll-every" data-testid="poll-every-box" hx-get="/demo/poll?n=0&amp;stop=3&amp;mode=every" hx-trigger="every 1s" hx-swap="outerHTML">
+        <span data-testid="poll-every-count">0</span> <span data-testid="poll-every-running">polling</span>
+    </div>
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Each response replaces the polling element (<code>outerHTML</code>). While the server keeps returning the
+        trigger attributes, polling continues; once it omits them, the new element is inert.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">Polling.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
+</section>

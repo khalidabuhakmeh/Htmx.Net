@@ -2,16 +2,67 @@
 @model Htmx4.Sample.Pages.PartialsModel
 @{
     ViewData["Title"] = "Partials";
+
+    var markup = @"<button hx-get=""/demo/partials"" hx-target=""#part-main"">Load</button>
+<div id=""part-main"">main (before)</div>
+<div id=""part-a"">A (before)</div>
+<ul id=""part-b""><li>B initial</li></ul>
+<div id=""part-oob"">OOB (before)</div>";
+
+    var server = @"// One response body, processed in document order
+<hx-partial hx-target=""#part-a"" hx-swap=""innerHTML"">partial A</hx-partial>
+<hx-partial hx-target=""#part-b"" hx-swap=""beforeend""><li>B item</li></hx-partial>
+<hx-partial hx-target=""#part-nested"" hx-swap=""innerHTML"">into nested</hx-partial>
+<div id=""part-oob"" hx-swap-oob=""true"">OOB updated</div>
+<div id=""part-main-content"">main <span id=""part-nested"">placeholder</span></div>";
 }
+
 <h1>&lt;hx-partial&gt; and ordering</h1>
-<p>One response: main content first, then partials and OOB in document order. The nested-target partial only works because the main swap runs first.</p>
-<button data-testid="part-btn" hx-get="/demo/partials" hx-target="#part-main">Load (main + 3 partials + OOB)</button>
-<div id="part-main" data-testid="part-main">main (before)</div>
-<div id="part-a" data-testid="part-a">A (before)</div>
-<ul id="part-b" data-testid="part-b"><li>B initial</li></ul>
-<div id="part-oob" data-testid="part-oob">OOB (before)</div>
-<hr />
-<p>Partials-only response: the main target is left untouched.</p>
-<button data-testid="part-btn-only" hx-get="/Partials?handler=Only" hx-target="#part-main2">Load partials only</button>
-<div id="part-main2" data-testid="part-main2">main2 (untouched)</div>
-<div id="part-c" data-testid="part-c">C (before)</div>
+<p class="demo-lead">
+    A single response can update several places at once. The main content swaps into the button's target first,
+    then each <code>&lt;hx-partial&gt;</code> and out-of-band element is applied in document order.
+    The second demo returns only partials, leaving the main target untouched.
+</p>
+
+<section class="stage">
+    <p class="stage__label">Try it</p>
+    <div class="btn-row">
+        <button data-testid="part-btn" hx-get="/demo/partials" hx-target="#part-main">Load (main + 3 partials + OOB)</button>
+    </div>
+    <p class="hint">
+        Click and watch <strong>four regions</strong> change from one response. The nested partial only lands because the
+        <strong>main swap runs first</strong> and creates its target.
+    </p>
+    <div class="result">
+        <div id="part-main" data-testid="part-main">main (before)</div>
+        <div id="part-a" data-testid="part-a">A (before)</div>
+        <ul id="part-b" data-testid="part-b"><li>B initial</li></ul>
+        <div id="part-oob" data-testid="part-oob">OOB (before)</div>
+    </div>
+    <hr />
+    <p>Partials-only response: the main target is left untouched.</p>
+    <div class="btn-row">
+        <button data-testid="part-btn-only" hx-get="/Partials?handler=Only" hx-target="#part-main2">Load partials only</button>
+    </div>
+    <p class="hint">Only <strong>C</strong> changes; <strong>main2</strong> stays exactly as it was.</p>
+    <div class="result">
+        <div id="part-main2" data-testid="part-main2">main2 (untouched)</div>
+        <div id="part-c" data-testid="part-c">C (before)</div>
+    </div>
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Each <code>hx-partial</code> carries its own target and swap style. Anything outside a partial is the main content,
+        which swaps first into the request's <code>hx-target</code>.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">Partials.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">DemoController.cs response</span><span class="lang">html</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
+</section>

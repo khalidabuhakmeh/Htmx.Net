@@ -4,5 +4,6 @@
     ViewData["Title"] = "BoostedOther";
 }
 <h1>Boosted (other page)</h1>
+<p class="demo-lead">This is the target of the boosted link. If you arrived without a full reload, <code>boosted</code> below reads true.</p>
 <p>boosted=<code data-testid="boost-is-boosted">@Request.IsHtmxBoosted()</code>, page=<code data-testid="boost-page">other</code></p>
 <nav hx-boost:inherited="true"><a href="/Boosted" data-testid="boost-link-back">Back to Boosted</a></nav>

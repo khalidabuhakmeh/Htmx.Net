@@ -2,13 +2,73 @@
 @model Htmx4.Sample.Pages.LocationModel
 @{
     ViewData["Title"] = "Location";
+
+    var markup = @"<button hx-get=""/Location?handler=Go"" hx-target=""#loc-start"">
+    Navigate via HtmxLocation object
+</button>
+<div id=""loc-dest"">(destination, before)</div>
+<div id=""loc-oob"">(oob before)</div>";
+
+    var server = @"// Location.cshtml.cs
+public IActionResult OnGetGo()
+{
+    Response.Htmx(h => h.Location(new HtmxLocation
+    {
+        Path = ""/Location?handler=Landing"",
+        Target = ""#loc-dest"",
+        Swap = HtmxSwap.InnerHtml,
+        Select = ""#loc-incoming"",
+        SelectOob = ""#loc-oob-incoming:#loc-oob"",
+        Values = new Dictionary<string, object> { [""from""] = ""hx-location"", [""n""] = 1 },
+        Transition = true
+    }));
+    return Content(""navigating"");
 }
+
+// string overload: h.Location(""/Location?handler=Landing"")";
+}
+
 <h1>HX-Location (HtmxLocation object)</h1>
-<p>Client-side navigation without a full page load. Server sets target, swap, select, values, selectOOB and transition.</p>
-<button data-testid="loc-btn-object" hx-get="/Location?handler=Go" hx-target="#loc-start">Navigate via HtmxLocation object</button>
-<button data-testid="loc-btn-string" hx-get="/Location?handler=GoString" hx-target="#loc-start">Navigate via string overload</button>
-<div id="loc-start" data-testid="loc-start">(start)</div>
-<div id="loc-dest" data-testid="loc-dest">(destination, before)</div>
-<div id="loc-oob" data-testid="loc-oob">(oob before)</div>
-<button data-testid="loc-btn-header-only" hx-get="/Location?handler=HeaderOnly" hx-target="#loc-header">Show serialized header with every property (no navigation)</button>
-<code id="loc-header" data-testid="loc-header">(none)</code>
+<p class="demo-lead">
+    The <code>HX-Location</code> response header tells htmx to navigate client-side without a full page load. With an
+    <code>HtmxLocation</code> object the server also chooses the target, swap style, which part of the response to select,
+    out-of-band selections, extra values and a view transition.
+</p>
+
+<section class="stage">
+    <p class="stage__label">Try it</p>
+    <div class="btn-row">
+        <button data-testid="loc-btn-object" hx-get="/Location?handler=Go" hx-target="#loc-start">Navigate via HtmxLocation object</button>
+        <button data-testid="loc-btn-string" hx-get="/Location?handler=GoString" hx-target="#loc-start">Navigate via string overload</button>
+    </div>
+    <p class="hint">
+        Click a button and watch the <strong>destination</strong> box fill in and the <strong>URL change</strong> with no
+        page reload. The object version also fills the <strong>OOB</strong> box and skips unselected content.
+    </p>
+    <div class="result">
+        <div id="loc-start" data-testid="loc-start">(start)</div>
+        <div id="loc-dest" data-testid="loc-dest">(destination, before)</div>
+        <div id="loc-oob" data-testid="loc-oob">(oob before)</div>
+    </div>
+    <div class="btn-row">
+        <button data-testid="loc-btn-header-only" hx-get="/Location?handler=HeaderOnly" hx-target="#loc-header">Show serialized header with every property (no navigation)</button>
+    </div>
+    <p class="hint">This one shows the raw <strong>JSON header</strong> instead of navigating.</p>
+    <code id="loc-header" data-testid="loc-header">(none)</code>
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        The button's own request returns a tiny body plus the <code>HX-Location</code> header. htmx then issues a second
+        request to <code>Path</code> and swaps the result according to the object's properties.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">Location.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">Location.cshtml.cs</span><span class="lang">csharp</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
+</section>

@@ -6,12 +6,44 @@
 @{
     ViewData["Title"] = "Antiforgery";
     var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
+
+    var markup = @"<!-- _Layout: ask htmx to attach the ASP.NET antiforgery token -->
+<meta name=""htmx-config"" includeAspNetAntiforgeryToken=""true"" />
+
+<!-- no body form: token goes in the RequestVerificationToken header -->
+<button hx-post=""/demo/af/check"" hx-target=""#af-out"">POST header</button>
+
+<!-- form body: token is added as a hidden form field -->
+<form hx-post=""/demo/af/check"" hx-target=""#af-out"">
+    <input name=""note"" value=""form-post"" />
+    <button type=""submit"">POST form</button>
+</form>";
+
+    var server = @"// DemoController.cs
+[HttpPost(""af/strict""), AutoValidateAntiforgeryToken]
+public IActionResult Strict() => Frag(""strict ok"");
+
+[HttpPost(""af/validate-attr""), ValidateAntiForgeryToken]
+public IActionResult ValidateAttr() => Frag(""validated"");
+
+// A raw fetch(""/demo/af/strict"", { method: ""POST"" }) sends no token -> 400.";
 }
 <h1>Antiforgery</h1>
-<p>The layout's <code>htmx-config includeAspNetAntiforgeryToken</code> meta + <code>@HtmxAntiforgeryScriptEndpoints.Path</code> attach the token to same-origin non-GET requests.
-    Header mode is used when the request has no body form; form mode when the body is form data (<code>hx-post</code> inside a form).</p>
+<p class="demo-lead">
+    The layout's <code>htmx-config includeAspNetAntiforgeryToken</code> meta plus the <code>@HtmxAntiforgeryScriptEndpoints.Path</code>
+    script attach ASP.NET Core's antiforgery token to same-origin non-GET requests automatically. Header mode is used when the
+    request has no form body; form mode when the body is form data (an <code>hx-post</code> inside a form).
+</p>
+
+<section class="stage">
+<p class="stage__label">Try it</p>
+<p class="hint">
+    Press any button and read the <strong>Result</strong> well: it reports whether the token arrived in the
+    <strong>header</strong> or the <strong>form field</strong>. GET sends none. The raw fetch control should end with status
+    <strong>400</strong>, proving the endpoint really validates.
+</p>
 <p>Token header name: <code data-testid="af-header-name">@tokens.HeaderName</code>; form field: <code data-testid="af-field-name">@tokens.FormFieldName</code>.</p>
-<div id="af-out" data-testid="af-out">(no result yet)</div>
+<div class="result" id="af-out" data-testid="af-out">(no result yet)</div>
 
 <h2>GET control (no token expected)</h2>
 <button data-testid="af-btn-get" hx-get="/demo/af/check" hx-target="#af-out">GET</button>
@@ -59,6 +91,23 @@
 }
 <p>HtmlExtensions.HtmxAntiforgeryScript() inline variant renders <code data-testid="af-inline-length">@sw.ToString().Length</code> chars (not emitted, the endpoint script is already loaded). Snippets: <code data-testid="af-snippet-lengths">@HtmxSnippets.AntiforgeryJavaScript.Length / @HtmxSnippets.AntiforgeryJavaScriptMinified.Length / @HtmxSnippets.GetAntiforgeryJavaScript(true).Length</code></p>
 <p>Cross-origin and redirect scenarios are verified in D5 (E2E), not here.</p>
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        You write ordinary <code>hx-post</code>/<code>hx-put</code>/<code>hx-patch</code>/<code>hx-delete</code> markup. The script reads the
+        token from htmx's config and decorates each request, so the server's standard antiforgery attributes just work.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">Antiforgery.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
+</section>
 @section Scripts {
     <script>
         document.getElementById("af-notoken").addEventListener("click", async function () {

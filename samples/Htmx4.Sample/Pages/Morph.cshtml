@@ -2,22 +2,64 @@
 @model Htmx4.Sample.Pages.MorphModel
 @{
     ViewData["Title"] = "Morph";
-}
-<h1>Morph vs plain swap</h1>
-<p>Type in the input, focus it, then click the button. Morph preserves the typed value and focus; a plain swap replaces the input.</p>
 
-<section>
+    var markup = @"<!-- client picks the swap -->
+<button hx-get=""/demo/morph/plain"" hx-target=""#box"" hx-swap=""outerHTML"">Plain swap</button>
+
+<!-- server picks the swap via HX-Reswap -->
+<button hx-get=""/demo/morph/outer"" hx-target=""#box"">Outer morph</button>";
+
+    var server = @"// DemoController.cs
+case ""outer"":
+    Response.Htmx(h => h.Reswap(HtmxSwap.OuterMorph));
+    return Frag($""<div id='{id}'>{inputs}</div>"");
+case ""inner"":
+    Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));
+    return Frag(inputs);";
+}
+
+<h1>Morph vs plain swap</h1>
+<p class="demo-lead">
+    A plain swap replaces DOM nodes, so anything you typed or focused is lost. Morph swaps diff the new HTML into the
+    existing nodes, keeping typed values and focus. The server can request morphing with
+    <code>Reswap(HtmxSwap.OuterMorph)</code> or <code>InnerMorph</code>.
+</p>
+
+<section class="stage">
+    <p class="stage__label">Try it</p>
+    <p class="hint">
+        <strong>Type something in an input</strong>, then click its button. The counter increments every time; with
+        morph your <strong>text survives</strong>, with the plain swap it is <strong>wiped</strong>.
+    </p>
     <h2>Plain outerHTML swap</h2>
-    <button data-testid="morph-btn-plain" hx-get="/demo/morph/plain" hx-target="#morph-plain-box" hx-swap="outerHTML">Plain swap</button>
-    <div id="morph-plain-box" data-testid="morph-plain-box"><input id="plain-input" name="x" data-testid="morph-plain-input" /> <span data-testid="morph-plain-count">0</span></div>
-</section>
-<section>
+    <div class="btn-row">
+        <button data-testid="morph-btn-plain" hx-get="/demo/morph/plain" hx-target="#morph-plain-box" hx-swap="outerHTML">Plain swap</button>
+    </div>
+    <div class="result"><div id="morph-plain-box" data-testid="morph-plain-box"><input id="plain-input" name="x" data-testid="morph-plain-input" /> <span data-testid="morph-plain-count">0</span></div></div>
     <h2>Reswap(HtmxSwap.OuterMorph)</h2>
-    <button data-testid="morph-btn-outer" hx-get="/demo/morph/outer" hx-target="#morph-outer-box">Outer morph (server HX-Reswap)</button>
-    <div id="morph-outer-box" data-testid="morph-outer-box"><input id="outer-input" name="x" data-testid="morph-outer-input" /> <span data-testid="morph-outer-count">0</span></div>
-</section>
-<section>
+    <div class="btn-row">
+        <button data-testid="morph-btn-outer" hx-get="/demo/morph/outer" hx-target="#morph-outer-box">Outer morph (server HX-Reswap)</button>
+    </div>
+    <div class="result"><div id="morph-outer-box" data-testid="morph-outer-box"><input id="outer-input" name="x" data-testid="morph-outer-input" /> <span data-testid="morph-outer-count">0</span></div></div>
     <h2>Reswap(HtmxSwap.InnerMorph)</h2>
-    <button data-testid="morph-btn-inner" hx-get="/demo/morph/inner" hx-target="#morph-inner-box">Inner morph (server HX-Reswap)</button>
-    <div id="morph-inner-box" data-testid="morph-inner-box"><input id="inner-input" name="x" data-testid="morph-inner-input" /> <span data-testid="morph-inner-count">0</span></div>
+    <div class="btn-row">
+        <button data-testid="morph-btn-inner" hx-get="/demo/morph/inner" hx-target="#morph-inner-box">Inner morph (server HX-Reswap)</button>
+    </div>
+    <div class="result"><div id="morph-inner-box" data-testid="morph-inner-box"><input id="inner-input" name="x" data-testid="morph-inner-input" /> <span data-testid="morph-inner-count">0</span></div></div>
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        The plain button sets <code>hx-swap</code> on the client. The morph buttons set nothing; the server adds an
+        <code>HX-Reswap</code> header via <code>Reswap(...)</code>, and the replacement keeps the same id so morphing can match it.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">Morph.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
 </section>

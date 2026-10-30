@@ -2,21 +2,71 @@
 @model Htmx4.Sample.Pages.TriggersModel
 @{
     ViewData["Title"] = "Triggers";
+
+    var markup = @"<button hx-get=""/demo/trigger/detail"" hx-target=""#trg-result"">
+    WithTrigger(name, object)
+</button>
+<ul id=""event-log""></ul>
+
+<script>
+  // listen for the server-sent custom event
+  document.addEventListener(""demo-detail"", e => {
+    log(e.detail);   // { id: 42, message: ""hello"" }
+  });
+</script>";
+
+    var server = @"// DemoController.cs
+Response.Htmx(h => h.WithTrigger(""demo-detail"", new { id = 42, message = ""hello"" }));
+// htmx 4 sends:  HX-Trigger: {""demo-detail"":{""id"":42,""message"":""hello""}}";
 }
+
 <h1>HX-Trigger</h1>
-<p>Custom event names are arbitrary. Detail: scalar -&gt; <code>event.detail.value</code>; object -&gt; properties copied onto detail.</p>
-<div>
-    <button data-testid="trg-btn-single" hx-get="/demo/trigger/single" hx-target="#trg-result">WithTrigger(name)</button>
-    <button data-testid="trg-btn-detail" hx-get="/demo/trigger/detail" hx-target="#trg-result">WithTrigger(name, object)</button>
-    <button data-testid="trg-btn-scalar" hx-get="/demo/trigger/scalar" hx-target="#trg-result">WithTrigger(name, scalar)</button>
-    <button data-testid="trg-btn-multi" hx-get="/demo/trigger/multi" hx-target="#trg-result">multiple triggers</button>
-    <button data-testid="trg-btn-merge-names" hx-get="/demo/trigger/merge-names" hx-target="#trg-result">merge with pre-set name list</button>
-    <button data-testid="trg-btn-merge-json" hx-get="/demo/trigger/merge-json" hx-target="#trg-result">merge with pre-set JSON</button>
-    <button data-testid="trg-btn-first-wins" hx-get="/demo/trigger/first-wins" hx-target="#trg-result">duplicate name (first wins)</button>
-</div>
-<div id="trg-result" data-testid="trg-result">(no result yet)</div>
-<button data-testid="event-log-clear" type="button" id="trg-clear">Clear log</button>
-<ul id="event-log" data-testid="event-log"></ul>
+<p class="demo-lead">
+    Fire client-side events from the server using the <code>HX-Trigger</code> response header.
+    Each button makes a request; the server attaches one or more events with
+    <code>WithTrigger(...)</code>, and htmx dispatches them in the browser after the swap.
+</p>
+
+<section class="stage">
+    <p class="stage__label">Try it</p>
+    <div class="btn-row">
+        <button data-testid="trg-btn-single" hx-get="/demo/trigger/single" hx-target="#trg-result">WithTrigger(name)</button>
+        <button data-testid="trg-btn-detail" hx-get="/demo/trigger/detail" hx-target="#trg-result">WithTrigger(name, object)</button>
+        <button data-testid="trg-btn-scalar" hx-get="/demo/trigger/scalar" hx-target="#trg-result">WithTrigger(name, scalar)</button>
+        <button data-testid="trg-btn-multi" hx-get="/demo/trigger/multi" hx-target="#trg-result">multiple triggers</button>
+        <button data-testid="trg-btn-merge-names" hx-get="/demo/trigger/merge-names" hx-target="#trg-result">merge with pre-set name list</button>
+        <button data-testid="trg-btn-merge-json" hx-get="/demo/trigger/merge-json" hx-target="#trg-result">merge with pre-set JSON</button>
+        <button data-testid="trg-btn-first-wins" hx-get="/demo/trigger/first-wins" hx-target="#trg-result">duplicate name (first wins)</button>
+    </div>
+    <p class="hint">
+        Press a button and watch two things: the <strong>Result</strong> well shows the raw
+        HX-Trigger header the server sent, and the <strong>event log</strong> below fills in as the
+        browser receives each dispatched event with its detail payload.
+    </p>
+    <div class="result" id="trg-result" data-testid="trg-result">(no result yet)</div>
+    <div class="btn-row">
+        <button data-testid="event-log-clear" type="button" id="trg-clear">Clear log</button>
+    </div>
+    <ul id="event-log" data-testid="event-log"></ul>
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Custom event names are arbitrary. A scalar detail arrives as <code>event.detail.value</code>;
+        an object has its properties copied straight onto <code>event.detail</code>. Multiple
+        <code>WithTrigger</code> calls are merged into a single header, and a duplicate event name keeps
+        the first value.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">Triggers.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
+</section>
 
 @section Scripts {
     <script>

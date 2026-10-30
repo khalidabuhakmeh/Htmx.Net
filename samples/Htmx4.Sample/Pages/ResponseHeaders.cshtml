@@ -3,36 +3,83 @@
 @{
     ViewData["Title"] = "ResponseHeaders";
     var swaps = new[] { "innerHTML", "outerHTML", "beforebegin", "afterbegin", "beforeend", "afterend", "delete", "none", "outerSync", "innerMorph", "outerMorph", "textContent", "before", "prepend", "append", "after" };
+
+    var markup = @"<button hx-get=""/demo/resp/push-url"" hx-target=""#resp-result"">PushUrl</button>
+<button hx-get=""/demo/resp/retarget"" hx-target=""#resp-result"">Retarget</button>
+<button hx-get=""/demo/resp/reswap"" hx-target=""#resp-result"">Reswap</button>
+
+<div id=""resp-result"">(no result yet)</div>
+<div id=""resp-retarget-target"">(retarget target)</div>";
+
+    var server = @"// DemoController.cs
+Response.Htmx(h => h.PushUrl(""/ResponseHeaders?pushed=1""));      // HX-Push-Url
+Response.Htmx(h => h.ReplaceUrl(""/ResponseHeaders?replaced=1"")); // HX-Replace-Url
+Response.Htmx(h => h.PreventPush());                              // HX-Push-Url: false
+Response.Htmx(h => h.Redirect(""/Boosted""));                      // HX-Redirect
+Response.Htmx(h => h.Refresh());                                  // HX-Refresh: true
+Response.Htmx(h => h.Retarget(""#resp-retarget-target""));         // HX-Retarget
+Response.Htmx(h => h.Reswap(HtmxSwap.BeforeEnd));                 // HX-Reswap
+Response.Htmx(h => h.Reselect(""#resp-pick""));                    // HX-Reselect
+Response.Htmx(h => h.Location(new HtmxLocation {
+    Path = ""/Location?handler=Landing"", Target = ""#resp-result"",
+    Swap = HtmxSwap.InnerHtml, Select = ""#loc-incoming"" }));     // HX-Location";
 }
 <h1>Response headers</h1>
-<p>Each button hits <code>/demo/resp/&lt;name&gt;</code>; the handler uses <code>Response.Htmx(h =&gt; ...)</code>.</p>
-<p>Current URL query: <code data-testid="resp-query">@Request.QueryString.Value</code></p>
+<p class="demo-lead">
+    The server can steer htmx from the response: change the URL, redirect, refresh, pick a different target, swap style or
+    selector. <code>Response.Htmx(h =&gt; ...)</code> sets the matching <code>HX-*</code> headers, so the markup on the
+    page stays unaware of the decision.
+</p>
 
-<div id="resp-result" data-testid="resp-result-box">(no result yet)</div>
-<div id="resp-retarget-target" data-testid="resp-retarget-target">(retarget target)</div>
-
-<div>
-    <button data-testid="resp-btn-push-url" hx-get="/demo/resp/push-url" hx-target="#resp-result">PushUrl</button>
-    <button data-testid="resp-btn-prevent-push" hx-get="/demo/resp/prevent-push" hx-target="#resp-result" hx-push-url="true">PreventPush (hx-push-url=true, server vetoes)</button>
-    <button data-testid="resp-btn-replace-url" hx-get="/demo/resp/replace-url" hx-target="#resp-result">ReplaceUrl</button>
-    <button data-testid="resp-btn-prevent-replace" hx-get="/demo/resp/prevent-replace" hx-target="#resp-result" hx-replace-url="true">PreventReplace (hx-replace-url=true, server vetoes)</button>
-    <button data-testid="resp-btn-redirect" hx-get="/demo/resp/redirect" hx-target="#resp-result">Redirect (full navigation to /Boosted)</button>
-    <button data-testid="resp-btn-refresh" hx-get="/demo/resp/refresh" hx-target="#resp-result">Refresh</button>
-    <button data-testid="resp-btn-retarget" hx-get="/demo/resp/retarget" hx-target="#resp-result">Retarget (to #resp-retarget-target)</button>
-    <button data-testid="resp-btn-reswap" hx-get="/demo/resp/reswap" hx-target="#resp-result">Reswap (beforeend)</button>
-    <button data-testid="resp-btn-reselect" hx-get="/demo/resp/reselect" hx-target="#resp-result">Reselect (#resp-pick)</button>
-    <button data-testid="resp-btn-location-string" hx-get="/demo/resp/location-string" hx-target="#resp-result">Location (string)</button>
-    <button data-testid="resp-btn-location-object" hx-get="/demo/resp/location-object" hx-target="#resp-result">Location (HtmxLocation object)</button>
-</div>
-
-<h2>HtmxSwap matrix (Reswap with every constant)</h2>
-@foreach (var s in swaps)
-{
-    <div data-testid="swap-case-@s">
-        <button data-testid="swap-btn-@s" hx-get="/demo/swap/@s" hx-target="#swap-@s">@s</button>
-        <div id="swap-@s" data-testid="swap-target-@s">original</div>
+<section class="stage">
+    <p class="stage__label">Try it</p>
+    <div class="btn-row">
+        <button data-testid="resp-btn-push-url" hx-get="/demo/resp/push-url" hx-target="#resp-result">PushUrl</button>
+        <button data-testid="resp-btn-prevent-push" hx-get="/demo/resp/prevent-push" hx-target="#resp-result" hx-push-url="true">PreventPush (hx-push-url=true, server vetoes)</button>
+        <button data-testid="resp-btn-replace-url" hx-get="/demo/resp/replace-url" hx-target="#resp-result">ReplaceUrl</button>
+        <button data-testid="resp-btn-prevent-replace" hx-get="/demo/resp/prevent-replace" hx-target="#resp-result" hx-replace-url="true">PreventReplace (hx-replace-url=true, server vetoes)</button>
+        <button data-testid="resp-btn-redirect" hx-get="/demo/resp/redirect" hx-target="#resp-result">Redirect (full navigation to /Boosted)</button>
+        <button data-testid="resp-btn-refresh" hx-get="/demo/resp/refresh" hx-target="#resp-result">Refresh</button>
+        <button data-testid="resp-btn-retarget" hx-get="/demo/resp/retarget" hx-target="#resp-result">Retarget (to #resp-retarget-target)</button>
+        <button data-testid="resp-btn-reswap" hx-get="/demo/resp/reswap" hx-target="#resp-result">Reswap (beforeend)</button>
+        <button data-testid="resp-btn-reselect" hx-get="/demo/resp/reselect" hx-target="#resp-result">Reselect (#resp-pick)</button>
+        <button data-testid="resp-btn-location-string" hx-get="/demo/resp/location-string" hx-target="#resp-result">Location (string)</button>
+        <button data-testid="resp-btn-location-object" hx-get="/demo/resp/location-object" hx-target="#resp-result">Location (HtmxLocation object)</button>
     </div>
-}
+    <p class="hint">
+        Watch the <strong>URL bar</strong> and the query string shown below for the push and replace buttons, the
+        <strong>Result</strong> well for swap and select changes, and the <strong>retarget</strong> box for content that lands
+        somewhere other than the declared target. Redirect and Refresh reload the page.
+    </p>
+    <p>Current URL query: <code data-testid="resp-query">@Request.QueryString.Value</code></p>
+    <div class="result" id="resp-result" data-testid="resp-result-box">(no result yet)</div>
+    <div id="resp-retarget-target" data-testid="resp-retarget-target">(retarget target)</div>
+
+    <h2>HtmxSwap matrix (Reswap with every constant)</h2>
+    @foreach (var s in swaps)
+    {
+        <div data-testid="swap-case-@s">
+            <button data-testid="swap-btn-@s" hx-get="/demo/swap/@s" hx-target="#swap-@s">@s</button>
+            <div id="swap-@s" data-testid="swap-target-@s">original</div>
+        </div>
+    }
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Every button hits <code>/demo/resp/&lt;name&gt;</code>. The handler writes one response header through the fluent
+        <code>Response.Htmx</code> builder; htmx reads it and overrides what the request attributes asked for.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">ResponseHeaders.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
+</section>
 
 <h2>Header names</h2>
 <p>HtmxResponseHeaders.Keys.All: <code data-testid="resp-keys">@string.Join(", ", HtmxResponseHeaders.Keys.All)</code></p>

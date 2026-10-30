@@ -2,26 +2,79 @@
 @model Htmx4.Sample.Pages.RequestHeadersModel
 @{
     ViewData["Title"] = "RequestHeaders";
+
+    var markup = @"<button id=""rh-btn-id""
+        hx-get=""/demo/request-headers?p=rh""
+        hx-target=""#rh-result"">GET with id</button>
+<div id=""rh-result"">(no result yet)</div>
+
+<!-- hx-select makes the request HX-Request-Type: full -->
+<button hx-get=""/demo/request-headers?p=rh3""
+        hx-select=""#rh3-fragment""
+        hx-target=""#rh-full-result"">GET with hx-select</button>";
+
+    var server = @"[HttpGet(""request-headers"")]
+public IActionResult RequestHeadersEcho(string p = ""rh"")
+{
+    if (Request.IsHtmx(out var h))
+    {
+        var source    = h.Source;                    // ""button#rh-btn-id""
+        var sourceId  = h.SourceElement?.Id;         // ""rh-btn-id""
+        var target    = h.Target;                    // ""div#rh-result""
+        var targetTag = h.TargetElement?.TagName;    // ""div""
+    }
+    // ...echo the values back as an HTML fragment
+}";
 }
 <h1>Request headers</h1>
-<p>Server echoes HtmxRequestHeaders / HtmxElementReference / HttpRequest extensions as data-testid elements.</p>
+<p class="demo-lead">
+    htmx adds headers such as <code>HX-Request</code>, <code>HX-Source</code>, <code>HX-Target</code> and
+    <code>HX-Request-Type</code> to every request. On the server, <code>Request.IsHtmx(out var h)</code> exposes them as a
+    typed <code>HtmxRequestHeaders</code>, including parsed element references (tag name and id). Each button below
+    sends a request and the server echoes back what it saw.
+</p>
 
-<section>
+<section class="stage">
+    <p class="stage__label">Try it</p>
+
     <h2>Source with id (HX-Source = <code>button#rh-btn-id</code>, HX-Target = <code>div#rh-result</code>)</h2>
-    <button id="rh-btn-id" data-testid="rh-btn-id" hx-get="/demo/request-headers?p=rh" hx-target="#rh-result">GET with id</button>
-    <div id="rh-result" data-testid="rh-result">(no result yet)</div>
-</section>
+    <div class="btn-row">
+        <button id="rh-btn-id" data-testid="rh-btn-id" hx-get="/demo/request-headers?p=rh" hx-target="#rh-result">GET with id</button>
+    </div>
+    <div class="result" id="rh-result" data-testid="rh-result">(no result yet)</div>
 
-<section>
     <h2>Source without id (HX-Source = <code>button</code>, HX-Target = <code>div</code> with no id)</h2>
-    <button data-testid="rh-btn-noid" hx-get="/demo/request-headers?p=rh2" hx-target="next div">GET without id</button>
-    <div data-testid="rh-noid-result">(no result yet)</div>
+    <div class="btn-row">
+        <button data-testid="rh-btn-noid" hx-get="/demo/request-headers?p=rh2" hx-target="next div">GET without id</button>
+    </div>
+    <div class="result" data-testid="rh-noid-result">(no result yet)</div>
+
+    <h2>Full request (hx-select makes HX-Request-Type: full)</h2>
+    <div class="btn-row">
+        <button id="rh-btn-full" data-testid="rh-btn-full" hx-get="/demo/request-headers?p=rh3" hx-select="#rh3-fragment" hx-target="#rh-full-result">GET with hx-select</button>
+    </div>
+    <p class="hint">
+        Click each button and read the <strong>Result</strong> well beneath it: compare the source and target values when the
+        element has an <strong>id</strong> versus when it does not, and see the request type flip to
+        <strong>full</strong> when <strong>hx-select</strong> is present. Open devtools Network to see the raw headers.
+    </p>
+    <div class="result" id="rh-full-result" data-testid="rh-full-result">(no result yet)</div>
 </section>
 
-<section>
-    <h2>Full request (hx-select makes HX-Request-Type: full)</h2>
-    <button id="rh-btn-full" data-testid="rh-btn-full" hx-get="/demo/request-headers?p=rh3" hx-select="#rh3-fragment" hx-target="#rh-full-result">GET with hx-select</button>
-    <div id="rh-full-result" data-testid="rh-full-result">(no result yet)</div>
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        <code>HX-Source</code> and <code>HX-Target</code> are sent as <code>tag#id</code> (or just the tag when there is no id).
+        The library parses them into an element reference so you don't have to split strings yourself.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">RequestHeaders.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
 </section>
 
 <section>

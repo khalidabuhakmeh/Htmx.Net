@@ -5,6 +5,23 @@
     var keys = new[] { "logAll", "prefix", "metaCharacter", "transitions", "history", "mode", "defaultSwap", "allowEmptySwapAfterOOB",
         "defaultFocusScroll", "defaultSettleDelay", "indicatorClass", "requestClass", "includeIndicatorCSS", "defaultTimeout",
         "extensions", "morphIgnore", "morphSkip", "morphSkipChildren", "morphScanLimit", "noSwap", "implicitInheritance", "inlineScriptNonce" };
+
+    var markup = @"@section HtmxConfig {
+    <meta name=""htmx-config""
+          defaultSwap=""beforeend""
+          defaultTimeout=""45000""
+          mode=""same-origin""
+          noSwap=""@(new object[] { 204, 304, 422 })""
+          morphIgnore=""@(new[] { ""data-htmx-powered"", ""data-keep"" })""
+          implicitInheritance=""false"" />
+}";
+
+    var effects = @"<!-- no hx-swap: defaultSwap=beforeend appends -->
+<button hx-get=""/demo/config/swap"" hx-target=""#cfg-list"">Add item</button>
+<ul id=""cfg-list""><li>initial</li></ul>
+
+<!-- 422 is in noSwap, so the response is not swapped -->
+<button hx-get=""/demo/status/422"" hx-target=""#cfg-noswap-target"">GET 422</button>";
 }
 @section HtmxConfig {
     @* Page-scoped config: replaces the layout's global htmx-config meta on this page only. *@
@@ -17,9 +34,15 @@
           implicitInheritance="false" inlineScriptNonce="demo-nonce" />
 }
 <h1>Config</h1>
-<p>This page's <code>&lt;meta name="htmx-config"&gt;</code> is rendered by the config tag helper (page-scoped via the <code>HtmxConfig</code> layout section; the global meta in <code>_Layout</code> is replaced on this page).
-    Note: the tag helper types <code>history</code> as a string, so <code>history="true"</code> reads back as the string <code>"true"</code>.</p>
+<p class="demo-lead">
+    htmx is configured through a <code>&lt;meta name="htmx-config"&gt;</code> tag. Here the config tag helper renders it with
+    typed attributes, scoped to this page through the <code>HtmxConfig</code> layout section (it replaces the global meta
+    from <code>_Layout</code>). The table reads the live <code>htmx.config</code> back so you can see what the browser received.
+    Note: the tag helper types <code>history</code> as a string, so <code>history="true"</code> reads back as <code>"true"</code>.
+</p>
 
+<section class="stage">
+<p class="stage__label">Try it</p>
 <p>Raw meta content: <code data-testid="cfg-meta-raw" id="cfg-meta-raw"></code></p>
 <table>
     <thead><tr><th>key</th><th>htmx.config value (JSON)</th></tr></thead>
@@ -34,11 +57,38 @@
 
 <h2>Effects</h2>
 <p>defaultSwap=beforeend: this button has no hx-swap, so the response is appended.</p>
-<button data-testid="cfg-btn-swap" hx-get="/demo/config/swap" hx-target="#cfg-list">Add item (default swap)</button>
+<div class="btn-row">
+    <button data-testid="cfg-btn-swap" hx-get="/demo/config/swap" hx-target="#cfg-list">Add item (default swap)</button>
+</div>
 <ul id="cfg-list" data-testid="cfg-list"><li data-testid="cfg-list-initial">initial</li></ul>
 <p>noSwap includes 422: this error response does NOT swap.</p>
-<button data-testid="cfg-btn-noswap" hx-get="/demo/status/422" hx-target="#cfg-noswap-target">GET 422</button>
-<div id="cfg-noswap-target" data-testid="cfg-noswap-target">untouched</div>
+<div class="btn-row">
+    <button data-testid="cfg-btn-noswap" hx-get="/demo/status/422" hx-target="#cfg-noswap-target">GET 422</button>
+</div>
+<p class="hint">
+    Click <strong>Add item</strong> repeatedly and watch the list <strong>grow</strong> instead of being replaced, because
+    the configured default swap is beforeend. Then click <strong>GET 422</strong> and notice the box stays
+    <strong>untouched</strong>: 422 is listed in noSwap, so htmx skips the swap.
+</p>
+<div class="result" id="cfg-noswap-target" data-testid="cfg-noswap-target">untouched</div>
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Each attribute on the meta tag maps to an <code>htmx.config</code> key. Array and object values such as
+        <code>morphIgnore</code> and <code>noSwap</code> are serialized to JSON for you. The page then reads
+        <code>htmx.config</code> in a script to fill in the table.
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">Config.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">Config.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@effects</code></pre>
+    </figure>
+</section>
 
 @section Scripts {
     <script>

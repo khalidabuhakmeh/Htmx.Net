@@ -320,3 +320,117 @@ th { color: var(--ink); font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
     * { transition: none !important; }
 }
+
+/* ---- Demo page scaffolding (explainer + stage + how-it-works) ----------- */
+.demo-lead {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 60ch;
+    margin: .25rem 0 1.5rem;
+}
+
+.stage {
+    background: var(--surface);
+    border: 2px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 1.1rem 1.2rem 1.3rem;
+    box-shadow: 4px 4px 0 var(--line);
+}
+.stage > * + * { margin-top: .85rem; }
+.stage__label {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+    border: none;
+    padding: 0;
+    font-weight: 600;
+}
+.btn-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+/* Output / result areas — a labelled dashed well so it's obvious where responses land. */
+.result, [data-result] {
+    position: relative;
+    min-height: 2.5rem;
+    background: var(--code-bg);
+    border: 2px dashed var(--line);
+    border-radius: var(--radius);
+    padding: 1.4rem .9rem .9rem;
+    font-size: .95rem;
+}
+.result::before, [data-result]::before {
+    content: "Result";
+    position: absolute;
+    top: .35rem;
+    left: .7rem;
+    font-family: var(--font-mono);
+    font-size: .62rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+/* "Watch this" hint callout */
+.hint {
+    display: flex;
+    gap: .55rem;
+    align-items: flex-start;
+    background: color-mix(in oklab, var(--accent) 8%, var(--surface));
+    border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line));
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: .65rem .8rem;
+    font-size: .92rem;
+    color: var(--text);
+    margin: 0;
+}
+.hint::before { content: "👀"; }
+
+/* How it works + code figures */
+.how { margin-top: 2.5rem; }
+figure.code {
+    margin: 1rem 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--code-bg);
+}
+figure.code figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: .74rem;
+    color: var(--muted);
+    background: color-mix(in oklab, var(--ink) 4%, var(--surface));
+    border-bottom: 1px solid var(--line);
+    padding: .4rem .8rem;
+}
+figure.code figcaption .lang {
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    font-size: .64rem;
+}
+figure.code pre { margin: 0; border: none; border-radius: 0; box-shadow: none; }
+
+.copy-btn {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: .15rem .5rem;
+    box-shadow: none;
+    cursor: pointer;
+}
+.copy-btn:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.copy-btn:active { transform: none; }
+.copy-btn.copied { color: var(--ok); border-color: var(--ok); }
+

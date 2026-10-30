@@ -2,15 +2,48 @@
 @model Htmx4.Sample.Pages.InheritedModel
 @{
     ViewData["Title"] = "Inherited";
+
+    var markup = @"<!-- :inherited opts in; children use this target and header -->
+<section hx-target:inherited=""#inh-out""
+         hx-headers-X-Demo=""from-parent"" hx-headers-inherited=""true"">
+    <button hx-get=""/demo/inherited/echo?p=inh"">child inherits</button>
+</section>
+
+<!-- no :inherited, so the child does NOT inherit in htmx 4 -->
+<section hx-target=""#inh-out2"" hx-headers='{""X-Demo"":""from-parent-plain""}'>
+    <button hx-get=""/demo/inherited/echo?p=noinh"">child gets nothing</button>
+</section>";
+
+    var server = @"// DemoController.cs
+[HttpGet(""inherited/echo"")]
+public IActionResult InheritedEcho(string p = ""inh"")
+{
+    Request.IsHtmx(out var h);
+    var header = Request.Headers[""X-Demo""].ToString();   // ""from-parent"" or empty
+    var target = h?.TargetElement;                       // div#inh-out or the button itself
+    // ...echo header + target back as a fragment
+}";
 }
 <h1>Explicit inheritance (htmx 4)</h1>
-<p>In htmx 4, attributes are NOT inherited unless written with <code>:inherited</code> (<code>htmx.config.implicitInheritance</code> is false).</p>
+<p class="demo-lead">
+    In htmx 4 an attribute on a parent is not seen by its children unless you write it with <code>:inherited</code>
+    (<code>htmx.config.implicitInheritance</code> is false). The tag helpers support this too, for example
+    <code>hx-headers-X-Demo</code> with <code>hx-headers-inherited="true"</code>. Compare the sections below.
+</p>
+
+<section class="stage">
+<p class="stage__label">Try it</p>
+<p class="hint">
+    Click each button and read its output well. The <strong>first</strong> button picks up the parent's target and
+    <strong>X-Demo header</strong>; the <strong>second</strong> inherits nothing, so its target well stays untouched and no header is sent.
+    The third sets a header on the button itself.
+</p>
 
 <section data-testid="inh-with" hx-target:inherited="#inh-out" hx-headers-X-Demo="from-parent" hx-headers-inherited="true">
     <h2>With <code>:inherited</code></h2>
     <button data-testid="inh-btn-with" hx-get="/demo/inherited/echo?p=inh">child relies on inherited target + headers</button>
 </section>
-<div id="inh-out" data-testid="inh-out">(waiting)</div>
+<div class="result" id="inh-out" data-testid="inh-out">(waiting)</div>
 <div data-testid="inh-out-lines">
     <span data-testid="inh-attr-target" id="inh-attr-target"></span>
 </div>
@@ -29,6 +62,23 @@
 <div id="inh-out3" data-testid="inh-out3">(waiting)</div>
 
 <p>Generated parent attributes: <code data-testid="inh-attrs" id="inh-attrs"></code></p>
+</section>
+
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        The parent declares what children should inherit; the server just reports what actually arrived
+        (the <code>X-Demo</code> request header and the resolved target element).
+    </p>
+    <figure class="code">
+        <figcaption><span class="file">Inherited.cshtml</span><span class="lang">html</span></figcaption>
+        <pre><code>@markup</code></pre>
+    </figure>
+    <figure class="code">
+        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+        <pre><code>@server</code></pre>
+    </figure>
+</section>
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {
