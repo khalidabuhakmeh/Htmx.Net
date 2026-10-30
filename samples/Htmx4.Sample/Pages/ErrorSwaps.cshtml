@@ -30,6 +30,24 @@ public IActionResult Status(int code) => code switch
     include form inputs unless you add <code>hx-include</code>.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        The server returns the right status code with an HTML body. htmx decides whether to swap from the status, so
+        the same fragment-returning handler serves success and error cases.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">ErrorSwaps.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
     <p class="stage__label">Try it</p>
     <div class="btn-row">
@@ -66,20 +84,4 @@ public IActionResult Status(int code) => code switch
     </form>
     <p class="hint">Compare the two buttons: only the <strong>include</strong> variant sends the item value to the server.</p>
     <div class="result" id="del-out" data-testid="del-out">(none)</div>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        The server returns the right status code with an HTML body. htmx decides whether to swap from the status, so
-        the same fragment-returning handler serves success and error cases.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">ErrorSwaps.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>

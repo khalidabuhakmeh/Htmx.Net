@@ -35,6 +35,24 @@ public IActionResult ValidateAttr() => Frag(""validated"");
     request has no form body; form mode when the body is form data (an <code>hx-post</code> inside a form).
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        You write ordinary <code>hx-post</code>/<code>hx-put</code>/<code>hx-patch</code>/<code>hx-delete</code> markup. The script reads the
+        token from htmx's config and decorates each request, so the standard antiforgery attributes work on the server.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">Antiforgery.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
 <p class="stage__label">Try it</p>
 <p class="hint">
@@ -91,22 +109,6 @@ public IActionResult ValidateAttr() => Frag(""validated"");
 }
 <p>HtmlExtensions.HtmxAntiforgeryScript() inline variant renders <code data-testid="af-inline-length">@sw.ToString().Length</code> chars (not emitted, the endpoint script is already loaded). Snippets: <code data-testid="af-snippet-lengths">@HtmxSnippets.AntiforgeryJavaScript.Length / @HtmxSnippets.AntiforgeryJavaScriptMinified.Length / @HtmxSnippets.GetAntiforgeryJavaScript(true).Length</code></p>
 <p>Cross-origin and redirect scenarios are verified in D5 (E2E), not here.</p>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        You write ordinary <code>hx-post</code>/<code>hx-put</code>/<code>hx-patch</code>/<code>hx-delete</code> markup. The script reads the
-        token from htmx's config and decorates each request, so the standard antiforgery attributes work on the server.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">Antiforgery.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>
 @section Scripts {
     <script>

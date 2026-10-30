@@ -25,6 +25,24 @@ case ""inner"":
     <code>Reswap(HtmxSwap.OuterMorph)</code> or <code>InnerMorph</code>.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        The plain button sets <code>hx-swap</code> on the client. The morph buttons set nothing; the server adds an
+        <code>HX-Reswap</code> header via <code>Reswap(...)</code>, and the replacement keeps the same id so morphing can match it.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">Morph.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
     <p class="stage__label">Try it</p>
     <p class="hint">
@@ -46,20 +64,4 @@ case ""inner"":
         <button data-testid="morph-btn-inner" hx-get="/demo/morph/inner" hx-target="#morph-inner-box">Inner morph (server HX-Reswap)</button>
     </div>
     <div class="result"><div id="morph-inner-box" data-testid="morph-inner-box"><input id="inner-input" name="x" data-testid="morph-inner-input" /> <span data-testid="morph-inner-count">0</span></div></div>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        The plain button sets <code>hx-swap</code> on the client. The morph buttons set nothing; the server adds an
-        <code>HX-Reswap</code> header via <code>Reswap(...)</code>, and the replacement keeps the same id so morphing can match it.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">Morph.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>

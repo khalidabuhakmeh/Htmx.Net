@@ -24,6 +24,24 @@
     The second demo returns only partials, leaving the main target untouched.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Each <code>hx-partial</code> carries its own target and swap style. Anything outside a partial is the main content,
+        which swaps first into the request's <code>hx-target</code>.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">Partials.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs response</span><span class="lang">html</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
     <p class="stage__label">Try it</p>
     <div class="btn-row">
@@ -49,20 +67,4 @@
         <div id="part-main2" data-testid="part-main2">main2 (untouched)</div>
         <div id="part-c" data-testid="part-c">C (before)</div>
     </div>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        Each <code>hx-partial</code> carries its own target and swap style. Anything outside a partial is the main content,
-        which swaps first into the request's <code>hx-target</code>.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">Partials.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs response</span><span class="lang">html</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>

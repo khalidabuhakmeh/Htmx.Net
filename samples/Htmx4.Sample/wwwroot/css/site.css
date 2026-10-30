@@ -459,7 +459,8 @@ th { color: var(--ink); font-weight: 700; }
 
 
 /* How it works + code figures */
-.how { margin-top: 2.5rem; }
+.how { margin-top: 1.25rem; }
+.how > p { max-width: 68ch; }
 figure.code {
     margin: 1rem 0;
     border: 1px solid var(--line);
@@ -467,6 +468,20 @@ figure.code {
     overflow: hidden;
     background: var(--code-bg);
 }
+
+/* UI markup + server C# shown side by side (stacks under ~44rem). */
+.code-pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(21rem, 1fr));
+    gap: 1rem;
+    align-items: start;
+    margin-top: 1rem;
+}
+.code-pair figure.code { margin: 0; min-width: 0; }
+.code-pair figure.code pre { max-height: 22rem; overflow: auto; }
+
+/* The interactive demo follows the code, so give it clear separation. */
+.stage { margin-top: 1.75rem; }
 figure.code figcaption {
     display: flex;
     align-items: center;

@@ -25,6 +25,24 @@ plain   = @Request.IsHtmxNonBoosted()";
     with no full reload. The server detects a boosted request with <code>Request.IsHtmxBoosted()</code>.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Put <code>hx-boost:inherited="true"</code> on a container and every link inside is boosted; opt a single link out with
+        <code>hx-boost="false"</code>. Boosted requests carry the <code>HX-Boosted</code> header, which the server reads.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">Boosted.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">Boosted.cshtml</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
     <p class="stage__label">Try it</p>
     <nav hx-boost:inherited="true" data-testid="boost-container" class="btn-row">
@@ -46,20 +64,4 @@ plain   = @Request.IsHtmxNonBoosted()";
             request type=<code data-testid="boost-request-type">@Model.RequestType</code>, page=<code data-testid="boost-page">boosted</code></p>
         <p>Last POST: <code data-testid="boost-post-result">@Model.PostResult</code></p>
     </div>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        Put <code>hx-boost:inherited="true"</code> on a container and every link inside is boosted; opt a single link out with
-        <code>hx-boost="false"</code>. Boosted requests carry the <code>HX-Boosted</code> header, which the server reads.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">Boosted.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">Boosted.cshtml</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>

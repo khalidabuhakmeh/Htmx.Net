@@ -32,6 +32,25 @@ public IActionResult Echo(string? id, string? p) =>
     performs a real request.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        A bare verb attribute gets filled in by the tag helper. If the element already has a value
+        (see "existing value wins"), it is left alone. Add <code>:inherited</code> to the verb to have children inherit it, and
+        <code>hxn-protocol</code>/<code>hxn-host</code> to produce an absolute URL.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">UrlHelper.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
 <p class="stage__label">Try it</p>
 <div class="btn-row">
@@ -62,23 +81,6 @@ public IActionResult Echo(string? id, string? p) =>
 <button data-testid="url-btn-host" hx-get hxn-route="demo-echo" hxn-protocol="https" hxn-host="example.test" hx-trigger="none">hxn-protocol + hxn-host (absolute URL; inert, trigger none)</button>
 <div id="url-generated" hidden></div>
 <p>Generated attribute values (read from DOM): <ul id="url-attrs" data-testid="url-attrs"></ul></p>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        A bare verb attribute gets filled in by the tag helper. If the element already has a value
-        (see "existing value wins"), it is left alone. Add <code>:inherited</code> to the verb to have children inherit it, and
-        <code>hxn-protocol</code>/<code>hxn-host</code> to produce an absolute URL.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">UrlHelper.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>
 @section Scripts {
     <script>

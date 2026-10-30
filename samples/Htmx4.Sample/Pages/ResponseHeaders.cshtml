@@ -30,6 +30,24 @@ Response.Htmx(h => h.Location(new HtmxLocation {
     selector. <code>Response.Htmx(h =&gt; ...)</code> sets the matching <code>HX-*</code> headers, so the page markup doesn't need to know.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Every button hits <code>/demo/resp/&lt;name&gt;</code>. The handler writes one response header through the fluent
+        <code>Response.Htmx</code> builder; htmx reads it and overrides what the request attributes asked for.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">ResponseHeaders.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
     <p class="stage__label">Try it</p>
     <div class="btn-row">
@@ -64,22 +82,6 @@ Response.Htmx(h => h.Location(new HtmxLocation {
             </div>
         }
     </div>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        Every button hits <code>/demo/resp/&lt;name&gt;</code>. The handler writes one response header through the fluent
-        <code>Response.Htmx</code> builder; htmx reads it and overrides what the request attributes asked for.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">ResponseHeaders.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>
 
 <h2>Header names</h2>

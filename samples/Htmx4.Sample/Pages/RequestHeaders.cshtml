@@ -34,6 +34,24 @@ public IActionResult RequestHeadersEcho(string p = ""rh"")
     sends a request and the server echoes back what it saw.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        <code>HX-Source</code> and <code>HX-Target</code> are sent as <code>tag#id</code> (or just the tag when there is no id).
+        The library parses them into an element reference so you don't split strings yourself.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">RequestHeaders.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
     <p class="stage__label">Try it</p>
 
@@ -59,22 +77,6 @@ public IActionResult RequestHeadersEcho(string p = ""rh"")
         <strong>full</strong> when <strong>hx-select</strong> is present. Open devtools Network to see the raw headers.
     </p>
     <div class="result" id="rh-full-result" data-testid="rh-full-result">(no result yet)</div>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        <code>HX-Source</code> and <code>HX-Target</code> are sent as <code>tag#id</code> (or just the tag when there is no id).
-        The library parses them into an element reference so you don't split strings yourself.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">RequestHeaders.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>
 
 <section>

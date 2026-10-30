@@ -41,6 +41,25 @@
     The tag helper types <code>history</code> as a string, so <code>history="true"</code> reads back as <code>"true"</code>.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Each attribute on the meta tag maps to an <code>htmx.config</code> key. Array and object values such as
+        <code>morphIgnore</code> and <code>noSwap</code> are serialized to JSON. The page then reads
+        <code>htmx.config</code> in a script to fill in the table.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">Config.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">Config.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@effects</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
 <p class="stage__label">Try it</p>
 <p>Raw meta content:</p>
@@ -71,23 +90,6 @@
     <strong>untouched</strong> because 422 is listed in noSwap.
 </p>
 <div class="result" id="cfg-noswap-target" data-testid="cfg-noswap-target">untouched</div>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        Each attribute on the meta tag maps to an <code>htmx.config</code> key. Array and object values such as
-        <code>morphIgnore</code> and <code>noSwap</code> are serialized to JSON. The page then reads
-        <code>htmx.config</code> in a script to fill in the table.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">Config.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">Config.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@effects</code></pre>
-    </figure>
 </section>
 
 @section Scripts {

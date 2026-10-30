@@ -31,54 +31,57 @@ public IActionResult InheritedEcho(string p = ""inh"")
     <code>hx-headers-X-Demo</code> with <code>hx-headers-inherited="true"</code>. Compare the sections below.
 </p>
 
-<section class="stage">
-<p class="stage__label">Try it</p>
-<p class="hint">
-    Click each button and read its output. The <strong>first</strong> button picks up the parent's target and
-    <strong>X-Demo header</strong>; the <strong>second</strong> inherits nothing, so its target well stays untouched and no header is sent.
-    The third sets a header on the button itself.
-</p>
-
-<section data-testid="inh-with" hx-target:inherited="#inh-out" hx-headers-X-Demo="from-parent" hx-headers-inherited="true">
-    <h2>With <code>:inherited</code></h2>
-    <button data-testid="inh-btn-with" hx-get="/demo/inherited/echo?p=inh">child relies on inherited target + headers</button>
-</section>
-<div class="result" id="inh-out" data-testid="inh-out">(waiting)</div>
-<div data-testid="inh-out-lines">
-    <span data-testid="inh-attr-target" id="inh-attr-target"></span>
-</div>
-
-<section data-testid="inh-without" hx-target="#inh-out2" hx-headers='{"X-Demo":"from-parent-plain"}'>
-    <h2>WITHOUT <code>:inherited</code> (does not inherit)</h2>
-    <p>The child falls back to itself as the target and sends no X-Demo header.</p>
-    <button data-testid="inh-btn-without" hx-get="/demo/inherited/echo?p=noinh">child gets no inherited target/headers</button>
-</section>
-<div id="inh-out2" data-testid="inh-out2">(should stay untouched)</div>
-
-<section data-testid="inh-plain-headers" hx-headers-X-Demo="plain-tag-helper">
-    <h2>Headers tag helper without inherited flag</h2>
-    <button data-testid="inh-btn-own" hx-get="/demo/inherited/echo?p=own" hx-target="#inh-out3" hx-headers-X-Demo="own-button">own header on the button itself</button>
-</section>
-<div id="inh-out3" data-testid="inh-out3">(waiting)</div>
-
-<p>Generated parent attributes: <code data-testid="inh-attrs" id="inh-attrs"></code></p>
-</section>
-
 <section class="how">
     <h2>How it works</h2>
     <p>
         The parent declares what children should inherit; the server reports what actually arrived
         (the <code>X-Demo</code> request header and the resolved target element).
     </p>
-    <figure class="code">
-        <figcaption><span class="file">Inherited.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">Inherited.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
 </section>
+
+<section class="stage">
+    <p class="stage__label">Try it</p>
+    <p class="hint">
+        Click each button and read its output. The <strong>first</strong> button picks up the parent's target and
+        <strong>X-Demo header</strong>; the <strong>second</strong> inherits nothing, so its target well stays untouched and no header is sent.
+        The third sets a header on the button itself.
+    </p>
+
+    <section data-testid="inh-with" hx-target:inherited="#inh-out" hx-headers-X-Demo="from-parent" hx-headers-inherited="true">
+        <h2>With <code>:inherited</code></h2>
+        <button data-testid="inh-btn-with" hx-get="/demo/inherited/echo?p=inh">child relies on inherited target + headers</button>
+    </section>
+    <div class="result" id="inh-out" data-testid="inh-out">(waiting)</div>
+    <div data-testid="inh-out-lines">
+        <span data-testid="inh-attr-target" id="inh-attr-target"></span>
+    </div>
+
+    <section data-testid="inh-without" hx-target="#inh-out2" hx-headers='{"X-Demo":"from-parent-plain"}'>
+        <h2>WITHOUT <code>:inherited</code> (does not inherit)</h2>
+        <p>The child falls back to itself as the target and sends no X-Demo header.</p>
+        <button data-testid="inh-btn-without" hx-get="/demo/inherited/echo?p=noinh">child gets no inherited target/headers</button>
+    </section>
+    <div id="inh-out2" data-testid="inh-out2">(should stay untouched)</div>
+
+    <section data-testid="inh-plain-headers" hx-headers-X-Demo="plain-tag-helper">
+        <h2>Headers tag helper without inherited flag</h2>
+        <button data-testid="inh-btn-own" hx-get="/demo/inherited/echo?p=own" hx-target="#inh-out3" hx-headers-X-Demo="own-button">own header on the button itself</button>
+    </section>
+    <div id="inh-out3" data-testid="inh-out3">(waiting)</div>
+
+    <p>Generated parent attributes: <code data-testid="inh-attrs" id="inh-attrs"></code></p>
+</section>
+
 @section Scripts {
     <script>
         document.addEventListener("DOMContentLoaded", function () {

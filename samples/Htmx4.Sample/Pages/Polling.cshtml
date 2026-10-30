@@ -29,6 +29,24 @@ public IActionResult Poll(int n = 0, int stop = 3, string mode = ""load"")
     trigger. Here the counter stops at 3.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        Each response replaces the polling element (<code>outerHTML</code>). While the server keeps returning the
+        trigger attributes, polling continues; once it omits them, the new element is inert.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">Polling.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
     <p class="stage__label">Watch it</p>
     <p class="hint">
@@ -43,20 +61,4 @@ public IActionResult Poll(int n = 0, int stop = 3, string mode = ""load"")
     <div class="result" id="poll-every" data-testid="poll-every-box" hx-get="/demo/poll?n=0&amp;stop=3&amp;mode=every" hx-trigger="every 1s" hx-swap="outerHTML">
         <span data-testid="poll-every-count">0</span> <span data-testid="poll-every-running">polling</span>
     </div>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        Each response replaces the polling element (<code>outerHTML</code>). While the server keeps returning the
-        trigger attributes, polling continues; once it omits them, the new element is inert.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">Polling.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">DemoController.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>

@@ -35,6 +35,24 @@ public IActionResult OnGetGo()
     out-of-band selections, extra values and a view transition.
 </p>
 
+<section class="how">
+    <h2>How it works</h2>
+    <p>
+        The button's own request returns a tiny body plus the <code>HX-Location</code> header. htmx then issues a second
+        request to <code>Path</code> and swaps the result according to the object's properties.
+    </p>
+    <div class="code-pair">
+        <figure class="code">
+            <figcaption><span class="file">Location.cshtml</span><span class="lang">html</span></figcaption>
+            <pre><code>@markup</code></pre>
+        </figure>
+        <figure class="code">
+            <figcaption><span class="file">Location.cshtml.cs</span><span class="lang">csharp</span></figcaption>
+            <pre><code>@server</code></pre>
+        </figure>
+    </div>
+</section>
+
 <section class="stage">
     <p class="stage__label">Try it</p>
     <div class="btn-row">
@@ -55,20 +73,4 @@ public IActionResult OnGetGo()
     </div>
     <p class="hint">This one shows the raw <strong>JSON header</strong> instead of navigating.</p>
     <code id="loc-header" data-testid="loc-header">(none)</code>
-</section>
-
-<section class="how">
-    <h2>How it works</h2>
-    <p>
-        The button's own request returns a tiny body plus the <code>HX-Location</code> header. htmx then issues a second
-        request to <code>Path</code> and swaps the result according to the object's properties.
-    </p>
-    <figure class="code">
-        <figcaption><span class="file">Location.cshtml</span><span class="lang">html</span></figcaption>
-        <pre><code>@markup</code></pre>
-    </figure>
-    <figure class="code">
-        <figcaption><span class="file">Location.cshtml.cs</span><span class="lang">csharp</span></figcaption>
-        <pre><code>@server</code></pre>
-    </figure>
 </section>
