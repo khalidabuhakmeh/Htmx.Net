@@ -1,17 +1,69 @@
 ---
 title: htmx.NET
-description: Server-side ASP.NET Core helpers for htmx 4
+description: Typed server-side helpers for htmx 4 in ASP.NET Core — read htmx requests, set response headers, and generate URLs without hand-writing strings.
 template: splash
 hero:
-  tagline: Server-side ASP.NET Core helpers for htmx 4
+  tagline: Typed server-side helpers for htmx 4 in ASP.NET Core.
   actions:
-    - text: Getting Started
+    - text: Get started
       link: getting-started/
       icon: right-arrow
-    - text: Migration guide (v1 → v2)
+      variant: primary
+    - text: Migration (v1 → v2)
       link: migration/v1-to-v2/
       variant: minimal
-    - text: Previous Version (v1.x)
-      link: v1/
+    - text: GitHub
+      link: https://github.com/khalidabuhakmeh/Htmx.Net
+      icon: external
       variant: minimal
 ---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+<div class="home">
+
+<div class="home-install" role="group" aria-label="Install">
+
+```bash
+dotnet add package Htmx
+dotnet add package Htmx.TagHelpers
+```
+
+<p class="home-meta">Two packages · <code>net8.0</code> &amp; <code>net10.0</code> · targets htmx <strong>4.0.0</strong> · MIT</p>
+
+</div>
+
+<p class="home-lead">
+htmx sends its state in request headers and reads it back from response headers. htmx.NET turns both sides into typed C# — so you detect htmx requests, read the triggering element, set <code>HX-*</code> response headers, and generate URLs from ASP.NET routing, instead of parsing and concatenating strings by hand.
+</p>
+
+## An example
+
+Read the incoming htmx request and answer with typed response headers — no string parsing, no hand-built JSON.
+
+```csharp
+// Detect an htmx request and read the element that triggered it.
+if (Request.IsHtmx(out var htmx))
+{
+    var id = htmx.SourceElement?.Id;   // e.g. "save-button"
+    var type = htmx.RequestType;       // Full or Partial
+}
+
+// Set HX-* response headers fluently instead of building strings.
+Response.Htmx(h => h
+    .PushUrl("/items/5")
+    .WithTrigger("saved", new { id = 5 }));
+```
+
+## Explore the docs
+
+<CardGrid>
+  <LinkCard title="Get started" href="getting-started/" description="Install the packages, wire up the tag helpers, and answer your first htmx request." />
+  <LinkCard title="Guides" href="guides/request-detection/" description="Request detection, response headers, tag helpers, antiforgery, caching, and morph." />
+  <LinkCard title="Reference" href="reference/request-headers/" description="Header-by-header tables and the htmx 4 behavior this library implements." />
+  <LinkCard title="Samples" href="samples/" description="Runnable demos for every feature, with the exact server code beside each one." />
+  <LinkCard title="Migration (v1 → v2)" href="migration/v1-to-v2/" description="Upgrade from htmx 2 to htmx 4: removed APIs, renames, and the client-script step." />
+  <LinkCard title="Previous version (v1.x)" href="v1/" description="Documentation for the htmx 2 line of htmx.NET." />
+</CardGrid>
+
+</div>

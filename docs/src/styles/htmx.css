@@ -154,6 +154,91 @@ h1#_top {
     font-size: clamp(2.6rem, 8vw, 4.6rem);
 }
 
+/* ---- Home page (splash) -------------------------------------------------- */
+/* Center the hero like four.htmx.org. Starlight lays the hero out as a
+   two-column grid (copy + image); with no image, collapse to one centered
+   column so the wordmark, tagline, and actions sit in the middle. */
+.page:has(.home) .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+}
+.page:has(.home) .hero .stack {
+    align-items: center;
+}
+.page:has(.home) .hero .actions {
+    justify-content: center;
+}
+.page:has(.home) .hero .tagline {
+    max-width: 40ch;
+}
+
+.home {
+    max-width: 52rem;
+    margin-inline: auto;
+}
+
+/* Install snippet — the single most important element, boxed and centered. */
+.home-install {
+    margin-top: 0.5rem;
+    text-align: center;
+}
+.home-install .expressive-code {
+    max-width: 30rem;
+    margin-inline: auto;
+    text-align: start;
+}
+.home-meta {
+    margin: 0.9rem 0 0;
+    font-size: 0.82rem;
+    color: var(--sl-color-gray-3);
+}
+.home-meta code {
+    font-size: 0.86em;
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 5px;
+    padding: 0.05em 0.35em;
+}
+
+/* Lead paragraph: a touch larger, muted, measured and left-aligned to read. */
+.home-lead {
+    margin: 2.6rem 0 0;
+    font-size: 1.08rem;
+    line-height: 1.62;
+    color: var(--sl-color-gray-2);
+}
+.home-lead code { font-size: 0.86em; }
+
+.home h2 {
+    margin-top: 3.4rem;
+}
+
+/* Wayfinding cards: warm surface, hairline, lift on hover. Known docs
+   pattern (recognition over recall) rather than decoration. */
+.home .card-grid { margin-top: 1.4rem; gap: 1rem; }
+.home .card {
+    background: var(--sl-color-bg-sidebar);
+    border: 1px solid var(--sl-color-hairline);
+    border-radius: 12px;
+    padding: 1.1rem 1.2rem;
+    transition: border-color 0.14s ease, box-shadow 0.14s ease, transform 0.14s ease;
+}
+.home .card:hover {
+    border-color: color-mix(in oklab, var(--sl-color-accent) 45%, var(--sl-color-hairline));
+    box-shadow: 0 6px 20px -12px color-mix(in oklab, var(--sl-color-accent) 55%, transparent);
+    transform: translateY(-2px);
+}
+.home .card .title {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--sl-color-white);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .home .card { transition: none; }
+    .home .card:hover { transform: none; }
+}
+
+
 /* ---- Browser surfaces (craft floor: theme what you didn't draw) --------- */
 :root { accent-color: var(--sl-color-accent); }
 ::selection {
