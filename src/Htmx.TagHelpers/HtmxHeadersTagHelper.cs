@@ -83,9 +83,17 @@ namespace Htmx.TagHelpers
             // prefixed attributes win over the existing JSON
             foreach (var h in headers) obj[h.Key] = h.Value;
 
+            // Choose the output attribute name. Honor the data- prefix of any existing attribute, and
+            // emit the :inherited suffix when requested via hx-headers-inherited OR when an existing
+            // attribute already used it (otherwise requested inheritance would be silently dropped).
+            var existingInherited = name != null && name.EndsWith(":inherited", StringComparison.OrdinalIgnoreCase);
+            var useDataPrefix = name != null && name.StartsWith("data-", StringComparison.OrdinalIgnoreCase);
+            var finalInherited = inherited || existingInherited;
+            var finalName = (useDataPrefix ? "data-hx-headers" : "hx-headers") + (finalInherited ? ":inherited" : "");
+
             // single quotes: JSON uses double quotes; the default JSON encoder escapes ' as \u0027
             output.Attributes.Add(new TagHelperAttribute(
-                name ?? (inherited ? "hx-headers:inherited" : "hx-headers"),
+                finalName,
                 new HtmlString(obj.ToJsonString()),
                 HtmlAttributeValueStyle.SingleQuotes));
         }

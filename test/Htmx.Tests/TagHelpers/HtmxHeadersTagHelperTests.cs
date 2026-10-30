@@ -160,6 +160,32 @@ namespace Htmx.Tests.TagHelpers
             Assert.Equal("{\"B\":\"2\"}", Assert.Single(_output.Attributes).Value.ToString());
         }
 
+        [Fact]
+        public void Inherited_requested_upgrades_existing_plain_hx_headers_name()
+        {
+            // weft blocker: an existing plain hx-headers plus hx-headers-inherited="true" must emit
+            // hx-headers:inherited (not silently drop the requested inheritance).
+            _output.Attributes.Add("hx-headers", "{\"A\":\"1\"}");
+            _tagHelper.Inherited = true;
+            _tagHelper.HeaderAttributes.Add("B", "2");
+            _tagHelper.Process(_context, _output);
+            var attr = Assert.Single(_output.Attributes);
+            Assert.Equal("hx-headers:inherited", attr.Name);
+            var json = JsonSerializer.Deserialize<JsonObject>(attr.Value.ToString()!)!;
+            Assert.Equal("1", json["A"]!.GetValue<string>());
+            Assert.Equal("2", json["B"]!.GetValue<string>());
+        }
+
+        [Fact]
+        public void Inherited_requested_upgrades_existing_data_prefixed_name()
+        {
+            _output.Attributes.Add("data-hx-headers", "{\"A\":\"1\"}");
+            _tagHelper.Inherited = true;
+            _tagHelper.HeaderAttributes.Add("B", "2");
+            _tagHelper.Process(_context, _output);
+            Assert.Equal("data-hx-headers:inherited", Assert.Single(_output.Attributes).Name);
+        }
+
         private static string Render(TagHelperOutput output) =>
             string.Join("\n", output.Attributes.Select(a =>
                 a.ValueStyle == HtmlAttributeValueStyle.SingleQuotes

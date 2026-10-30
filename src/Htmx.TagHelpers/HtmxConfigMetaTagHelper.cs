@@ -137,13 +137,21 @@ public class HtmxConfigMetaTagHelper : TagHelper
         );
     }
 
-    private HtmxConfig BuildConfig() => new()
+    // htmx 4's `history` config accepts a boolean OR a history-mode string. Emit a real JSON boolean
+    // for "true"/"false" so markup like history="false" serializes as {"history":false}, not "false".
+    private static object? NormalizeHistory(string? value)
     {
-                LogAll = LogAll,
+        if (string.IsNullOrWhiteSpace(value)) return null;
+        if (bool.TryParse(value, out var b)) return b;
+        return value;
+    }
+
+    private HtmxConfig BuildConfig() => new()
+    {                LogAll = LogAll,
                 Prefix = Prefix,
                 MetaCharacter = MetaCharacter,
                 Transitions = Transitions,
-                History = History,
+                History = NormalizeHistory(History),
                 Mode = Mode,
                 DefaultSwap = DefaultSwap,
                 AllowEmptySwapAfterOOB = AllowEmptySwapAfterOOB,
@@ -199,7 +207,7 @@ public class HtmxConfigMetaTagHelper : TagHelper
         public bool? Transitions { get; init; }
 
         [JsonPropertyName("history")]
-        public string? History { get; init; }
+        public object? History { get; init; }
 
         [JsonPropertyName("mode")]
         public string? Mode { get; init; }

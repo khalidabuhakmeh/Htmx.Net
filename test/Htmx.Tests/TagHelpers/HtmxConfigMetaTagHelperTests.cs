@@ -53,6 +53,31 @@ public class HtmxConfigMetaTagHelperTests
         return content.Value.ToString()!;
     }
 
+    [Theory]
+    [InlineData("false", "\"history\":false")]   // weft blocker: must be a JSON boolean, not "false"
+    [InlineData("true", "\"history\":true")]
+    [InlineData("False", "\"history\":false")]   // case-insensitive
+    public void History_boolean_values_serialize_as_json_boolean(string value, string expectedFragment)
+    {
+        var json = Run(new HtmxConfigMetaTagHelper { History = value });
+        Assert.Contains(expectedFragment, json);
+        Assert.DoesNotContain("\"history\":\"", json); // never a stringified boolean
+    }
+
+    [Fact]
+    public void History_mode_string_serializes_as_json_string()
+    {
+        var json = Run(new HtmxConfigMetaTagHelper { History = "reload" });
+        Assert.Contains("\"history\":\"reload\"", json);
+    }
+
+    [Fact]
+    public void History_unset_is_not_serialized()
+    {
+        var json = Run(new HtmxConfigMetaTagHelper());
+        Assert.DoesNotContain("history", json);
+    }
+
     private static HtmxConfigMetaTagHelper Full() => new()
     {
         LogAll = true, Prefix = "data-x-", MetaCharacter = "-", Transitions = true, History = "reload",
