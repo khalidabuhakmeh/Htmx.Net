@@ -3,19 +3,20 @@
 @{
     ViewData["Title"] = "RequestHeaders";
 
-    var without = @"// Without Htmx.Net: read and parse the raw headers
+    var without = @"// Without Htmx.Net: parse the raw headers
 var isHtmx = Request.Headers[""HX-Request""] == ""true"";
-var source = Request.Headers[""HX-Source""].ToString();   // ""button#rh-btn-id""
+// HX-Source arrives as ""button#rh-btn-id"" — split it:
+var source = Request.Headers[""HX-Source""].ToString();
 var hash   = source.IndexOf('#');
-var tag    = hash < 0 ? source : source[..hash];          // ""button""
-var id     = hash < 0 ? null   : source[(hash + 1)..];    // ""rh-btn-id""";
+var tag    = hash < 0 ? source : source[..hash];
+var id     = hash < 0 ? null   : source[(hash + 1)..];";
 
-    var with = @"// With Htmx.Net: one call, typed values (tag#id already parsed)
+    var with = @"// With Htmx.Net: one call, typed values
 if (Request.IsHtmx(out var h))
 {
-    var tag  = h.SourceElement?.TagName;   // ""button""
-    var id   = h.SourceElement?.Id;        // ""rh-btn-id""
-    var kind = h.RequestType;              // Full or Partial
+    var tag  = h.SourceElement?.TagName;  // button
+    var id   = h.SourceElement?.Id;       // rh-btn-id
+    var kind = h.RequestType;             // Full/Partial
 }";
 }
 <h1>Request headers</h1>

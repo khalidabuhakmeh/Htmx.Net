@@ -6,13 +6,15 @@
         "defaultFocusScroll", "defaultSettleDelay", "indicatorClass", "requestClass", "includeIndicatorCSS", "defaultTimeout",
         "extensions", "morphIgnore", "morphSkip", "morphSkipChildren", "morphScanLimit", "noSwap", "implicitInheritance", "inlineScriptNonce" };
 
-    var without = @"<!-- Without Htmx.Net: hand-write and escape the content JSON -->
+    var without = @"<!-- Without Htmx.Net: hand-write and -->
+<!-- escape the content JSON -->
 <meta name=""htmx-config""
       content='{""defaultSwap"":""beforeend"",""defaultTimeout"":45000,
                 ""noSwap"":[204,304,422],""implicitInheritance"":false}' />
 <!-- antiforgery token? wire that up separately -->";
 
-    var with = @"<!-- With Htmx.Net: typed attributes, arrays serialized, antiforgery built in -->
+    var with = @"<!-- With Htmx.Net: typed attributes, -->
+<!-- arrays serialized, antiforgery built in -->
 <meta name=""htmx-config""
       defaultSwap=""beforeend""
       defaultTimeout=""45000""

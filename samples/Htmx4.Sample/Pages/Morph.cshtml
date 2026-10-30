@@ -17,8 +17,9 @@ case ""inner"":
     Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));
     return Frag(inputs);
 
-// Frag(html) is this sample's shortcut for returning an HTML fragment.
-// A real app returns Partial(""_View"", model) or Content(html, ""text/html"").";
+// Frag(html): this sample's HTML-fragment shortcut.
+// Real apps return Partial(""_View"", model)
+// or Content(html, ""text/html"").";
 }
 
 <h1>Morph vs plain swap</h1>

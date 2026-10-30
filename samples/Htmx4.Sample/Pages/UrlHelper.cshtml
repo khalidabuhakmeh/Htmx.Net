@@ -3,12 +3,14 @@
 @{
     ViewData["Title"] = "UrlHelper";
 
-    var without = @"<!-- Without Htmx.Net: hard-code the URL (breaks when routes change) -->
+    var without = @"<!-- Without Htmx.Net: hard-code the URL -->
+<!-- (breaks when routes change) -->
 <button hx-get=""/demo/echo/7?p=ctrl"" hx-target=""#url-result-box"">
     controller/action
 </button>";
 
-    var with = @"<!-- With Htmx.Net: generated from ASP.NET routing, like asp-* -->
+    var with = @"<!-- With Htmx.Net: generated from -->
+<!-- ASP.NET routing, like asp-* -->
 <button hx-get
         hxn-controller=""Demo"" hxn-action=""Echo""
         hxn-route-id=""7"" hxn-route-p=""ctrl""
