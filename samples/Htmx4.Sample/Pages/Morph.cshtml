@@ -1,0 +1,23 @@
+@page
+@model Htmx4.Sample.Pages.MorphModel
+@{
+    ViewData["Title"] = "Morph";
+}
+<h1>Morph vs plain swap</h1>
+<p>Type in the input, focus it, then click the button. Morph preserves the typed value and focus; a plain swap replaces the input.</p>
+
+<section>
+    <h2>Plain outerHTML swap</h2>
+    <button data-testid="morph-btn-plain" hx-get="/demo/morph/plain" hx-target="#morph-plain-box" hx-swap="outerHTML">Plain swap</button>
+    <div id="morph-plain-box" data-testid="morph-plain-box"><input id="plain-input" name="x" data-testid="morph-plain-input" /> <span data-testid="morph-plain-count">0</span></div>
+</section>
+<section>
+    <h2>Reswap(HtmxSwap.OuterMorph)</h2>
+    <button data-testid="morph-btn-outer" hx-get="/demo/morph/outer" hx-target="#morph-outer-box">Outer morph (server HX-Reswap)</button>
+    <div id="morph-outer-box" data-testid="morph-outer-box"><input id="outer-input" name="x" data-testid="morph-outer-input" /> <span data-testid="morph-outer-count">0</span></div>
+</section>
+<section>
+    <h2>Reswap(HtmxSwap.InnerMorph)</h2>
+    <button data-testid="morph-btn-inner" hx-get="/demo/morph/inner" hx-target="#morph-inner-box">Inner morph (server HX-Reswap)</button>
+    <div id="morph-inner-box" data-testid="morph-inner-box"><input id="inner-input" name="x" data-testid="morph-inner-input" /> <span data-testid="morph-inner-count">0</span></div>
+</section>

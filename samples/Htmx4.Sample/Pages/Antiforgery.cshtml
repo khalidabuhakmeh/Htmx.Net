@@ -1,0 +1,69 @@
+@page
+@using Microsoft.AspNetCore.Antiforgery
+@using Htmx.TagHelpers
+@inject IAntiforgery Antiforgery
+@model Htmx4.Sample.Pages.AntiforgeryModel
+@{
+    ViewData["Title"] = "Antiforgery";
+    var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
+}
+<h1>Antiforgery</h1>
+<p>The layout's <code>htmx-config includeAspNetAntiforgeryToken</code> meta + <code>@HtmxAntiforgeryScriptEndpoints.Path</code> attach the token to same-origin non-GET requests.
+    Header mode is used when the request has no body form; form mode when the body is form data (<code>hx-post</code> inside a form).</p>
+<p>Token header name: <code data-testid="af-header-name">@tokens.HeaderName</code>; form field: <code data-testid="af-field-name">@tokens.FormFieldName</code>.</p>
+<div id="af-out" data-testid="af-out">(no result yet)</div>
+
+<h2>GET control (no token expected)</h2>
+<button data-testid="af-btn-get" hx-get="/demo/af/check" hx-target="#af-out">GET</button>
+
+<h2>Header mode (non-form triggers)</h2>
+<button data-testid="af-btn-header-post" hx-post="/demo/af/check" hx-target="#af-out">POST header</button>
+<button data-testid="af-btn-header-put" hx-put="/demo/af/check" hx-target="#af-out">PUT header</button>
+<button data-testid="af-btn-header-patch" hx-patch="/demo/af/check" hx-target="#af-out">PATCH header</button>
+<button data-testid="af-btn-header-delete" hx-delete="/demo/af/check" hx-target="#af-out">DELETE header</button>
+
+<h2>Form mode</h2>
+<form hx-post="/demo/af/check" hx-target="#af-out" data-testid="af-form-post">
+    <input name="note" value="form-post" data-testid="af-form-note-post" />
+    <button type="submit" data-testid="af-btn-form-post">POST form</button>
+</form>
+<form hx-put="/demo/af/check" hx-target="#af-out" data-testid="af-form-put">
+    <input name="note" value="form-put" data-testid="af-form-note-put" />
+    <button type="submit" data-testid="af-btn-form-put">PUT form</button>
+</form>
+<form hx-patch="/demo/af/check" hx-target="#af-out" data-testid="af-form-patch">
+    <input name="note" value="form-patch" data-testid="af-form-note-patch" />
+    <button type="submit" data-testid="af-btn-form-patch">PATCH form</button>
+</form>
+<form hx-delete="/demo/af/check" hx-target="#af-out" data-testid="af-form-delete">
+    <input name="note" value="form-delete" data-testid="af-form-note-delete" />
+    <button type="submit" data-testid="af-btn-form-delete">DELETE form</button>
+</form>
+
+<h2>Attribute-validated endpoints</h2>
+<button data-testid="af-btn-strict-post" hx-post="/demo/af/strict" hx-target="#af-out">POST [AutoValidateAntiforgeryToken]</button>
+<button data-testid="af-btn-strict-delete" hx-delete="/demo/af/strict" hx-target="#af-out">DELETE [AutoValidateAntiforgeryToken]</button>
+<button data-testid="af-btn-attr" hx-post="/demo/af/validate-attr" hx-target="#af-out">POST [ValidateAntiForgeryToken]</button>
+<p>Control: a raw fetch with no token must fail (400).</p>
+<button data-testid="af-btn-notoken" type="button" id="af-notoken">POST via fetch (no token)</button>
+<code data-testid="af-notoken-status" id="af-notoken-status"></code>
+
+<h2>Form that already carries a token field (no duplicate)</h2>
+<form hx-post="/demo/af/check" hx-target="#af-out" data-testid="af-form-existing">
+    <input type="hidden" name="@tokens.FormFieldName" value="@tokens.RequestToken" data-testid="af-existing-token" />
+    <button type="submit" data-testid="af-btn-form-existing">POST form with existing token field</button>
+</form>
+@{
+    using var sw = new StringWriter();
+    Html.HtmxAntiforgeryScript().WriteTo(sw, System.Text.Encodings.Web.HtmlEncoder.Default);
+}
+<p>HtmlExtensions.HtmxAntiforgeryScript() inline variant renders <code data-testid="af-inline-length">@sw.ToString().Length</code> chars (not emitted, the endpoint script is already loaded). Snippets: <code data-testid="af-snippet-lengths">@HtmxSnippets.AntiforgeryJavaScript.Length / @HtmxSnippets.AntiforgeryJavaScriptMinified.Length / @HtmxSnippets.GetAntiforgeryJavaScript(true).Length</code></p>
+<p>Cross-origin and redirect scenarios are verified in D5 (E2E), not here.</p>
+@section Scripts {
+    <script>
+        document.getElementById("af-notoken").addEventListener("click", async function () {
+            const r = await fetch("/demo/af/strict", { method: "POST" });
+            document.getElementById("af-notoken-status").textContent = String(r.status);
+        });
+    </script>
+}

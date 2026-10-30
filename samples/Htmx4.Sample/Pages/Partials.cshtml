@@ -1,0 +1,17 @@
+@page
+@model Htmx4.Sample.Pages.PartialsModel
+@{
+    ViewData["Title"] = "Partials";
+}
+<h1>&lt;hx-partial&gt; and ordering</h1>
+<p>One response: main content first, then partials and OOB in document order. The nested-target partial only works because the main swap runs first.</p>
+<button data-testid="part-btn" hx-get="/demo/partials" hx-target="#part-main">Load (main + 3 partials + OOB)</button>
+<div id="part-main" data-testid="part-main">main (before)</div>
+<div id="part-a" data-testid="part-a">A (before)</div>
+<ul id="part-b" data-testid="part-b"><li>B initial</li></ul>
+<div id="part-oob" data-testid="part-oob">OOB (before)</div>
+<hr />
+<p>Partials-only response: the main target is left untouched.</p>
+<button data-testid="part-btn-only" hx-get="/Partials?handler=Only" hx-target="#part-main2">Load partials only</button>
+<div id="part-main2" data-testid="part-main2">main2 (untouched)</div>
+<div id="part-c" data-testid="part-c">C (before)</div>

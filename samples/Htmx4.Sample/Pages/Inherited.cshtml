@@ -1,0 +1,43 @@
+@page
+@model Htmx4.Sample.Pages.InheritedModel
+@{
+    ViewData["Title"] = "Inherited";
+}
+<h1>Explicit inheritance (htmx 4)</h1>
+<p>In htmx 4, attributes are NOT inherited unless written with <code>:inherited</code> (<code>htmx.config.implicitInheritance</code> is false).</p>
+
+<section data-testid="inh-with" hx-target:inherited="#inh-out" hx-headers-X-Demo="from-parent" hx-headers-inherited="true">
+    <h2>With <code>:inherited</code></h2>
+    <button data-testid="inh-btn-with" hx-get="/demo/inherited/echo?p=inh">child relies on inherited target + headers</button>
+</section>
+<div id="inh-out" data-testid="inh-out">(waiting)</div>
+<div data-testid="inh-out-lines">
+    <span data-testid="inh-attr-target" id="inh-attr-target"></span>
+</div>
+
+<section data-testid="inh-without" hx-target="#inh-out2" hx-headers='{"X-Demo":"from-parent-plain"}'>
+    <h2>WITHOUT <code>:inherited</code> (does not inherit)</h2>
+    <p>The child falls back to itself as the target and sends no X-Demo header.</p>
+    <button data-testid="inh-btn-without" hx-get="/demo/inherited/echo?p=noinh">child gets no inherited target/headers</button>
+</section>
+<div id="inh-out2" data-testid="inh-out2">(should stay untouched)</div>
+
+<section data-testid="inh-plain-headers" hx-headers-X-Demo="plain-tag-helper">
+    <h2>Headers tag helper without inherited flag</h2>
+    <button data-testid="inh-btn-own" hx-get="/demo/inherited/echo?p=own" hx-target="#inh-out3" hx-headers-X-Demo="own-button">own header on the button itself</button>
+</section>
+<div id="inh-out3" data-testid="inh-out3">(waiting)</div>
+
+<p>Generated parent attributes: <code data-testid="inh-attrs" id="inh-attrs"></code></p>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const names = [];
+            for (const id of ["inh-with", "inh-without", "inh-plain-headers"]) {
+                const el = document.querySelector("[data-testid=" + id + "]");
+                for (const a of el.attributes) if (a.name.indexOf("hx-") === 0) names.push(id + ":" + a.name + "=" + a.value);
+            }
+            document.getElementById("inh-attrs").textContent = names.join(" | ");
+        });
+    </script>
+}

@@ -1,0 +1,5 @@
+body { font-family: system-ui, sans-serif; margin: 0; color: #222; }
+nav { display: flex; flex-wrap: wrap; gap: 1rem; padding: .75rem 1rem; background: #f2f2f2; }
+main { padding: 1rem; max-width: 60rem; }
+.htmx-indicator { opacity: 0; }
+.htmx-request .htmx-indicator, .htmx-request.htmx-indicator { opacity: 1; }

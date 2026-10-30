@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFrameworks></TargetFrameworks>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>Htmx4.Sample</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Htmx\Htmx.csproj" />
+        <ProjectReference Include="..\..\src\Htmx.TagHelpers\Htmx.TagHelpers.csproj" />
+    </ItemGroup>
+
+</Project>

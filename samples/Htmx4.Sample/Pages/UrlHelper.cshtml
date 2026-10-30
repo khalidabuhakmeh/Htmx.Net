@@ -1,0 +1,49 @@
+@page
+@model Htmx4.Sample.Pages.UrlHelperModel
+@{
+    ViewData["Title"] = "UrlHelper";
+}
+<h1>URL tag helper matrix</h1>
+<p>Each button gets its URL generated from a binding attribute and performs a real request. Result lands in <code>#url-result-box</code>.</p>
+<div id="url-result-box" data-testid="url-result-box">(no result yet)</div>
+<div>
+    <button data-testid="url-btn-page" hx-get hx-page="/UrlHelper" hx-page-handler="Fragment" hx-target="#url-result-box">hx-page + hx-page-handler</button>
+    <button data-testid="url-btn-page-only" hx-get hx-page="/RequestHeaders" hx-select="#rh-keys" hx-target="#url-result-box">hx-page only (hx-select)</button>
+    <button data-testid="url-btn-controller" hx-get hx-controller="Demo" hx-action="Echo" hx-route-id="7" hx-route-p="ctrl" hx-target="#url-result-box">hx-controller/hx-action + route values</button>
+    <button data-testid="url-btn-route" hx-get hx-route="demo-echo" hx-target="#url-result-box">hx-route</button>
+    <button data-testid="url-btn-route-values" hx-get hx-route="demo-echo" hx-route-id="42" hx-route-p="rv" hx-target="#url-result-box">hx-route + hx-route-{values}</button>
+    <button data-testid="url-btn-area" hx-get hx-area="Admin" hx-controller="Admin" hx-action="Ping" hx-target="#url-result-box">hx-area</button>
+    <button data-testid="url-btn-fragment" hx-get hx-route="demo-echo" hx-fragment="frag" hx-route-id="9" hx-target="#url-result-box">hx-fragment</button>
+    <button data-testid="url-btn-data" data-hx-get hx-route="demo-echo" hx-route-id="data" hx-target="#url-result-box">data-hx-get spelling</button>
+    <button data-testid="url-btn-post" hx-post hx-page="/UrlHelper" hx-page-handler="Post" hx-target="#url-result-box">hx-post (antiforgery attached)</button>
+    <button data-testid="url-btn-existing" hx-get="/demo/echo/explicit" hx-route="demo-echo" hx-target="#url-result-box">existing value wins</button>
+</div>
+<div hx-get:inherited hx-route="demo-echo" hx-route-id="inh" hx-target:inherited="#url-result-box" data-testid="url-inherited-parent">
+    <p>Parent has <code>hx-get:inherited</code> generated from <code>hx-route</code>.</p>
+    <button data-testid="url-btn-inherited" hx-trigger="click" hx-get>child inherits parent's hx-get (explicit)</button>
+</div>
+<div hx-get:inherited hx-controller="Demo" hx-action="Echo" hx-route-id="inh2" hx-target="#url-result-box" data-testid="url-inherited-parent2" hx-trigger="click">
+    <span data-testid="url-inherited-click">click this div (hx-get:inherited generated)</span>
+</div>
+<button data-testid="url-btn-host" hx-get hx-route="demo-echo" hx-protocol="https" hx-host="example.test" hx-trigger="none">hx-protocol + hx-host (absolute URL; inert, trigger none)</button>
+<div id="url-generated" hidden></div>
+<p>Generated attribute values (read from DOM): <ul id="url-attrs" data-testid="url-attrs"></ul></p>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ul = document.getElementById("url-attrs");
+            document.querySelectorAll("[data-testid^='url-btn-'],[data-testid^='url-inherited-parent']").forEach(function (el) {
+                for (const a of el.attributes) {
+                    if (/^(data-)?hx-(get|post|put|patch|delete)(:inherited)?$/.test(a.name)) {
+                        const li = document.createElement("li");
+                        li.setAttribute("data-testid", "url-attr-" + el.getAttribute("data-testid"));
+                        li.setAttribute("data-attr-name", a.name);
+                        li.setAttribute("data-url", a.value);
+                        li.textContent = el.getAttribute("data-testid") + " " + a.name + "=" + a.value;
+                        ul.appendChild(li);
+                    }
+                }
+            });
+        });
+    </script>
+}

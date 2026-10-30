@@ -18,4 +18,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\..\samples\Htmx4.Sample\Htmx4.Sample.csproj" />
+    </ItemGroup>
+
 </Project>

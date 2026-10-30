@@ -1,0 +1,8 @@
+@page
+@model Htmx4.Sample.Pages.BoostedOtherModel
+@{
+    ViewData["Title"] = "BoostedOther";
+}
+<h1>Boosted (other page)</h1>
+<p>boosted=<code data-testid="boost-is-boosted">@Request.IsHtmxBoosted()</code>, page=<code data-testid="boost-page">other</code></p>
+<nav hx-boost:inherited="true"><a href="/Boosted" data-testid="boost-link-back">Back to Boosted</a></nav>

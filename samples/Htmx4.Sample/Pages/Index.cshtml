@@ -1,0 +1,13 @@
+@page
+@model Htmx4.Sample.Pages.IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+<h1>Htmx.Net + htmx 4 sample</h1>
+<p>Demo pages (added in D2):</p>
+<ul data-testid="demo-index">
+    @foreach (var d in Demos.All)
+    {
+        <li><a href="/@d" data-testid="index-link-@d">@d</a></li>
+    }
+</ul>

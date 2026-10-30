@@ -1,0 +1,41 @@
+@page
+@model Htmx4.Sample.Pages.TriggersModel
+@{
+    ViewData["Title"] = "Triggers";
+}
+<h1>HX-Trigger</h1>
+<p>Custom event names are arbitrary. Detail: scalar -&gt; <code>event.detail.value</code>; object -&gt; properties copied onto detail.</p>
+<div>
+    <button data-testid="trg-btn-single" hx-get="/demo/trigger/single" hx-target="#trg-result">WithTrigger(name)</button>
+    <button data-testid="trg-btn-detail" hx-get="/demo/trigger/detail" hx-target="#trg-result">WithTrigger(name, object)</button>
+    <button data-testid="trg-btn-scalar" hx-get="/demo/trigger/scalar" hx-target="#trg-result">WithTrigger(name, scalar)</button>
+    <button data-testid="trg-btn-multi" hx-get="/demo/trigger/multi" hx-target="#trg-result">multiple triggers</button>
+    <button data-testid="trg-btn-merge-names" hx-get="/demo/trigger/merge-names" hx-target="#trg-result">merge with pre-set name list</button>
+    <button data-testid="trg-btn-merge-json" hx-get="/demo/trigger/merge-json" hx-target="#trg-result">merge with pre-set JSON</button>
+    <button data-testid="trg-btn-first-wins" hx-get="/demo/trigger/first-wins" hx-target="#trg-result">duplicate name (first wins)</button>
+</div>
+<div id="trg-result" data-testid="trg-result">(no result yet)</div>
+<button data-testid="event-log-clear" type="button" id="trg-clear">Clear log</button>
+<ul id="event-log" data-testid="event-log"></ul>
+
+@section Scripts {
+    <script>
+        (function () {
+            const names = ["demo-single", "demo-detail", "demo-scalar", "demo-multi-a", "demo-multi-b",
+                "demo-pre-a", "demo-pre-b", "demo-pre-json", "demo-added", "demo-dup"];
+            const log = document.getElementById("event-log");
+            names.forEach(function (name) {
+                document.addEventListener(name, function (e) {
+                    const d = e.detail || {};
+                    const li = document.createElement("li");
+                    li.setAttribute("data-testid", "event-log-item");
+                    li.setAttribute("data-event", name);
+                    li.setAttribute("data-detail", JSON.stringify({ value: d.value, id: d.id, message: d.message, n: d.n, v: d.v }));
+                    li.textContent = name + " " + li.getAttribute("data-detail");
+                    log.appendChild(li);
+                });
+            });
+            document.getElementById("trg-clear").addEventListener("click", function () { log.innerHTML = ""; });
+        })();
+    </script>
+}

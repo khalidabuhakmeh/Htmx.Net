@@ -1,0 +1,30 @@
+@page
+@using Htmx.TagHelpers
+@* TEST-ONLY page (D5): ?base=<href for <base>>, ?variant=min|full, ?attacker=<other origin>. *@
+@{
+    Layout = null;
+    var self = $"{Request.Scheme}://{Request.Host}";
+    var baseHref = Request.Query["base"].ToString();
+    var attacker = Request.Query["attacker"].ToString();
+    var full = Request.Query["variant"] == "full";
+    var script = full ? self + "/demo/af-test/antiforgery.full.js" : self + HtmxAntiforgeryScriptEndpoints.Path;
+    var capture = "/demo/af-test/capture";
+    string Redirect(int code) => "/demo/af-test/redirect-to?code=" + code + "&url=" + Uri.EscapeDataString(attacker + capture);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @if (baseHref.Length > 0) { <base href="@baseHref" /> }
+    <meta name="htmx-config" includeAspNetAntiforgeryToken="true" />
+    <script src="@(self)/lib/htmx/htmx.min.js" defer></script>
+    <script src="@script" defer></script>
+</head>
+<body>
+<div id="out" data-testid="x-out">(none)</div>
+<button data-testid="x-btn-rel" hx-post="@capture" hx-target="#out">relative</button>
+<button data-testid="x-btn-same-abs" hx-post="@(self + capture)" hx-target="#out">absolute same-origin</button>
+<button data-testid="x-btn-cross-abs" hx-post="@(attacker + capture)" hx-target="#out">absolute cross-origin</button>
+<button data-testid="x-btn-redirect307" hx-post="@Redirect(307)" hx-target="#out">same-origin 307 to attacker</button>
+<button data-testid="x-btn-redirect308" hx-post="@Redirect(308)" hx-target="#out">same-origin 308 to attacker</button>
+</body>
+</html>

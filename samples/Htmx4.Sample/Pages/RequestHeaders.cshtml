@@ -1,0 +1,36 @@
+@page
+@model Htmx4.Sample.Pages.RequestHeadersModel
+@{
+    ViewData["Title"] = "RequestHeaders";
+}
+<h1>Request headers</h1>
+<p>Server echoes HtmxRequestHeaders / HtmxElementReference / HttpRequest extensions as data-testid elements.</p>
+
+<section>
+    <h2>Source with id (HX-Source = <code>button#rh-btn-id</code>, HX-Target = <code>div#rh-result</code>)</h2>
+    <button id="rh-btn-id" data-testid="rh-btn-id" hx-get="/demo/request-headers?p=rh" hx-target="#rh-result">GET with id</button>
+    <div id="rh-result" data-testid="rh-result">(no result yet)</div>
+</section>
+
+<section>
+    <h2>Source without id (HX-Source = <code>button</code>, HX-Target = <code>div</code> with no id)</h2>
+    <button data-testid="rh-btn-noid" hx-get="/demo/request-headers?p=rh2" hx-target="next div">GET without id</button>
+    <div data-testid="rh-noid-result">(no result yet)</div>
+</section>
+
+<section>
+    <h2>Full request (hx-select makes HX-Request-Type: full)</h2>
+    <button id="rh-btn-full" data-testid="rh-btn-full" hx-get="/demo/request-headers?p=rh3" hx-select="#rh3-fragment" hx-target="#rh-full-result">GET with hx-select</button>
+    <div id="rh-full-result" data-testid="rh-full-result">(no result yet)</div>
+</section>
+
+<section>
+    <h2>Header names</h2>
+    <p>HtmxRequestHeaders.Keys.All: <code id="rh-keys" data-testid="rh-keys">@string.Join(", ", HtmxRequestHeaders.Keys.All)</code></p>
+    <p>Individual keys: <code data-testid="rh-key-request">@HtmxRequestHeaders.Keys.Request</code>,
+        <code data-testid="rh-key-request-type">@HtmxRequestHeaders.Keys.RequestType</code>,
+        <code>@HtmxRequestHeaders.Keys.CurrentUrl</code>, <code>@HtmxRequestHeaders.Keys.Source</code>,
+        <code>@HtmxRequestHeaders.Keys.Target</code>, <code>@HtmxRequestHeaders.Keys.Boosted</code>,
+        <code>@HtmxRequestHeaders.Keys.HistoryRestoreRequest</code>, <code>@HtmxRequestHeaders.Keys.Prompt</code></p>
+    <p>Full page load (not htmx): <code data-testid="rh-page-is-htmx">@Request.IsHtmx()</code></p>
+</section>

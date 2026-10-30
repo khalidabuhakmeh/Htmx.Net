@@ -1,0 +1,15 @@
+@page
+@model Htmx4.Sample.Pages.PollingModel
+@{
+    ViewData["Title"] = "Polling";
+}
+<h1>Polling</h1>
+<p>htmx 4 has no 286 stop signal. Stop by returning content without the poller. Counter stops at 3.</p>
+<h2>Load polling (each response replaces the poller)</h2>
+<div id="poll-load" data-testid="poll-load-box" hx-get="/demo/poll?n=0&amp;stop=3&amp;mode=load" hx-trigger="load delay:1s" hx-swap="outerHTML">
+    <span data-testid="poll-load-count">0</span> <span data-testid="poll-load-running">polling</span>
+</div>
+<h2>hx-trigger="every 1s" (stopped by replacing the element)</h2>
+<div id="poll-every" data-testid="poll-every-box" hx-get="/demo/poll?n=0&amp;stop=3&amp;mode=every" hx-trigger="every 1s" hx-swap="outerHTML">
+    <span data-testid="poll-every-count">0</span> <span data-testid="poll-every-running">polling</span>
+</div>

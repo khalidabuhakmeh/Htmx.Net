@@ -1,0 +1,31 @@
+@page
+@model Htmx4.Sample.Pages.ErrorSwapsModel
+@{
+    ViewData["Title"] = "ErrorSwaps";
+}
+<h1>Error responses swap by default (htmx 4)</h1>
+<p>Default <code>noSwap</code> is <code>[204, 304]</code>. 4xx/5xx swap; 204/304 do not.</p>
+<button data-testid="err-btn-422" hx-get="/demo/status/422" hx-target="#err-422">422 (swaps)</button>
+<div id="err-422" data-testid="err-422">(untouched)</div>
+<button data-testid="err-btn-500" hx-get="/demo/status/500" hx-target="#err-500">500 (swaps)</button>
+<div id="err-500" data-testid="err-500">(untouched)</div>
+<button data-testid="err-btn-204" hx-get="/demo/status/204" hx-target="#err-204">204 (no swap)</button>
+<div id="err-204" data-testid="err-204">(untouched)</div>
+<button data-testid="err-btn-304" hx-get="/demo/status/304" hx-target="#err-304">304 (no swap)</button>
+<div id="err-304" data-testid="err-304">(untouched)</div>
+<hr />
+<h2>Validation form (422 swaps)</h2>
+<form hx-post="/ErrorSwaps?handler=Validate" hx-target="#err-form-out" data-testid="err-form">
+    <input name="name" data-testid="err-form-name" />
+    <button type="submit" data-testid="err-form-submit">Submit</button>
+</form>
+<div id="err-form-out" data-testid="err-form-out">(none)</div>
+<hr />
+<h2>hx-delete + hx-include</h2>
+<p>htmx 4 does not include form inputs on DELETE; add <code>hx-include="closest form"</code>.</p>
+<form data-testid="del-form">
+    <input name="item" value="42" data-testid="del-item" />
+    <button type="button" data-testid="del-btn-plain" hx-delete="/ErrorSwaps?handler=Delete" hx-target="#del-out">DELETE (no include)</button>
+    <button type="button" data-testid="del-btn-include" hx-delete="/ErrorSwaps?handler=Delete" hx-include="closest form" hx-target="#del-out">DELETE (hx-include closest form)</button>
+</form>
+<div id="del-out" data-testid="del-out">(none)</div>

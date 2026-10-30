@@ -1,0 +1,14 @@
+@page
+@model Htmx4.Sample.Pages.LocationModel
+@{
+    ViewData["Title"] = "Location";
+}
+<h1>HX-Location (HtmxLocation object)</h1>
+<p>Client-side navigation without a full page load. Server sets target, swap, select, values, selectOOB and transition.</p>
+<button data-testid="loc-btn-object" hx-get="/Location?handler=Go" hx-target="#loc-start">Navigate via HtmxLocation object</button>
+<button data-testid="loc-btn-string" hx-get="/Location?handler=GoString" hx-target="#loc-start">Navigate via string overload</button>
+<div id="loc-start" data-testid="loc-start">(start)</div>
+<div id="loc-dest" data-testid="loc-dest">(destination, before)</div>
+<div id="loc-oob" data-testid="loc-oob">(oob before)</div>
+<button data-testid="loc-btn-header-only" hx-get="/Location?handler=HeaderOnly" hx-target="#loc-header">Show serialized header with every property (no navigation)</button>
+<code id="loc-header" data-testid="loc-header">(none)</code>

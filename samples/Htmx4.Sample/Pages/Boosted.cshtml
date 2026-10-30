@@ -1,0 +1,19 @@
+@page
+@model Htmx4.Sample.Pages.BoostedModel
+@{
+    ViewData["Title"] = "Boosted";
+}
+<h1>Boosted</h1>
+<p>Server saw this request as: boosted=<code data-testid="boost-is-boosted">@Request.IsHtmxBoosted()</code>,
+    htmx=<code data-testid="boost-is-htmx">@Request.IsHtmx()</code>, non-boosted=<code data-testid="boost-is-nonboosted">@Request.IsHtmxNonBoosted()</code>,
+    request type=<code data-testid="boost-request-type">@Model.RequestType</code>, page=<code data-testid="boost-page">boosted</code></p>
+<nav hx-boost:inherited="true" data-testid="boost-container">
+    <a href="/BoostedOther" data-testid="boost-link-other">Go to BoostedOther (boosted)</a>
+    <a href="/Boosted" data-testid="boost-link-self">Reload Boosted (boosted)</a>
+    <a href="/Boosted" hx-boost="false" data-testid="boost-link-unboosted">Unboosted link</a>
+</nav>
+<form method="post" hx-boost="true" action="/Boosted?handler=Post" data-testid="boost-form">
+    <input name="note" value="boosted-form" />
+    <button type="submit" data-testid="boost-form-submit">Boosted POST form</button>
+</form>
+<p>Last POST: <code data-testid="boost-post-result">@Model.PostResult</code></p>

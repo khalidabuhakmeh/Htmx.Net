@@ -1,0 +1,55 @@
+@page
+@model Htmx4.Sample.Pages.ConfigModel
+@{
+    ViewData["Title"] = "Config";
+    var keys = new[] { "logAll", "prefix", "metaCharacter", "transitions", "history", "mode", "defaultSwap", "allowEmptySwapAfterOOB",
+        "defaultFocusScroll", "defaultSettleDelay", "indicatorClass", "requestClass", "includeIndicatorCSS", "defaultTimeout",
+        "extensions", "morphIgnore", "morphSkip", "morphSkipChildren", "morphScanLimit", "noSwap", "implicitInheritance", "inlineScriptNonce" };
+}
+@section HtmxConfig {
+    @* Page-scoped config: replaces the layout's global htmx-config meta on this page only. *@
+    <meta name="htmx-config" includeAspNetAntiforgeryToken="true"
+          logAll="false" prefix="data-hx-" metaCharacter=":" transitions="true" history="true" mode="same-origin"
+          defaultSwap="beforeend" allowEmptySwapAfterOOB="true" defaultFocusScroll="true" defaultSettleDelay="5"
+          indicatorClass="loading-dot" requestClass="is-loading" includeIndicatorCSS="true" defaultTimeout="45000"
+          extensions="" morphIgnore="@(new[] { "data-htmx-powered", "data-keep" })" morphSkip="[data-skip]"
+          morphSkipChildren="[data-skip-children]" morphScanLimit="7" noSwap="@(new object[] { 204, 304, 422 })"
+          implicitInheritance="false" inlineScriptNonce="demo-nonce" />
+}
+<h1>Config</h1>
+<p>This page's <code>&lt;meta name="htmx-config"&gt;</code> is rendered by the config tag helper (page-scoped via the <code>HtmxConfig</code> layout section; the global meta in <code>_Layout</code> is replaced on this page).
+    Note: the tag helper types <code>history</code> as a string, so <code>history="true"</code> reads back as the string <code>"true"</code>.</p>
+
+<p>Raw meta content: <code data-testid="cfg-meta-raw" id="cfg-meta-raw"></code></p>
+<table>
+    <thead><tr><th>key</th><th>htmx.config value (JSON)</th></tr></thead>
+    <tbody id="cfg-rows">
+    @foreach (var k in keys)
+    {
+        <tr><td>@k</td><td><code data-testid="cfg-@k" data-key="@k">(pending)</code></td></tr>
+    }
+    </tbody>
+</table>
+<p>antiForgery header name: <code data-testid="cfg-antiForgery-header" id="cfg-af-header"></code>; token present: <code data-testid="cfg-antiForgery-token-present" id="cfg-af-token"></code></p>
+
+<h2>Effects</h2>
+<p>defaultSwap=beforeend: this button has no hx-swap, so the response is appended.</p>
+<button data-testid="cfg-btn-swap" hx-get="/demo/config/swap" hx-target="#cfg-list">Add item (default swap)</button>
+<ul id="cfg-list" data-testid="cfg-list"><li data-testid="cfg-list-initial">initial</li></ul>
+<p>noSwap includes 422: this error response does NOT swap.</p>
+<button data-testid="cfg-btn-noswap" hx-get="/demo/status/422" hx-target="#cfg-noswap-target">GET 422</button>
+<div id="cfg-noswap-target" data-testid="cfg-noswap-target">untouched</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll("[data-key]").forEach(function (el) {
+                el.textContent = JSON.stringify(htmx.config[el.getAttribute("data-key")]);
+            });
+            document.getElementById("cfg-meta-raw").textContent = document.querySelector("meta[name=htmx-config]").getAttribute("content").replace(/"requestToken":"[^"]*"/, '"requestToken":"..."');
+            const af = htmx.config.antiForgery || {};
+            document.getElementById("cfg-af-header").textContent = af.headerName || "";
+            document.getElementById("cfg-af-token").textContent = String(!!af.requestToken);
+        });
+    </script>
+}

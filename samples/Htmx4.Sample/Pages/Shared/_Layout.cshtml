@@ -1,0 +1,45 @@
+@using Htmx.TagHelpers
+@{
+    // Add D2 demo pages here; Index and the nav both read this list.
+    var demos = Htmx4.Sample.Demos.All;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Htmx4 Sample</title>
+    @if (IsSectionDefined("HtmxConfig"))
+    {
+        @* Page-scoped config: a page replaces the global meta (only one htmx-config meta may exist). *@
+        @await RenderSectionAsync("HtmxConfig")
+    }
+    else
+    {
+        <meta name="htmx-config" includeAspNetAntiforgeryToken="true" indicatorClass="htmx-indicator" />
+    }
+    <link rel="stylesheet" href="~/css/site.css" />
+    <!--
+        Vendored htmx 4.0.0 (https://unpkg.com/htmx.org@4.0.0/dist/htmx.min.js)
+        sha256: e484d9171a9db30a39c8f16e3d709d4137f3211c659f8e6125816635033d593f
+        SRI: sha384-BvJpBiO8Kh31EqtJe5DRIeWrHWnCGkwytKs9NKFi86Hhw96dEqdEMzZDeK9iEGTc
+    -->
+    <script src="~/lib/htmx/htmx.min.js" defer integrity="sha384-BvJpBiO8Kh31EqtJe5DRIeWrHWnCGkwytKs9NKFi86Hhw96dEqdEMzZDeK9iEGTc"></script>
+    <script src="@HtmxAntiforgeryScriptEndpoints.Path" defer></script>
+</head>
+<body>
+<header>
+    <nav>
+        <a href="/">Home</a>
+        @foreach (var d in demos)
+        {
+            <a href="/@d" data-testid="nav-@d">@d</a>
+        }
+    </nav>
+</header>
+<main id="main" data-testid="main">
+    @RenderBody()
+</main>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
