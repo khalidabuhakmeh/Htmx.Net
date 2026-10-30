@@ -4,10 +4,10 @@ description: Citation-backed reference to the htmx 4.0.0 request and response co
 ---
 
 :::note
-This page is a citation-backed reference to the htmx 4.0.0 request/response contract that htmx.NET implements. Where the official htmx 4 docs and other sources disagree, the official docs win, and every row links to its source.
+Where the official htmx 4 docs and other sources disagree, the official docs win. Sources are linked throughout.
 :::
 
-This reference summarizes the htmx 4 request/response contract and the migration points that matter to a server-side helper library. It draws on the official htmx 4 reference and upgrade guide, with the v4.0.0 release source cited where it pins down exact header construction.
+This page documents the htmx 4 request/response contract that htmx.NET implements: the request and response headers, status-code behavior, config keys, events, and swap styles. It draws on the official htmx 4 docs and the v4.0.0 release source.
 
 ## 1. Request headers
 
