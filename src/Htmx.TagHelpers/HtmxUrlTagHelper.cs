@@ -12,15 +12,25 @@ using Microsoft.AspNetCore.Routing;
 namespace Htmx.TagHelpers;
 
 /// <summary>
-/// Targets any element that has hx-get, hx-post, hx-put, hx-patch, and hx-delete. These
-/// elements will ultimately hold the request URL generated.
+/// Generates a request URL for an htmx verb attribute when a URL-binding attribute
+/// (<c>hx-page</c>, <c>hx-action</c>, <c>hx-controller</c> or <c>hx-route</c>) is present.
 /// </summary>
+/// <remarks>
+/// htmx 4 treats a valueless <c>hx-get</c> as valid (it requests the current URL), so this helper
+/// no longer matches on the verb attributes. It only runs when a binding attribute is present and then
+/// writes the URL into whichever spelling of the verb the author used:
+/// <c>hx-get</c>, <c>hx-get:inherited</c>, <c>data-hx-get</c> or <c>data-hx-get:inherited</c>
+/// (verbs: get, post, put, patch, delete). The spelling is detected at runtime from
+/// <c>context.AllAttributes</c>, so no design-time colon matching is needed.
+/// NOTE (docs): the routing attribute names (hx-page, hx-action, hx-controller, hx-route...) are
+/// Htmx.Net conventions and are not htmx 4 attributes; htmx 4 could introduce similar names, so document this.
+/// NOTE: in htmx 4, hx-delete no longer includes form inputs; add hx-include yourself if needed (not automatic).
+/// </remarks>
 [PublicAPI]
-[HtmlTargetElement("*", Attributes = "hx-get")]
-[HtmlTargetElement("*", Attributes = "hx-post")]
-[HtmlTargetElement("*", Attributes = "hx-delete")]
-[HtmlTargetElement("*", Attributes = "hx-put")]
-[HtmlTargetElement("*", Attributes = "hx-patch")]
+[HtmlTargetElement("*", Attributes = "hx-page")]
+[HtmlTargetElement("*", Attributes = "hx-action")]
+[HtmlTargetElement("*", Attributes = "hx-controller")]
+[HtmlTargetElement("*", Attributes = "hx-route")]
 public class HtmxUrlTagHelper : TagHelper
 {
     private const string ActionAttributeName = "hx-action";
@@ -36,10 +46,14 @@ public class HtmxUrlTagHelper : TagHelper
     private const string RouteValuesPrefix = "hx-route-";
     private IDictionary<string, string>? routeValues;
 
-    private static readonly List<string> HtmxMethods = new()
-    {
-        "hx-get", "hx-post", "hx-delete", "hx-put", "hx-patch"
-    };
+    private static readonly string[] Verbs = { "get", "post", "put", "patch", "delete" };
+
+    private static readonly List<string> HtmxMethods = Verbs
+        .SelectMany(v => new[] { $"hx-{v}", $"hx-{v}:inherited", $"data-hx-{v}", $"data-hx-{v}:inherited" })
+        .ToList();
+
+    private static bool IsMethod(string name) =>
+        HtmxMethods.Any(m => string.Equals(m, name, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>
     /// Creates a new <see cref="AnchorTagHelper"/>.
@@ -170,26 +184,41 @@ public class HtmxUrlTagHelper : TagHelper
             throw new ArgumentNullException(nameof(output));
         }
 
-        if (output.Attributes.Count(a => HtmxMethods.Contains(a.Name)) > 1)
+        if (context.AllAttributes.Count(a => IsMethod(a.Name)) > 1)
         {
             throw new InvalidOperationException(
                 $"Too many htmx method attributes found on element. Use only one of the following: {string.Join(",", HtmxMethods)}");
         }
 
-        var hxMethodAttribute = context.AllAttributes.First(a => HtmxMethods.Contains(a.Name));
-        // if it already has a value, don't do anything
-        if (hxMethodAttribute.Value is HtmlString s && !string.IsNullOrWhiteSpace(s.Value))
+        var hxMethodAttribute = context.AllAttributes.FirstOrDefault(a => IsMethod(a.Name));
+        if (hxMethodAttribute == null)
         {
-            // if the attribute already has a value
-            // then continue on, we don't want to alter it
-            // Note: this will leave other hx-method attributes
-            //       in the case the user is sloppy
+            // binding attributes without a verb: nothing to write into
+            return;
+        }
+
+        // if it already has a non-empty value, don't do anything
+        var existing = hxMethodAttribute.Value switch
+        {
+            HtmlString hs => hs.Value,
+            string str => str,
+            null => null,
+            var other => other.ToString()
+        };
+        if (!string.IsNullOrWhiteSpace(existing))
+        {
             return;
         }
 
         var routeLink = Route != null;
         var actionLink = Controller != null || Action != null;
         var pageLink = Page != null || PageHandler != null;
+
+        if (!routeLink && !actionLink && !pageLink)
+        {
+            // no binding attribute: a valueless verb is valid htmx 4 (current URL), leave it alone
+            return;
+        }
 
         if ((routeLink && actionLink) || (routeLink && pageLink) || (actionLink && pageLink))
         {
@@ -257,13 +286,8 @@ public class HtmxUrlTagHelper : TagHelper
         }
 
         var href = tagBuilder.Attributes["href"];
-        foreach (var htmxMethod in HtmxMethods.Where(htmxMethod =>
-                     output.Attributes.TryGetAttribute(htmxMethod, out _)))
-        {
-            // should only loop once... should
-            output.Attributes.RemoveAll(htmxMethod);
-            output.Attributes.Add(htmxMethod, href);
-            break;
-        }
+        var written = hxMethodAttribute.Name;
+        output.Attributes.RemoveAll(written);
+        output.Attributes.Add(written, href);
     }
 }

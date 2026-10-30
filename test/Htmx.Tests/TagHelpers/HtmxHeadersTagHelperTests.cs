@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using System.Linq;
+using VerifyXunit;
 using Xunit;
 
 namespace Htmx.Tests.TagHelpers
@@ -77,6 +79,92 @@ namespace Htmx.Tests.TagHelpers
             var json = JsonSerializer.Deserialize<JsonObject>(_output.Attributes["hx-headers"].Value.ToString()!)!;
             Assert.Equal("ExistingValue1", json["ExistingKey1"]!.GetValue<string>());
         }
+
+        [Fact]
+        public Task Snapshot_non_inherited()
+        {
+            _tagHelper.HeaderAttributes.Add("X-One", "1");
+            _tagHelper.HeaderAttributes.Add("X-Two", "it's \"2\"");
+            _tagHelper.Process(_context, _output);
+            return Verifier.Verify(Render(_output));
+        }
+
+        [Fact]
+        public Task Snapshot_inherited()
+        {
+            _tagHelper.Inherited = true;
+            _tagHelper.HeaderAttributes.Add("X-One", "1");
+            _tagHelper.Process(_context, _output);
+            return Verifier.Verify(Render(_output));
+        }
+
+        [Fact]
+        public Task Snapshot_merge_with_existing()
+        {
+            _output.Attributes.Add("hx-headers", "{\"X-Existing\":\"e\",\"X-One\":\"old\"}");
+            _tagHelper.HeaderAttributes.Add("X-One", "new");
+            _tagHelper.Process(_context, _output);
+            return Verifier.Verify(Render(_output));
+        }
+
+        [Fact]
+        public void Inherited_flag_via_dictionary_key_is_honored()
+        {
+            _tagHelper.HeaderAttributes.Add("inherited", "true");
+            _tagHelper.HeaderAttributes.Add("X-One", "1");
+            _tagHelper.Process(_context, _output);
+            Assert.Equal("hx-headers:inherited", Assert.Single(_output.Attributes).Name);
+            Assert.DoesNotContain("inherited\"", _output.Attributes[0].Value.ToString());
+        }
+
+        [Fact]
+        public void Only_inherited_flag_adds_nothing()
+        {
+            _tagHelper.Inherited = true;
+            _tagHelper.Process(_context, _output);
+            Assert.Empty(_output.Attributes);
+        }
+
+        [Theory]
+        [InlineData("hx-headers:inherited")]
+        [InlineData("data-hx-headers")]
+        [InlineData("data-hx-headers:inherited")]
+        public void Existing_spelling_is_preserved_and_merged(string name)
+        {
+            _output.Attributes.Add(name, "{\"A\":\"1\"}");
+            _tagHelper.HeaderAttributes.Add("B", "2");
+            _tagHelper.Process(_context, _output);
+            var attr = Assert.Single(_output.Attributes);
+            Assert.Equal(name, attr.Name);
+            var json = JsonSerializer.Deserialize<JsonObject>(attr.Value.ToString()!)!;
+            Assert.Equal("1", json["A"]!.GetValue<string>());
+            Assert.Equal("2", json["B"]!.GetValue<string>());
+        }
+
+        [Fact]
+        public void Non_json_existing_value_is_left_untouched()
+        {
+            _output.Attributes.Add("hx-headers", "js:{a: foo()}");
+            _tagHelper.HeaderAttributes.Add("B", "2");
+            _tagHelper.Process(_context, _output);
+            var attr = Assert.Single(_output.Attributes);
+            Assert.Equal("js:{a: foo()}", attr.Value);
+        }
+
+        [Fact]
+        public void Existing_empty_value_is_replaced()
+        {
+            _output.Attributes.Add("hx-headers", "");
+            _tagHelper.HeaderAttributes.Add("B", "2");
+            _tagHelper.Process(_context, _output);
+            Assert.Equal("{\"B\":\"2\"}", Assert.Single(_output.Attributes).Value.ToString());
+        }
+
+        private static string Render(TagHelperOutput output) =>
+            string.Join("\n", output.Attributes.Select(a =>
+                a.ValueStyle == HtmlAttributeValueStyle.SingleQuotes
+                    ? $"{a.Name}='{a.Value}'"
+                    : $"{a.Name}=\"{a.Value}\""));
 
         [Fact]
         public void Process_DoesNotAddHeadersAttribute_WhenNoHeaderAttributes()

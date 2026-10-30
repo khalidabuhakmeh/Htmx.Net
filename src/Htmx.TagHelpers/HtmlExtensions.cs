@@ -8,7 +8,7 @@ namespace Htmx.TagHelpers;
 public static class HtmlExtensions
 {
     /// <summary>
-    /// Adds an event handler for "htmx:configRequest" to hydrate
+    /// Adds an event handler for "htmx:config:request" to hydrate
     /// an antiforgery token on each HTMX mutating request (POST, PUT, DELETE).
     /// </summary>
     /// <remarks>

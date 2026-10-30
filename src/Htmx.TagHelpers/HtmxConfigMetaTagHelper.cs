@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Web;
@@ -14,283 +13,118 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Htmx.TagHelpers;
 
+/// <summary>
+/// Renders the htmx 4 config meta tag. Every property is nullable; unset
+/// properties are not serialized so htmx defaults apply.
+/// </summary>
 [PublicAPI]
 [HtmlTargetElement("meta", Attributes = "[name=htmx-config]", TagStructure = TagStructure.WithoutEndTag)]
 public class HtmxConfigMetaTagHelper : TagHelper
 {
-    /// <summary>
-    /// defaults to true, really only useful for testing
-    /// </summary>
-    [HtmlAttributeName("historyEnabled")]
-    public bool? HistoryEnabled { get; set; }
+    private static readonly JsonSerializerOptions ConfigJsonOptions = new()
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
 
-    /// <summary>
-    /// defaults to 10
-    /// </summary>
-    [HtmlAttributeName("historyCacheSize")]
-    public int? HistoryCacheSize { get; set; } = 10;
+    /// <summary>htmx 4 default: false</summary>
+    [HtmlAttributeName("logAll")]
+    public bool? LogAll { get; set; }
 
-    /// <summary>
-    /// defaults to false, if set to true htmx will issue a full page refresh on history misses rather than use an AJAX request
-    /// </summary>
-    [HtmlAttributeName("refreshOnHistoryMiss")]
-    public bool? RefreshOnHistoryMiss { get; set; }
+    /// <summary>htmx 4 default: "data-hx-"</summary>
+    [HtmlAttributeName("prefix")]
+    public string? Prefix { get; set; }
 
-    /// <summary>
-    /// defaults to innerHTML
-    /// </summary>
-    [HtmlAttributeName("defaultSwapStyle")]
-    public string? DefaultSwapStyle { get; set; }
+    /// <summary>htmx 4 default: undefined</summary>
+    [HtmlAttributeName("metaCharacter")]
+    public string? MetaCharacter { get; set; }
 
-    /// <summary>
-    /// defaults to 0
-    /// </summary>
-    [HtmlAttributeName("defaultSwapDelay")]
-    public int? DefaultSwapDelay { get; set; }
+    /// <summary>htmx 4 default: false</summary>
+    [HtmlAttributeName("transitions")]
+    public bool? Transitions { get; set; }
 
-    /// <summary>
-    /// defaults to 100
-    /// </summary>
+    /// <summary>htmx 4 default: true; also accepts a history mode string</summary>
+    [HtmlAttributeName("history")]
+    public string? History { get; set; }
+
+    /// <summary>htmx 4 default: "same-origin"</summary>
+    [HtmlAttributeName("mode")]
+    public string? Mode { get; set; }
+
+    /// <summary>htmx 4 default: "innerHTML"</summary>
+    [HtmlAttributeName("defaultSwap")]
+    public string? DefaultSwap { get; set; }
+
+    /// <summary>htmx 4 default: false</summary>
+    [HtmlAttributeName("allowEmptySwapAfterOOB")]
+    public bool? AllowEmptySwapAfterOOB { get; set; }
+
+    /// <summary>htmx 4 default: false</summary>
+    [HtmlAttributeName("defaultFocusScroll")]
+    public bool? DefaultFocusScroll { get; set; }
+
+    /// <summary>htmx 4 default: 1</summary>
     [HtmlAttributeName("defaultSettleDelay")]
     public int? DefaultSettleDelay { get; set; }
 
-    /// <summary>
-    /// defaults to true (determines if the indicator styles are loaded)
-    /// </summary>
-    [HtmlAttributeName("includeIndicatorStyles")]
-    public bool? IncludeIndicatorStyles { get; set; }
-
-    /// <summary>
-    /// defaults to htmx-indicator
-    /// </summary>
+    /// <summary>htmx 4 default: "htmx-indicator"</summary>
     [HtmlAttributeName("indicatorClass")]
     public string? IndicatorClass { get; set; }
 
-    /// <summary>
-    /// defaults to htmx-request
-    /// </summary>
+    /// <summary>htmx 4 default: "htmx-request"</summary>
     [HtmlAttributeName("requestClass")]
     public string? RequestClass { get; set; }
 
-    /// <summary>
-    /// defaults to htmx-settling
-    /// </summary>
-    [HtmlAttributeName("settlingClass")]
-    public string? SettlingClass { get; set; }
+    /// <summary>htmx 4 default: true</summary>
+    [HtmlAttributeName("includeIndicatorCSS")]
+    public bool? IncludeIndicatorCSS { get; set; }
 
-    /// <summary>
-    /// defaults to htmx-swapping
-    /// </summary>
-    [HtmlAttributeName("swappingClass")]
-    public string? SwappingClass { get; set; }
+    /// <summary>htmx 4 default: 60000</summary>
+    [HtmlAttributeName("defaultTimeout")]
+    public int? DefaultTimeout { get; set; }
 
-    /// <summary>
-    /// defaults to htmx-added
-    /// </summary>
-    [HtmlAttributeName("addedClass")]
-    public string? AddedClass { get; set; }
+    /// <summary>htmx 4 default: ""</summary>
+    [HtmlAttributeName("extensions")]
+    public string? Extensions { get; set; }
 
-    /// <summary>
-    /// defaults to false
-    /// </summary>
-    [HtmlAttributeName("selfRequestsOnly")]
-    public bool SelfRequestsOnly { get; set; }
+    /// <summary>htmx 4 default: ["data-htmx-powered"]</summary>
+    [HtmlAttributeName("morphIgnore")]
+    public string[]? MorphIgnore { get; set; }
 
-    /// <summary>
-    /// defaults to true
-    /// </summary>
-    [HtmlAttributeName("allowScriptTags")]
-    public bool AllowScriptTags { get; set; } = true;
+    /// <summary>htmx 4 default: "[hx-morph-skip]"</summary>
+    [HtmlAttributeName("morphSkip")]
+    public string? MorphSkip { get; set; }
 
-    /// <summary>
-    /// defaults to true
-    /// </summary>
-    [HtmlAttributeName("allowEval")]
-    public bool? AllowEval { get; set; }
+    /// <summary>htmx 4 default: "[hx-morph-skip-children]"</summary>
+    [HtmlAttributeName("morphSkipChildren")]
+    public string? MorphSkipChildren { get; set; }
 
-    /// <summary>
-    /// defaults to false, HTML template tags for parsing content from the server (not IE11 compatible!)
-    /// </summary>
-    [HtmlAttributeName("useTemplateFragments")]
-    public bool? UseTemplateFragments { get; set; }
+    /// <summary>htmx 4 default: 10</summary>
+    [HtmlAttributeName("morphScanLimit")]
+    public int? MorphScanLimit { get; set; }
 
-    /// <summary>
-    /// defaults to full-jitter
-    /// </summary>
-    [HtmlAttributeName("wsReconnectDelay")]
-    public string? WsReconnectDelay { get; set; }
+    /// <summary>htmx 4 default: [204, 304]; ints and/or strings</summary>
+    [HtmlAttributeName("noSwap")]
+    public object[]? NoSwap { get; set; }
 
-    /// <summary>
-    /// defaults to blob
-    /// </summary>
-    [HtmlAttributeName("wsBinaryType")]
-    public string? WsBinaryType { get; set; }
+    /// <summary>htmx 4 default: false</summary>
+    [HtmlAttributeName("implicitInheritance")]
+    public bool? ImplicitInheritance { get; set; }
 
-    /// <summary>
-    /// defaults to [disable-htmx], [data-disable-htmx], htmx will not process elements with this attribute on it or a parent
-    /// </summary>
-    [HtmlAttributeName("disableSelector")]
-    public string? DisableSelector { get; set; }
-        
-    /// <summary>
-    /// default timeout of an HTMX triggered HTTP Request. Defaults to 0 in HTMX.
-    /// </summary>
-    [HtmlAttributeName("timeout")]
-    public int? Timeout { get; set; }
-
-    [HtmlAttributeName("includeAspNetAntiforgeryToken")]
-    public bool IncludeAntiForgery { get; set; }
-
-    /// <summary>
-    /// defaults to ""
-    /// </summary>
+    /// <summary>htmx 4 default: undefined</summary>
     [HtmlAttributeName("inlineScriptNonce")]
     public string? InlineScriptNonce { get; set; }
 
-    /// <summary>
-    /// defaults to false
-    /// </summary>
-    [HtmlAttributeName("withCredentials")]
-    public bool WithCredentials { get; set; }
-
-    /// <summary>
-    /// defaults to smooth
-    /// </summary>
-    [HtmlAttributeName("scrollBehavior")]
-    public string? ScrollBehavior { get; set; }
-
-    /// <summary>
-    /// defaults to false
-    /// </summary>
-    [HtmlAttributeName("defaultFocusScroll")]
-    public bool DefaultFocusScroll { get; set; }
-
-    /// <summary>
-    /// defaults to false
-    /// </summary>
-    [HtmlAttributeName("getCacheBusterParam")]
-    public bool GetCacheBusterParam { get; set; }
-
-    /// <summary>
-    /// defaults to false
-    /// </summary>
-    [HtmlAttributeName("globalViewTransitions")]
-    public bool GlobalViewTransitions { get; set; }
-
-    /// <summary>
-    /// defaults to ["class", "style", "width", "height"]
-    /// </summary>
-    [HtmlAttributeName("attributesToSettle")]
-    public IEnumerable<string>? AttributesToSettle { get; set; }
-
-    /// <summary>
-    /// defaults to ["get"]
-    /// </summary>
-    [HtmlAttributeName("methodsThatUseUrlParams")]
-    public IEnumerable<string>? MethodsThatUseUrlParams { get; set; }
-    
-    /// <summary>
-    /// If set to `true` htmx will not update the title of the document when a title tag is found in new content
-    /// </summary>
-    [HtmlAttributeName("ignoreTitle")]
-    public bool? IgnoreTitle { get; set; }
-    
-    /// <summary>
-    /// Defaults to true, whether or not the target of a boosted element is scrolled into the viewport. If hx-target is omitted on a boosted element, the target defaults to body, causing the page to scroll to the top.
-    /// </summary>
-    [HtmlAttributeName("scrollIntoViewOnBoost")]
-    public bool? ScrollIntoViewOnBoost { get; set; }
-    
-    /// <summary>
-    /// Pro feature: defaults to null, the cache to store evaluated trigger specifications into, improving parsing performance at the cost of more memory usage.
-    /// </summary>
-    [HtmlAttributeName("triggerSpecsCache")]
-    public HtmxTriggerSpecificationCache? TriggerSpecsCache { get; set; }
-
-    /// <summary>
-    /// defaults to false. If set to true, the inheritance of attributes is completely disabled
-    /// </summary>
-    [HtmlAttributeName("disableInheritance")]
-    public bool? DisableInheritance { get; set; }
-
-    /// <summary>
-    /// defaults to '', meaning that no nonce will be added to inline styles
-    /// </summary>
-    [HtmlAttributeName("inlineStyleNonce")]
-    public string? InlineStyleNonce { get; set; }
-
-    /// <summary>
-    /// Response handling configuration. See https://htmx.org/docs/#response-handling for details.
-    /// </summary>
-    [HtmlAttributeName("responseHandling")]
-    public IEnumerable<HtmxResponseHandling>? ResponseHandling { get; set; }
-
-    /// <summary>
-    /// defaults to true, whether to process OOB swaps on elements that are nested within the main response element
-    /// </summary>
-    [HtmlAttributeName("allowNestedOobSwaps")]
-    public bool? AllowNestedOobSwaps { get; set; }
-
-    /// <summary>
-    /// defaults to true, Whether to treat history cache miss full page reload requests as a HX-Request
-    /// </summary>
-    [HtmlAttributeName("historyRestoreAsHxRequest")]
-    public bool? HistoryRestoreAsHxRequest { get; set; }
-
-    /// <summary>
-    /// defaults to false, Whether to report input validation errors to the end user
-    /// </summary>
-    [HtmlAttributeName("reportValidityOfForms")]
-    public bool? ReportValidityOfForms { get; set; }
+    [HtmlAttributeName("includeAspNetAntiforgeryToken")]
+    public bool IncludeAntiForgery { get; set; }
 
     [ViewContext]
     public ViewContext ViewContext { get; set; } = null!;
 
     private HttpContext HttpContext => ViewContext.HttpContext;
-    
+
     public override void Process(TagHelperContext context, TagHelperOutput output)
     {
-        var config = JsonSerializer.Serialize(new
-        {
-            AllowEval,
-            SelfRequestsOnly,
-            AllowScriptTags,
-            DisableSelector,
-            HistoryEnabled,
-            IndicatorClass,
-            AddedClass,
-            RequestClass,
-            SettlingClass,
-            SwappingClass,
-            DefaultSettleDelay,
-            DefaultSwapDelay,
-            DefaultSwapStyle,
-            HistoryCacheSize,
-            IncludeIndicatorStyles,
-            UseTemplateFragments,
-            WsBinaryType,
-            WsReconnectDelay,
-            RefreshOnHistoryMiss,
-            Timeout,
-            InlineScriptNonce,
-            WithCredentials,
-            ScrollBehavior,
-            DefaultFocusScroll,
-            GetCacheBusterParam,
-            GlobalViewTransitions,
-            AttributesToSettle,
-            MethodsThatUseUrlParams,
-            IgnoreTitle,
-            ScrollIntoViewOnBoost,
-            TriggerSpecsCache,
-            DisableInheritance,
-            InlineStyleNonce,
-            ResponseHandling,
-            AllowNestedOobSwaps,
-            HistoryRestoreAsHxRequest,
-            ReportValidityOfForms,
-            AntiForgery = TryGetAntiForgeryConfig()
-        }, Shared.JsonSerializerOptions);
+        var config = JsonSerializer.Serialize(BuildConfig(), ConfigJsonOptions);
 
         output.Attributes.RemoveAll("content");
 
@@ -303,13 +137,40 @@ public class HtmxConfigMetaTagHelper : TagHelper
         );
     }
 
+    private HtmxConfig BuildConfig() => new()
+    {
+                LogAll = LogAll,
+                Prefix = Prefix,
+                MetaCharacter = MetaCharacter,
+                Transitions = Transitions,
+                History = History,
+                Mode = Mode,
+                DefaultSwap = DefaultSwap,
+                AllowEmptySwapAfterOOB = AllowEmptySwapAfterOOB,
+                DefaultFocusScroll = DefaultFocusScroll,
+                DefaultSettleDelay = DefaultSettleDelay,
+                IndicatorClass = IndicatorClass,
+                RequestClass = RequestClass,
+                IncludeIndicatorCSS = IncludeIndicatorCSS,
+                DefaultTimeout = DefaultTimeout,
+                Extensions = Extensions,
+                MorphIgnore = MorphIgnore,
+                MorphSkip = MorphSkip,
+                MorphSkipChildren = MorphSkipChildren,
+                MorphScanLimit = MorphScanLimit,
+                NoSwap = NoSwap,
+                ImplicitInheritance = ImplicitInheritance,
+                InlineScriptNonce = InlineScriptNonce,
+                AntiForgery = TryGetAntiForgeryConfig()
+    };
+
     private AntiForgeryConfig? TryGetAntiForgeryConfig()
     {
         if (!IncludeAntiForgery)
             return null;
 
         var antiforgery = HttpContext.RequestServices.GetService<IAntiforgery>();
-            
+
         // need to call GetAndStoreTokens or else
         // all requests will fail until something calls
         // GetAndStoreTokens. This ensures the token
@@ -320,6 +181,79 @@ public class HtmxConfigMetaTagHelper : TagHelper
         }
 
         return null;
+    }
+
+    /// <summary>Serialized shape of the htmx 4 config (explicit JSON names, no naming policy).</summary>
+    private sealed class HtmxConfig
+    {
+        [JsonPropertyName("logAll")]
+        public bool? LogAll { get; init; }
+
+        [JsonPropertyName("prefix")]
+        public string? Prefix { get; init; }
+
+        [JsonPropertyName("metaCharacter")]
+        public string? MetaCharacter { get; init; }
+
+        [JsonPropertyName("transitions")]
+        public bool? Transitions { get; init; }
+
+        [JsonPropertyName("history")]
+        public string? History { get; init; }
+
+        [JsonPropertyName("mode")]
+        public string? Mode { get; init; }
+
+        [JsonPropertyName("defaultSwap")]
+        public string? DefaultSwap { get; init; }
+
+        [JsonPropertyName("allowEmptySwapAfterOOB")]
+        public bool? AllowEmptySwapAfterOOB { get; init; }
+
+        [JsonPropertyName("defaultFocusScroll")]
+        public bool? DefaultFocusScroll { get; init; }
+
+        [JsonPropertyName("defaultSettleDelay")]
+        public int? DefaultSettleDelay { get; init; }
+
+        [JsonPropertyName("indicatorClass")]
+        public string? IndicatorClass { get; init; }
+
+        [JsonPropertyName("requestClass")]
+        public string? RequestClass { get; init; }
+
+        [JsonPropertyName("includeIndicatorCSS")]
+        public bool? IncludeIndicatorCSS { get; init; }
+
+        [JsonPropertyName("defaultTimeout")]
+        public int? DefaultTimeout { get; init; }
+
+        [JsonPropertyName("extensions")]
+        public string? Extensions { get; init; }
+
+        [JsonPropertyName("morphIgnore")]
+        public string[]? MorphIgnore { get; init; }
+
+        [JsonPropertyName("morphSkip")]
+        public string? MorphSkip { get; init; }
+
+        [JsonPropertyName("morphSkipChildren")]
+        public string? MorphSkipChildren { get; init; }
+
+        [JsonPropertyName("morphScanLimit")]
+        public int? MorphScanLimit { get; init; }
+
+        [JsonPropertyName("noSwap")]
+        public object[]? NoSwap { get; init; }
+
+        [JsonPropertyName("implicitInheritance")]
+        public bool? ImplicitInheritance { get; init; }
+
+        [JsonPropertyName("inlineScriptNonce")]
+        public string? InlineScriptNonce { get; init; }
+
+        [JsonPropertyName("antiForgery")]
+        public AntiForgeryConfig? AntiForgery { get; init; }
     }
 
     private class AntiForgeryConfig
@@ -334,95 +268,11 @@ public class HtmxConfigMetaTagHelper : TagHelper
             RequestToken = HttpUtility.HtmlAttributeEncode(antiforgery.RequestToken)!;
         }
 
-        // Serialized
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
+        [JsonPropertyName("formFieldName")]
         public string FormFieldName { get; set; }
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
+        [JsonPropertyName("headerName")]
         public string? HeaderName { get; set; }
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
+        [JsonPropertyName("requestToken")]
         public string RequestToken { get; set; }
     }
-}
-
-public class HtmxTriggerSpecificationCache: Dictionary<string, HtmxTriggerSpecification[]> {}
-
-[PublicAPI]
-public class HtmxTriggerSpecification
-{
-    [JsonPropertyName("trigger")]
-    public string Trigger { get;  set; } = default!;
-    [JsonPropertyName("sseEvent")]
-    public string? SseEvent { get; set; }
-    [JsonPropertyName("eventFilter")]
-    public string? EventFilter { get; set; }
-    [JsonPropertyName("changed")]
-    public bool? Changed { get; set; }
-    [JsonPropertyName("once")]
-    public bool? Once { get; set; }
-    [JsonPropertyName("consume")]
-    public bool? Consume { get; set; }
-    [JsonPropertyName("from")]
-    public string? From { get; set; }
-    [JsonPropertyName("target")]
-    public string? Target { get; set; }
-    [JsonPropertyName("throttle")]
-    public int? Throttle { get; set; }
-    [JsonPropertyName("queue")]
-    public string? Queue { get; set; }
-    [JsonPropertyName("root")]
-    public string? Root { get; set; }
-    [JsonPropertyName("threshold")]
-    public string? Threshold { get; set; }
-    [JsonPropertyName("delay")]
-    public int? Delay { get; set; }
-    [JsonPropertyName("pollInterval")]
-    public int? PollInterval { get; set; }
-}
-
-/// <summary>
-/// When htmx receives a response it will iterate in order over
-/// the htmx.config.responseHandling array and test if the code property
-/// of a given object, when treated as a Regular Expression, matches the current response.
-/// If an entry does match the current response code, it will be used to determine
-/// if and how the response will be processed.
-/// https://htmx.org/docs/#response-handling
-/// </summary>
-[PublicAPI]
-public class HtmxResponseHandling
-{
-    /// <summary>
-    /// a String representing a regular expression that will be tested against response codes.
-    /// </summary>
-    [JsonPropertyName("code")]
-    public string Code { get; set; } = default!;
-    /// <summary>
-    /// true if the response should be swapped into the DOM, false otherwise
-    /// </summary>
-    [JsonPropertyName("swap")]
-    public bool? Swap { get; set; }
-    /// <summary>
-    /// true if htmx should treat this response as an error
-    /// </summary>
-    [JsonPropertyName("error")]
-    public bool? Error { get; set; }
-    /// <summary>
-    /// true if htmx should ignore title tags in the response
-    /// </summary>
-    [JsonPropertyName("ignoreTitle")]
-    public bool? IgnoreTitle { get; set; }
-    /// <summary>
-    /// A CSS selector to use to select content from the response
-    /// </summary>
-    [JsonPropertyName("select")]
-    public string? Select { get; set; }
-    /// <summary>
-    /// A CSS selector specifying an alternative target for the response
-    /// </summary>
-    [JsonPropertyName("target")]
-    public string? Target { get; set; }
-    /// <summary>
-    /// An alternative swap mechanism for the response
-    /// </summary>
-    [JsonPropertyName("swapOverride")]
-    public string? SwapOverride { get; set; }
 }

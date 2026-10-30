@@ -1,0 +1,1 @@
+﻿{"antiForgery":{"formFieldName":"__RequestVerificationToken","headerName":"RequestVerificationToken","requestToken":"req-token\u002B/="}}
