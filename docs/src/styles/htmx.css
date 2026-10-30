@@ -135,3 +135,32 @@ h1#_top {
     border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--sl-color-gray-4); }
+
+/* ---- Asides / admonitions: recolor to the warm htmx palette -------------- */
+:root[data-theme="light"] {
+    --sl-color-asides-text-accent: var(--sl-color-accent-high);
+    --sl-color-asides-border: var(--sl-color-accent);
+    --sl-color-blue-high: #1f3f85;
+}
+.starlight-aside {
+    border-inline-start-width: 2px;
+    border-radius: 0 8px 8px 0;
+    background: color-mix(in oklab, var(--sl-color-asides-border) 7%, var(--sl-color-bg));
+}
+.starlight-aside--note {
+    --sl-color-asides-text-accent: #1f3f85;
+    --sl-color-asides-border: #3d72d7;
+}
+.starlight-aside--tip {
+    --sl-color-asides-text-accent: #166546;
+    --sl-color-asides-border: #1a7f52;
+}
+.starlight-aside--caution {
+    --sl-color-asides-text-accent: #8a5a00;
+    --sl-color-asides-border: #c4941f;
+}
+.starlight-aside--danger {
+    --sl-color-asides-text-accent: #9a2d22;
+    --sl-color-asides-border: #b23b2e;
+}
+.starlight-aside__title { letter-spacing: -0.01em; }
