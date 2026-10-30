@@ -105,7 +105,7 @@ Response.Htmx(h => h.Location(new HtmxLocation
 On the wire the header looks like `HX-Location: {"path":"/Location?handler=Landing","target":"#loc-dest","swap":"innerHTML",...}`.
 
 :::note
-`handler` is not a documented htmx 4 option and `HtmxLocation.Handler` was removed. `Source` and `Event` serialize into the header, but htmx's docs do not define useful semantics for `event`; treat them as pass-through ([htmx 4 facts](/Htmx.Net/reference/htmx4-facts/#2-response-headers)).
+`handler` is not a documented htmx 4 option and `HtmxLocation.Handler` was removed. `Source` and `Event` serialize into the header, but htmx's docs do not define useful semantics for `event`; treat them as pass-through ([htmx 4 reference](/Htmx.Net/reference/htmx4-facts/#2-response-headers)).
 :::
 
 ## `HtmxSwap` constants

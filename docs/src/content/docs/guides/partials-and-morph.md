@@ -36,13 +36,9 @@ public IActionResult OnGetOnly() => Content(
 <div id="toast" hx-swap-oob="true">Saved!</div>
 ```
 
-:::note
-In prose, write the tag as `<hx-partial>` in backticks; inside code fences nothing needs escaping.
-:::
-
 ## Ordering (changed from htmx 2)
 
-In htmx 4 the **main content swaps first**; OOB swaps and `<hx-partial>` swaps then run in document order. A partial can therefore target an element that exists only after the main swap (`#part-nested` above). In htmx 2, OOB ran before main. Don't rely on the old order ([htmx 4 facts §8](/Htmx.Net/reference/htmx4-facts/#8-hx-partial-and-oob-ordering)).
+In htmx 4 the **main content swaps first**; OOB swaps and `<hx-partial>` swaps then run in document order. A partial can therefore target an element that exists only after the main swap (`#part-nested` above). In htmx 2, OOB ran before main. Don't rely on the old order ([htmx 4 reference §8](/Htmx.Net/reference/htmx4-facts/#8-hx-partial-and-oob-ordering)).
 
 ## Non-200 responses swap by default
 
@@ -130,4 +126,4 @@ Opt elements out of morphing with the config attributes `morphIgnore`, `morphSki
 
 See the live demos: run `dotnet run --project samples/Htmx4.Sample` and open `/Partials` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Partials.cshtml)), `/Morph` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Morph.cshtml)) and `/ErrorSwaps` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/ErrorSwaps.cshtml)).
 
-Related: [Response headers](/Htmx.Net/guides/response-headers/), [Config tag helper](/Htmx.Net/guides/config/), [htmx 4 facts](/Htmx.Net/reference/htmx4-facts/).
+Related: [Response headers](/Htmx.Net/guides/response-headers/), [Config tag helper](/Htmx.Net/guides/config/), [htmx 4 reference](/Htmx.Net/reference/htmx4-facts/).

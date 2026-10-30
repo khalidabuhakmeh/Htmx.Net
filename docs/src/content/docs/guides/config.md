@@ -106,7 +106,7 @@ A page-scoped meta **replaces** the global one. Re-add `includeAspNetAntiforgery
 
 ## Renamed or removed from htmx 2
 
-Use `defaultSwap` (was `defaultSwapStyle`), `transitions` (`globalViewTransitions`), `history` (`historyEnabled`), `includeIndicatorCSS` (`includeIndicatorStyles`), `defaultTimeout` (`timeout`). Many htmx 2 keys (`historyCacheSize`, `selfRequestsOnly`, `withCredentials`, `allowEval`, `inlineStyleNonce`, …) no longer exist; see the [htmx 4 facts](/Htmx.Net/reference/htmx4-facts/#4-configuration).
+Use `defaultSwap` (was `defaultSwapStyle`), `transitions` (`globalViewTransitions`), `history` (`historyEnabled`), `includeIndicatorCSS` (`includeIndicatorStyles`), `defaultTimeout` (`timeout`). Many htmx 2 keys (`historyCacheSize`, `selfRequestsOnly`, `withCredentials`, `allowEval`, `inlineStyleNonce`, …) no longer exist; see the [htmx 4 reference](/Htmx.Net/reference/htmx4-facts/#4-configuration).
 
 ## Effect of config on server code
 
@@ -124,4 +124,4 @@ Examples you will feel on the server:
 
 See the live demo: run `dotnet run --project samples/Htmx4.Sample` and open `/Config` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Config.cshtml)). It reads `htmx.config` back so you can see what the browser received.
 
-Related: [htmx 4 facts: configuration](/Htmx.Net/reference/htmx4-facts/#4-configuration), [Antiforgery](/Htmx.Net/guides/antiforgery/), [Partials and morph](/Htmx.Net/guides/partials-and-morph/).
+Related: [htmx 4 reference: configuration](/Htmx.Net/reference/htmx4-facts/#4-configuration), [Antiforgery](/Htmx.Net/guides/antiforgery/), [Partials and morph](/Htmx.Net/guides/partials-and-morph/).

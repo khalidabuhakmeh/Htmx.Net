@@ -153,4 +153,4 @@ Polling is just a repeating request, so detect it like any other (`Request.IsHtm
 
 See the live demos: run `dotnet run --project samples/Htmx4.Sample` and open `/RequestHeaders` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/RequestHeaders.cshtml)) and `/Boosted` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Boosted.cshtml)).
 
-Related: [Response headers](/Htmx.Net/guides/response-headers/), [Caching](/Htmx.Net/guides/caching/), [htmx 4 facts](/Htmx.Net/reference/htmx4-facts/).
+Related: [Response headers](/Htmx.Net/guides/response-headers/), [Caching](/Htmx.Net/guides/caching/), [htmx 4 reference](/Htmx.Net/reference/htmx4-facts/).

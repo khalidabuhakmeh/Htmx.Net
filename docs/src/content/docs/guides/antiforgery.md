@@ -117,4 +117,4 @@ You can build the script's own endpoint into tests with `HtmxSnippets.Antiforger
 
 See the live demo: run `dotnet run --project samples/Htmx4.Sample` and open `/Antiforgery` ([source](https://github.com/khalidabuhakmeh/Htmx.Net/blob/main/samples/Htmx4.Sample/Pages/Antiforgery.cshtml)).
 
-Related: [Config tag helper](/Htmx.Net/guides/config/), [htmx 4 facts: `htmx:config:request`](/Htmx.Net/reference/htmx4-facts/#5-events-and-event-detail), [Getting started](/Htmx.Net/getting-started/).
+Related: [Config tag helper](/Htmx.Net/guides/config/), [htmx 4 reference: `htmx:config:request`](/Htmx.Net/reference/htmx4-facts/#5-events-and-event-detail), [Getting started](/Htmx.Net/getting-started/).

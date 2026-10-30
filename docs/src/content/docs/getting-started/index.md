@@ -11,7 +11,7 @@ htmx.NET gives ASP.NET Core two packages for **htmx 4**. This page takes you fro
 | `Htmx.TagHelpers` | Razor tag helpers (`htmx-config` meta, URL generation, `hx-headers-*`) and the antiforgery script. |
 
 :::caution
-These packages target **htmx 4 only** (`htmx.org@4.0.0`). htmx 1/2 users should read the [previous version docs](/Htmx.Net/v1/) and the [migration guide](/Htmx.Net/migration/v1-to-v2/). The [htmx 4 facts](/Htmx.Net/reference/htmx4-facts/) page lists the verified behavior these docs rely on.
+These packages target **htmx 4 only** (`htmx.org@4.0.0`). htmx 1/2 users should read the [previous version docs](/Htmx.Net/v1/) and the [migration guide](/Htmx.Net/migration/v1-to-v2/). The [htmx 4 reference](/Htmx.Net/reference/htmx4-facts/) documents the htmx 4 request/response contract this library implements.
 :::
 
 ## 1. Install

@@ -61,7 +61,7 @@ return Request.IsHtmxPartial() ? Partial("_List") : Page();
 ```
 
 :::note
-The htmx 4 caching docs only show `Vary: HX-Request`. Adding `HX-Request-Type` follows the general `Vary` rule and is an inference, not an explicit htmx recommendation ([htmx 4 facts §9](/Htmx.Net/reference/htmx4-facts/#9-vary-and-caching)).
+The htmx 4 caching docs only show `Vary: HX-Request`. Adding `HX-Request-Type` follows the general `Vary` rule and is an inference, not an explicit htmx recommendation ([htmx 4 reference §9](/Htmx.Net/reference/htmx4-facts/#9-vary-and-caching)).
 :::
 
 ## Related behavior
