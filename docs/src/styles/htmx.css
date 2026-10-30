@@ -112,6 +112,43 @@ h1#_top {
     border-radius: 10px;
 }
 
+/* ---- Wrap code instead of scrolling horizontally ------------------------ */
+/* Expressive Code sets overflow on the <pre> and keeps each .ec-line on one
+   line. Override both so long attribute lists / URLs / JSON break and fit the
+   block, matching the sample app. Break first at whitespace/attribute
+   boundaries, then over-long tokens as a last resort. */
+.expressive-code pre {
+    overflow-x: visible;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+.expressive-code pre > code {
+    white-space: inherit;
+}
+.expressive-code .ec-line,
+.expressive-code .ec-line .code {
+    white-space: inherit;
+    overflow-wrap: inherit;
+    word-break: inherit;
+}
+/* Keep the gutter (line numbers / markers) from being torn by the wrap, and
+   let the wrapped continuation hang past the first column for readability. */
+.expressive-code .ec-line .code {
+    display: inline-block;
+    max-width: 100%;
+}
+
+/* Plain (non-Expressive) Starlight code blocks wrap too. */
+.sl-markdown-content pre {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+.sl-markdown-content pre > code {
+    white-space: inherit;
+}
+
 /* ---- Hero (splash) wordmark -------------------------------------------- */
 .hero h1 {
     font-size: clamp(2.6rem, 8vw, 4.6rem);
