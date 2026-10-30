@@ -1,0 +1,120 @@
+#nullable enable
+const Htmx.HtmxRequestHeaders.Keys.Boosted = "HX-Boosted" -> string!
+const Htmx.HtmxRequestHeaders.Keys.CurrentUrl = "HX-Current-URL" -> string!
+const Htmx.HtmxRequestHeaders.Keys.HistoryRestoreRequest = "HX-History-Restore-Request" -> string!
+const Htmx.HtmxRequestHeaders.Keys.Prompt = "HX-Prompt" -> string!
+const Htmx.HtmxRequestHeaders.Keys.Request = "HX-Request" -> string!
+const Htmx.HtmxRequestHeaders.Keys.RequestType = "HX-Request-Type" -> string!
+const Htmx.HtmxRequestHeaders.Keys.Source = "HX-Source" -> string!
+const Htmx.HtmxRequestHeaders.Keys.Target = "HX-Target" -> string!
+const Htmx.HtmxResponseHeaders.Keys.Location = "HX-Location" -> string!
+const Htmx.HtmxResponseHeaders.Keys.PushUrl = "HX-Push-Url" -> string!
+const Htmx.HtmxResponseHeaders.Keys.Redirect = "HX-Redirect" -> string!
+const Htmx.HtmxResponseHeaders.Keys.Refresh = "HX-Refresh" -> string!
+const Htmx.HtmxResponseHeaders.Keys.ReplaceUrl = "HX-Replace-Url" -> string!
+const Htmx.HtmxResponseHeaders.Keys.Reselect = "HX-Reselect" -> string!
+const Htmx.HtmxResponseHeaders.Keys.Reswap = "HX-Reswap" -> string!
+const Htmx.HtmxResponseHeaders.Keys.Retarget = "HX-Retarget" -> string!
+const Htmx.HtmxResponseHeaders.Keys.Trigger = "HX-Trigger" -> string!
+const Htmx.HtmxSwap.After = "after" -> string!
+const Htmx.HtmxSwap.AfterBegin = "afterbegin" -> string!
+const Htmx.HtmxSwap.AfterEnd = "afterend" -> string!
+const Htmx.HtmxSwap.Append = "append" -> string!
+const Htmx.HtmxSwap.Before = "before" -> string!
+const Htmx.HtmxSwap.BeforeBegin = "beforebegin" -> string!
+const Htmx.HtmxSwap.BeforeEnd = "beforeend" -> string!
+const Htmx.HtmxSwap.Delete = "delete" -> string!
+const Htmx.HtmxSwap.InnerHtml = "innerHTML" -> string!
+const Htmx.HtmxSwap.InnerMorph = "innerMorph" -> string!
+const Htmx.HtmxSwap.None = "none" -> string!
+const Htmx.HtmxSwap.OuterHtml = "outerHTML" -> string!
+const Htmx.HtmxSwap.OuterMorph = "outerMorph" -> string!
+const Htmx.HtmxSwap.OuterSync = "outerSync" -> string!
+const Htmx.HtmxSwap.Prepend = "prepend" -> string!
+const Htmx.HtmxSwap.TextContent = "textContent" -> string!
+Htmx.HtmxElementReference
+Htmx.HtmxElementReference.DecodedId.get -> string?
+Htmx.HtmxElementReference.HtmxElementReference() -> void
+Htmx.HtmxElementReference.HtmxElementReference(string! TagName, string? Id, string! Raw) -> void
+Htmx.HtmxElementReference.Id.get -> string?
+Htmx.HtmxElementReference.Id.init -> void
+Htmx.HtmxElementReference.Raw.get -> string!
+Htmx.HtmxElementReference.Raw.init -> void
+Htmx.HtmxElementReference.TagName.get -> string!
+Htmx.HtmxElementReference.TagName.init -> void
+Htmx.HtmxHttpExtensions
+Htmx.HtmxLocation
+Htmx.HtmxLocation.Event.get -> string?
+Htmx.HtmxLocation.Event.set -> void
+Htmx.HtmxLocation.Headers.get -> System.Collections.Generic.IDictionary<string!, string!>?
+Htmx.HtmxLocation.Headers.set -> void
+Htmx.HtmxLocation.HtmxLocation() -> void
+Htmx.HtmxLocation.Path.get -> string!
+Htmx.HtmxLocation.Path.set -> void
+Htmx.HtmxLocation.Select.get -> string?
+Htmx.HtmxLocation.Select.set -> void
+Htmx.HtmxLocation.SelectOob.get -> string?
+Htmx.HtmxLocation.SelectOob.set -> void
+Htmx.HtmxLocation.Source.get -> string?
+Htmx.HtmxLocation.Source.set -> void
+Htmx.HtmxLocation.Swap.get -> string?
+Htmx.HtmxLocation.Swap.set -> void
+Htmx.HtmxLocation.Target.get -> string?
+Htmx.HtmxLocation.Target.set -> void
+Htmx.HtmxLocation.Transition.get -> bool?
+Htmx.HtmxLocation.Transition.set -> void
+Htmx.HtmxLocation.Values.get -> System.Collections.Generic.IDictionary<string!, object!>?
+Htmx.HtmxLocation.Values.set -> void
+Htmx.HtmxRequestHeaders
+Htmx.HtmxRequestHeaders.Boosted.get -> bool
+Htmx.HtmxRequestHeaders.CurrentUrl.get -> string!
+Htmx.HtmxRequestHeaders.HistoryRestoreRequest.get -> bool
+Htmx.HtmxRequestHeaders.HtmxRequestHeaders(Microsoft.AspNetCore.Http.HttpRequest! request) -> void
+Htmx.HtmxRequestHeaders.Keys
+Htmx.HtmxRequestHeaders.Prompt.get -> string!
+Htmx.HtmxRequestHeaders.RequestType.get -> Htmx.HtmxRequestType
+Htmx.HtmxRequestHeaders.Source.get -> string!
+Htmx.HtmxRequestHeaders.SourceElement.get -> Htmx.HtmxElementReference?
+Htmx.HtmxRequestHeaders.Target.get -> string!
+Htmx.HtmxRequestHeaders.TargetElement.get -> Htmx.HtmxElementReference?
+Htmx.HtmxRequestHeaders.Trigger.get -> string!
+Htmx.HtmxRequestHeaders.TriggerName.get -> string!
+Htmx.HtmxRequestType
+Htmx.HtmxRequestType.Full = 1 -> Htmx.HtmxRequestType
+Htmx.HtmxRequestType.Partial = 2 -> Htmx.HtmxRequestType
+Htmx.HtmxRequestType.Unknown = 0 -> Htmx.HtmxRequestType
+Htmx.HtmxResponseHeaders
+Htmx.HtmxResponseHeaders.Keys
+Htmx.HtmxResponseHeaders.Location(Htmx.HtmxLocation! location) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.Location(string! value) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.PreventPush() -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.PreventReplace() -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.PushUrl(string! value) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.Redirect(string! value) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.Refresh() -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.ReplaceUrl(string! value) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.Reselect(string! value) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.Reswap(string! value) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.Retarget(string! value) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.WithTrigger(string! eventName, object? detail = null) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.WithTrigger(string! eventName, object? detail, Htmx.HtmxTriggerTiming timing) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.WithVary() -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxResponseHeaders.WithVary(params string![]! headerNames) -> Htmx.HtmxResponseHeaders!
+Htmx.HtmxSwap
+Htmx.HtmxTriggerTiming
+Htmx.HtmxTriggerTiming.AfterSettle = 1 -> Htmx.HtmxTriggerTiming
+Htmx.HtmxTriggerTiming.AfterSwap = 2 -> Htmx.HtmxTriggerTiming
+Htmx.HtmxTriggerTiming.Default = 0 -> Htmx.HtmxTriggerTiming
+static Htmx.HtmxElementReference.TryParse(string? value, out Htmx.HtmxElementReference result) -> bool
+static Htmx.HtmxHttpExtensions.Htmx(this Microsoft.AspNetCore.Http.HttpResponse! response, System.Action<Htmx.HtmxResponseHeaders!>! action) -> void
+static Htmx.HtmxHttpExtensions.IsHtmx(this Microsoft.AspNetCore.Http.HttpRequest? request) -> bool
+static Htmx.HtmxHttpExtensions.IsHtmx(this Microsoft.AspNetCore.Http.HttpRequest? request, out Htmx.HtmxRequestHeaders? values) -> bool
+static Htmx.HtmxHttpExtensions.IsHtmxBoosted(this Microsoft.AspNetCore.Http.HttpRequest? request) -> bool
+static Htmx.HtmxHttpExtensions.IsHtmxFullRequest(this Microsoft.AspNetCore.Http.HttpRequest? request) -> bool
+static Htmx.HtmxHttpExtensions.IsHtmxHistoryRestoreRequest(this Microsoft.AspNetCore.Http.HttpRequest? request) -> bool
+static Htmx.HtmxHttpExtensions.IsHtmxNonBoosted(this Microsoft.AspNetCore.Http.HttpRequest? request) -> bool
+static Htmx.HtmxHttpExtensions.IsHtmxNonBoosted(this Microsoft.AspNetCore.Http.HttpRequest? request, out Htmx.HtmxRequestHeaders? values) -> bool
+static Htmx.HtmxHttpExtensions.IsHtmxPartial(this Microsoft.AspNetCore.Http.HttpRequest? request) -> bool
+static Htmx.HtmxHttpExtensions.StopPolling(this Microsoft.AspNetCore.Http.HttpResponse! response) -> void
+static Htmx.HtmxRequestHeaders.Keys.All.get -> string![]!
+static Htmx.HtmxResponseHeaders.Keys.All.get -> string![]!

@@ -1,0 +1,95 @@
+#nullable enable
+Htmx.TagHelpers.HtmlExtensions
+Htmx.TagHelpers.HtmxAntiforgeryScriptEndpoints
+Htmx.TagHelpers.HtmxConfigMetaTagHelper
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.AllowEmptySwapAfterOOB.get -> bool?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.AllowEmptySwapAfterOOB.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.DefaultFocusScroll.get -> bool?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.DefaultFocusScroll.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.DefaultSettleDelay.get -> int?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.DefaultSettleDelay.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.DefaultSwap.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.DefaultSwap.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.DefaultTimeout.get -> int?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.DefaultTimeout.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.Extensions.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.Extensions.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.History.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.History.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.HtmxConfigMetaTagHelper() -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.ImplicitInheritance.get -> bool?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.ImplicitInheritance.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.IncludeAntiForgery.get -> bool
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.IncludeAntiForgery.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.IncludeIndicatorCSS.get -> bool?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.IncludeIndicatorCSS.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.IndicatorClass.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.IndicatorClass.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.InlineScriptNonce.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.InlineScriptNonce.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.LogAll.get -> bool?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.LogAll.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MetaCharacter.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MetaCharacter.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.Mode.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.Mode.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MorphIgnore.get -> string![]?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MorphIgnore.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MorphScanLimit.get -> int?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MorphScanLimit.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MorphSkip.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MorphSkip.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MorphSkipChildren.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.MorphSkipChildren.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.NoSwap.get -> object![]?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.NoSwap.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.Prefix.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.Prefix.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.RequestClass.get -> string?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.RequestClass.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.Transitions.get -> bool?
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.Transitions.set -> void
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.ViewContext.get -> Microsoft.AspNetCore.Mvc.Rendering.ViewContext!
+Htmx.TagHelpers.HtmxConfigMetaTagHelper.ViewContext.set -> void
+Htmx.TagHelpers.HtmxHeadersTagHelper
+Htmx.TagHelpers.HtmxHeadersTagHelper.HeaderAttributes.get -> System.Collections.Generic.IDictionary<string!, string?>!
+Htmx.TagHelpers.HtmxHeadersTagHelper.HeaderAttributes.set -> void
+Htmx.TagHelpers.HtmxHeadersTagHelper.HtmxHeadersTagHelper() -> void
+Htmx.TagHelpers.HtmxHeadersTagHelper.Inherited.get -> bool
+Htmx.TagHelpers.HtmxHeadersTagHelper.Inherited.set -> void
+Htmx.TagHelpers.HtmxSnippets
+Htmx.TagHelpers.HtmxUrlTagHelper
+Htmx.TagHelpers.HtmxUrlTagHelper.Action.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.Action.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.Area.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.Area.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.Controller.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.Controller.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.Fragment.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.Fragment.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.Generator.get -> Microsoft.AspNetCore.Mvc.ViewFeatures.IHtmlGenerator!
+Htmx.TagHelpers.HtmxUrlTagHelper.Host.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.Host.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.HtmxUrlTagHelper(Microsoft.AspNetCore.Mvc.ViewFeatures.IHtmlGenerator! generator) -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.Page.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.Page.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.PageHandler.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.PageHandler.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.Protocol.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.Protocol.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.Route.get -> string?
+Htmx.TagHelpers.HtmxUrlTagHelper.Route.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.RouteValues.get -> System.Collections.Generic.IDictionary<string!, string!>?
+Htmx.TagHelpers.HtmxUrlTagHelper.RouteValues.set -> void
+Htmx.TagHelpers.HtmxUrlTagHelper.ViewContext.get -> Microsoft.AspNetCore.Mvc.Rendering.ViewContext?
+Htmx.TagHelpers.HtmxUrlTagHelper.ViewContext.set -> void
+override Htmx.TagHelpers.HtmxConfigMetaTagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext! context, Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput! output) -> void
+override Htmx.TagHelpers.HtmxHeadersTagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext! context, Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput! output) -> void
+override Htmx.TagHelpers.HtmxUrlTagHelper.Order.get -> int
+override Htmx.TagHelpers.HtmxUrlTagHelper.Process(Microsoft.AspNetCore.Razor.TagHelpers.TagHelperContext! context, Microsoft.AspNetCore.Razor.TagHelpers.TagHelperOutput! output) -> void
+static Htmx.TagHelpers.HtmlExtensions.HtmxAntiforgeryScript(this Microsoft.AspNetCore.Mvc.Rendering.IHtmlHelper! helper, bool minified = true) -> Microsoft.AspNetCore.Html.IHtmlContent!
+static Htmx.TagHelpers.HtmxAntiforgeryScriptEndpoints.MapHtmxAntiforgeryScript(this Microsoft.AspNetCore.Routing.IEndpointRouteBuilder! builder, string? path = null, bool minified = true) -> Microsoft.AspNetCore.Builder.IEndpointConventionBuilder!
+static Htmx.TagHelpers.HtmxAntiforgeryScriptEndpoints.Path.get -> string!
+static Htmx.TagHelpers.HtmxSnippets.AntiforgeryJavaScript.get -> string!
+static Htmx.TagHelpers.HtmxSnippets.AntiforgeryJavaScriptMinified.get -> string!
+static Htmx.TagHelpers.HtmxSnippets.GetAntiforgeryJavaScript(bool minified) -> string!
