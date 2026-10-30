@@ -13,6 +13,13 @@ public class DemoController : Controller
 
     internal static string H(string? v) => WebUtility.HtmlEncode(v ?? string.Empty);
 
+    /// <summary>
+    /// Sample-only shortcut for returning an inline HTML fragment with an optional status code.
+    /// It is NOT part of Htmx.Net. In a real app you would usually return a partial view
+    /// (<c>return Partial("_View", model);</c>, an MVC/Razor Pages <c>PartialViewResult</c>) or
+    /// a Razor component, rather than building HTML strings by hand. <c>Content(html, "text/html")</c>
+    /// is the direct equivalent when you already have the HTML.
+    /// </summary>
     internal static ContentResult Frag(string html, int status = 200) =>
         new() { Content = html, ContentType = "text/html; charset=utf-8", StatusCode = status };
 

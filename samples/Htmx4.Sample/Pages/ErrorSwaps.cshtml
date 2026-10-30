@@ -20,7 +20,10 @@ public IActionResult Status(int code) => code switch
     204 => NoContent(),        // htmx: no swap
     304 => StatusCode(304),    // htmx: no swap
     _   => NotFound()
-};";
+};
+
+// Frag(html, status) is this sample's shortcut for an HTML fragment.
+// A real app returns Partial(""_View"", model) or Content(html, ""text/html"").";
 }
 
 <h1>Error responses swap by default (htmx 4)</h1>

@@ -15,7 +15,10 @@ case ""outer"":
     return Frag($""<div id='{id}'>{inputs}</div>"");
 case ""inner"":
     Response.Htmx(h => h.Reswap(HtmxSwap.InnerMorph));
-    return Frag(inputs);";
+    return Frag(inputs);
+
+// Frag(html) is this sample's shortcut for returning an HTML fragment.
+// A real app returns Partial(""_View"", model) or Content(html, ""text/html"").";
 }
 
 <h1>Morph vs plain swap</h1>

@@ -19,7 +19,10 @@ public IActionResult Poll(int n = 0, int stop = 3, string mode = ""load"")
 
     return Frag($""<div id='poll-{mode}' hx-get='/demo/poll?n={n}&stop={stop}&mode={mode}' "" +
                 $""hx-trigger='every 1s' hx-swap='outerHTML'>{n} polling</div>"");
-}";
+}
+
+// Frag(html) is this sample's shortcut for returning an HTML fragment.
+// A real app returns Partial(""_View"", model) or Content(html, ""text/html"").";
 }
 
 <h1>Polling</h1>
