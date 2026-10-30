@@ -2,8 +2,7 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 
-// NOTE: `site` and `base` target GitHub Pages for khalidabuhakmeh/Htmx.Net.
-// Task E5 finalizes these to match the actual Pages URL.
+// `site` and `base` target GitHub Pages for the khalidabuhakmeh/Htmx.Net repo.
 export default defineConfig({
   site: "https://khalidabuhakmeh.github.io",
   base: "/Htmx.Net",

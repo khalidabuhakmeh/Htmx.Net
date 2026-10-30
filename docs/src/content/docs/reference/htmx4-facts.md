@@ -1,15 +1,13 @@
 ---
-title: htmx 4.0.0 verified facts (Task A4)
-description: Authoritative, citation-backed htmx 4.0.0 contract that all htmx.NET upgrade tasks must follow.
+title: htmx 4 behavior reference
+description: Citation-backed reference to the htmx 4.0.0 request and response contract that htmx.NET implements, with a source for every behavior.
 ---
 
-> **Status: VERIFIED (Task A4).** This file is the single source of truth for the htmx 4 upgrade.
-> Implementation code (Phases B, C, D) must follow this document, not memory or the brief.
-> When the official v4 docs and the upgrade skill conflict, the v4 docs win. Every row cites a source.
+:::note
+This page is a citation-backed reference to the htmx 4.0.0 request/response contract that htmx.NET implements. Where the official htmx 4 docs and other sources disagree, the official docs win, and every row links to its source.
+:::
 
-# htmx 4.0.0 facts for htmx.NET
-
-This reference summarizes the official htmx 4 request/response contract and migration points relevant to a server-side helper library. It is based primarily on the htmx v4 reference and upgrade guide; the v4.0.0 release source is used where it clarifies exact request-header construction. Each factual row or statement links to its source.
+This reference summarizes the htmx 4 request/response contract and the migration points that matter to a server-side helper library. It draws on the official htmx 4 reference and upgrade guide, with the v4.0.0 release source cited where it pins down exact header construction.
 
 ## 1. Request headers
 
@@ -195,10 +193,12 @@ The v4 caching guidance says to use `Vary: HX-Request` when the same URL returns
 
 `HX-Request-Type` is the v4 header that distinguishes full from partial requests. The v4 caching example does **not** explicitly mention it. Therefore, if an application varies its representation specifically by `HX-Request-Type`, including `HX-Request-Type` in `Vary` follows the documented general rule; this is an inference from the two docs, not an explicit v4 caching recommendation. [HX-Request-Type reference](https://four.htmx.org/reference/headers/HX-Request-Type) · [Caching documentation](https://four.htmx.org/docs#caching)
 
-## Unresolved / ambiguous (raise with maintainer before Phase B)
+## Ambiguities and how htmx.NET resolves them
 
-1. **Polling stop signal:** the official v4 docs do not state whether any replacement status code exists for v2's `286`. The v4.0.0 source shows `every` timers continue while their element remains connected; the documented load-polling pattern instead continues by returning a replacement poller. **Implication for library:** `StopPolling()` (status 286) is no longer honored by htmx 4 → per plan B2 it becomes `[Obsolete(error:true)]`.
+A few areas of the htmx 4 docs are underspecified. This is how htmx.NET interprets each one.
+
+1. **Polling stop signal:** the official v4 docs do not state whether any replacement status code exists for v2's `286`. The v4.0.0 source shows `every` timers continue while their element remains connected; the documented load-polling pattern instead continues by returning a replacement poller. htmx.NET therefore marks `StopPolling()` (which set status 286) as `[Obsolete(error: true)]` — stop polling by returning content that no longer contains the polling element.
 2. **Caching on `HX-Request-Type`:** the caching section's specific example mentions only `HX-Request`; it does not explicitly discuss `HX-Request-Type`. The general `Vary` rule implies varying on `HX-Request-Type` when representations depend on it.
-3. **`HX-Location` serialization of `event`:** the docs list `event` as an htmx.ajax option and say HX-Location accepts serializable htmx.ajax options, but do not explain what serialized event value is useful or accepted. `handler` is **not** listed → `HtmxLocation.Handler` should be removed/obsoleted in B3.
-4. **`reportValidityOfForms` and `historyRestoreAsHxRequest`:** neither appears in the complete v4 config list or the upgrade guide's removed-config list, so the docs do not clearly state whether these were prior-version config keys that were intentionally removed or simply unsupported names. Treat as removed from the config tag helper.
-5. **`HX-Trigger` equivalence:** the upgrade guide calls the header unchanged, while the v4 reference documents its JSON behavior. Preserve the v4-documented `value`, copied-object-properties, and `target` behavior when implementing helpers.
+3. **`HX-Location` serialization of `event`:** the docs list `event` as an htmx.ajax option and say HX-Location accepts serializable htmx.ajax options, but do not explain what serialized event value is useful or accepted. `handler` is **not** listed, so htmx.NET removed `HtmxLocation.Handler`.
+4. **`reportValidityOfForms` and `historyRestoreAsHxRequest`:** neither appears in the complete v4 config list or the upgrade guide's removed-config list, so the docs do not clearly state whether these were prior-version config keys that were intentionally removed or simply unsupported names. htmx.NET does not expose either on the config tag helper.
+5. **`HX-Trigger` equivalence:** the upgrade guide calls the header unchanged, while the v4 reference documents its JSON behavior. htmx.NET's `WithTrigger` preserves the v4-documented `value`, copied-object-properties, and `target` behavior.
