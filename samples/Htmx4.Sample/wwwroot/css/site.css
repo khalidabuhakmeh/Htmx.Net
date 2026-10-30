@@ -403,7 +403,7 @@ th { color: var(--ink); font-weight: 700; }
     font-size: .93rem;
     line-height: 1.65;
     color: var(--text);
-    margin: 0;
+    margin: 1.1rem 0;
 }
 .hint::before {
     content: "";
