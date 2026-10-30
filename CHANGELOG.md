@@ -20,6 +20,7 @@ All notable changes to htmx.NET are documented here. This project adheres to
 ### Breaking changes
 
 - **URL tag helper attributes renamed `hx-*` → `hxn-*`** (`hxn-page`, `hxn-page-handler`, `hxn-controller`, `hxn-action`, `hxn-area`, `hxn-route[-*]`, `hxn-host`, `hxn-protocol`, `hxn-fragment`, `hxn-all-route-data`) because htmx 4 added a native `hx-action`.
+
 **`Htmx` package**
 
 - Request headers: removed `HtmxRequestHeaders.Trigger` and `TriggerName` (compile-error obsolete) —

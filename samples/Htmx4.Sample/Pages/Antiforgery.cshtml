@@ -105,7 +105,7 @@ app.MapHtmxAntiforgeryScript();";
     Html.HtmxAntiforgeryScript().WriteTo(sw, System.Text.Encodings.Web.HtmlEncoder.Default);
 }
 <p>HtmlExtensions.HtmxAntiforgeryScript() inline variant renders <code data-testid="af-inline-length">@sw.ToString().Length</code> chars (not emitted, the endpoint script is already loaded). Snippets: <code data-testid="af-snippet-lengths">@HtmxSnippets.AntiforgeryJavaScript.Length / @HtmxSnippets.AntiforgeryJavaScriptMinified.Length / @HtmxSnippets.GetAntiforgeryJavaScript(true).Length</code></p>
-<p>Cross-origin and redirect scenarios are verified in D5 (E2E), not here.</p>
+<p>Cross-origin and redirect scenarios are verified by the E2E tests, not here.</p>
 </section>
 @section Scripts {
     <script>

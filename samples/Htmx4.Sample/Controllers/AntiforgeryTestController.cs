@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Htmx4.Sample.Controllers;
 
 /// <summary>
-/// TEST-ONLY endpoints used by test/Htmx.E2ETests AntiforgeryTests (D5). They simulate a hostile second origin
+/// TEST-ONLY endpoints used by test/Htmx.E2ETests AntiforgeryTests. They simulate a hostile second origin
 /// (localhost vs 127.0.0.1 on the same server) that records what it receives. Not a demo of recommended practice.
 /// </summary>
 [Route("demo/af-test")]

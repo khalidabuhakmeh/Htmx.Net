@@ -15,7 +15,7 @@ Fragments live in `Controllers/DemoController.cs` (and `AntiforgeryDemoControlle
 | Config | config tag helper keys, `htmx.config` read-back, defaultSwap/noSwap effects |
 | UrlHelper | url tag helper matrix incl. `hx-get:inherited`, `data-hx-get` |
 | Inherited | `:inherited` vs not, headers tag helper `hx-headers-inherited` |
-| Antiforgery | header + form mode for POST/PUT/PATCH/DELETE, GET control, validation attributes (cross-origin/redirect: D5) |
+| Antiforgery | header + form mode for POST/PUT/PATCH/DELETE, GET control, validation attributes (cross-origin/redirect covered by E2E tests) |
 | Boosted | `hx-boost:inherited`, `HX-Boosted` detection, boosted form POST (+ `BoostedOther`) |
 | Partials | `<hx-partial>` multi-target, main-first ordering, OOB, partials-only |
 | Morph | `OuterMorph`/`InnerMorph` vs plain swap |
@@ -77,4 +77,4 @@ Fragments live in `Controllers/DemoController.cs` (and `AntiforgeryDemoControlle
 
 ## Notes
 - The only API members not exercised are the `[Obsolete(error: true)]` ones (`StopPolling`, `HtmxTriggerTiming`, `Trigger`/`TriggerName`), which cannot compile or would throw.
-- Cross-origin, `<base href>`, redirect and token-rotation antiforgery scenarios are proven in D5.
+- Cross-origin, `<base href>`, redirect and token-rotation antiforgery scenarios are proven by the E2E tests in `test/Htmx.E2ETests`.
