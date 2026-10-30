@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [main, feat/htmx-4]
+    branches: [main]
   pull_request:
 
 permissions:
