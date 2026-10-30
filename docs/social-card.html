@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1280px; height: 640px; }
+  body {
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    width: 1280px; height: 640px;
+    background:
+      radial-gradient(1200px 680px at 85% -15%, rgba(61,114,215,0.40), transparent 58%),
+      radial-gradient(900px 640px at 2% 118%, rgba(124,77,255,0.26), transparent 55%),
+      linear-gradient(135deg, #0b1020 0%, #121a33 55%, #0a0f1f 100%);
+    color: #fff; position: relative; overflow: hidden;
+  }
+  /* ambient vignette, not a decorative overlay */
+  .vignette { position: absolute; inset: 0; box-shadow: inset 0 0 220px rgba(0,0,0,0.55); z-index: 1; }
+  .wrap { position: relative; z-index: 2; height: 100%; padding: 76px 82px; display: flex; flex-direction: column; justify-content: space-between; }
+
+  .lockup { display: flex; align-items: center; gap: 28px; }
+  .mark {
+    font-family: "SF Mono", "JetBrains Mono", Menlo, monospace;
+    font-size: 46px; font-weight: 800; letter-spacing: -1px;
+    width: 104px; height: 104px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #4a82ea, #2f5fc4); color: #fff; border-radius: 24px;
+    box-shadow: 0 20px 48px -12px rgba(61,114,215,0.60), inset 0 1px 0 rgba(255,255,255,0.22);
+  }
+  h1 { font-size: 100px; line-height: 0.95; font-weight: 850; letter-spacing: -0.03em; }
+  h1 .net { color: #9a7bff; }
+
+  .tag { font-size: 37px; color: #cdd8ee; font-weight: 500; margin-top: 36px; max-width: 920px; line-height: 1.32; }
+  .tag b { color: #fff; font-weight: 700; }
+
+  .code {
+    font-family: "SF Mono", "JetBrains Mono", Menlo, monospace;
+    font-size: 28px; color: #93e6c0; letter-spacing: -0.01em;
+    background: rgba(146,180,255,0.07); border: 1px solid rgba(146,180,255,0.16);
+    padding: 20px 28px; border-radius: 16px; display: inline-block;
+    box-shadow: 0 14px 40px -20px rgba(0,0,0,0.8);
+  }
+  .code .k { color: #7aa2ff; }
+  .code .m { color: #ffd479; }
+  .code .s { color: #ff9ecd; }
+
+  .bottom { display: flex; align-items: center; justify-content: space-between; }
+  .chips { display: flex; gap: 14px; }
+  .chip { font-size: 23px; font-weight: 600; color: #d4e2ff; border: 1px solid rgba(146,180,255,0.20); background: rgba(146,180,255,0.06); padding: 12px 24px; border-radius: 999px; }
+  .meta { font-size: 25px; color: #93a7cf; font-weight: 600; letter-spacing: 0.01em; }
+  .meta .hl { color: #cdd8ee; }
+</style>
+</head>
+<body>
+  <div class="vignette"></div>
+  <div class="wrap">
+    <div>
+      <div class="lockup">
+        <div class="mark">&lt;/&gt;</div>
+        <h1>htmx<span class="net">.NET</span></h1>
+      </div>
+      <div class="tag">Server-side helpers that make <b>htmx</b> feel native in <b>ASP.NET&nbsp;Core</b>. Typed headers, fluent responses, Tag&nbsp;Helpers.</div>
+    </div>
+
+    <div class="code"><span class="k">return</span> Request.<span class="m">IsHtmx</span>() ? Partial(<span class="s">"_Form"</span>, <span class="k">this</span>) : Page();</div>
+
+    <div class="bottom">
+      <div class="chips">
+        <div class="chip">Request detection</div>
+        <div class="chip">Response headers</div>
+        <div class="chip">Tag Helpers</div>
+      </div>
+      <div class="meta"><span class="hl">htmx 4</span> &nbsp;·&nbsp; nuget.org/Htmx</div>
+    </div>
+  </div>
+</body>
+</html>
