@@ -51,6 +51,10 @@ Fragments are served by Razor Page handlers and by `Controllers/DemoController.c
 
 New here? Start with [Getting started](/Htmx.Net/getting-started/).
 
+## More samples
+
+- [**Twelve Days of htmx-mas**](https://github.com/khalidabuhakmeh/twelve-days-of-htmx-mas) — a Christmas-themed ASP.NET Core app with 12 demos (counter, modals, drag & drop, infinite scroll, out-of-band swaps, and more) showing common htmx patterns you can drop into existing apps. Runs on htmx 4 with the Htmx.NET 2.0 preview on .NET 10.
+
 ## More recipes on the blog
 
 Worked examples that combine htmx.NET with other libraries and patterns:

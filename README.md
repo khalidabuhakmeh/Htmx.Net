@@ -93,6 +93,7 @@ app.MapHtmxAntiforgeryScript();
 - **[Migration guide (v1 → v2)](https://khalidabuhakmeh.github.io/Htmx.Net/migration/v1-to-v2/)**
 - **[Previous version (v1.x)](https://khalidabuhakmeh.github.io/Htmx.Net/v1/)**
 - **Samples:** [`samples/Htmx4.Sample`](samples/Htmx4.Sample) demonstrates every feature with integration and Playwright E2E tests.
+- **More samples:** [Twelve Days of htmx-mas](https://github.com/khalidabuhakmeh/twelve-days-of-htmx-mas) — a Christmas-themed ASP.NET Core app with 12 htmx demos.
 
 > New to htmx with ASP.NET Core? See the [JetBrains guide to getting started with htmx for ASP.NET Core developers](https://www.jetbrains.com/dotnet/guide/tutorials/htmx-aspnetcore/).
 
