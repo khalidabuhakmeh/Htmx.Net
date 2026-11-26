@@ -187,47 +187,15 @@ The resulting HTML will be.
 
 ### HTMX and Anti-forgery Tokens
 
-You can set the attribute `includeAspNetAntiforgerToken` on the `htmx-config` element. Then you'll need to include this additional JavaScript in your web application. We include the attribute `__htmx_antiforgery` to track the event listener was added already. This keeps us from accidentally re-registering the event listener.
+You can set the attribute `includeAspNetAntiforgeryToken` on the `htmx-config` element. Then you'll need to include the antiforgery JavaScript snippet in your web application. The source is [`src/Htmx.TagHelpers/JavaScript/antiforgerySnippet.js`](src/Htmx.TagHelpers/JavaScript/antiforgerySnippet.js). It works with htmx 1.x and 2.x. The snippet:
 
-```javascript
-if (!document.body.attributes.__htmx_antiforgery) {
-    document.addEventListener("htmx:configRequest", evt => {
-        let httpVerb = evt.detail.verb.toUpperCase();
-        if (httpVerb === 'GET') return;
-        let antiForgery = htmx.config.antiForgery;
-        if (antiForgery) {
-            // already specified on form, short circuit
-            if (evt.detail.parameters[antiForgery.formFieldName])
-                return;
+- adds the token to every non-safe request (anything except `GET`, `HEAD`, `OPTIONS`, and `TRACE`);
+- **only sends the token to the page's own origin.** It resolves the target against `document.baseURI`, so a `<base href>` can't redirect the token cross-origin;
+- in header mode (the ASP.NET Core default, `RequestVerificationToken`), always sets the header and removes any rendered `__RequestVerificationToken` form field from the request. That way the token never ends up in a query string. htmx 2 sends `DELETE` parameters in the URL.
+- in form-field mode (no antiforgery header name configured), never puts the token in a URL. For verbs listed in `htmx.config.methodsThatUseUrlParams` (htmx 2 default: `GET` and `DELETE`), the token is not sent and a console warning is logged. Configure a header name, or set `methodsThatUseUrlParams` to `["get"]`;
+- registers itself only once (guarded by `window.__htmxAntiforgery`).
 
-            if (antiForgery.headerName) {
-                evt.detail.headers[antiForgery.headerName]
-                    = antiForgery.requestToken;
-            } else {
-                evt.detail.parameters[antiForgery.formFieldName]
-                    = antiForgery.requestToken;
-            }
-        }
-    });
-    document.addEventListener("htmx:afterOnLoad", evt => {
-        if (evt.detail.boosted) {
-            const parser = new DOMParser();
-            const html = parser.parseFromString(evt.detail.xhr.responseText, 'text/html');
-            const selector = 'meta[name=htmx-config]';
-            const config = html.querySelector(selector);
-            if (config) {
-                const current = document.querySelector(selector);
-                // only change the anti-forgery token
-                const key = 'antiForgery';
-                htmx.config[key] = JSON.parse(config.attributes['content'].value)[key];
-                // update DOM, probably not necessary, but for sanity's sake
-                current.replaceWith(config);
-            }
-        }
-    });
-    document.body.attributes.__htmx_antiforgery = true;
-}
-```
+**Token refresh and `hx-boost`:** the snippet does not refresh the token from htmx responses. Tokens refresh on full page loads. If you use `hx-boost` and the user's identity changes mid-session (sign-in or sign-out), respond with `HX-Refresh: true` after that change, for example `Response.Htmx(h => h.Refresh());`.
 
 You can access the snippet in two ways. The first is to use the `HtmxSnippet` static class in your views.
 
@@ -273,7 +241,7 @@ You can now configure this endpoint with caching, authentication, etc. More impo
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <script src="~/lib/jquery/dist/jquery.min.js" defer></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
-    <script src="https://unpkg.com/htmx.org@@1.9.2" defer></script>
+    <script src="https://unpkg.com/htmx.org@@2.0.11/dist/htmx.min.js" defer></script>
     <!-- this uses the static value in a script tag -->
     <script src="@HtmxAntiforgeryScriptEndpoints.Path" defer></script>
 </head>

@@ -91,10 +91,11 @@ public class HtmxConfigMetaTagHelper : TagHelper
     public string? AddedClass { get; set; }
 
     /// <summary>
-    /// defaults to false
+    /// When not set, the value is omitted and htmx's own default applies
+    /// (false in htmx 1.x, true in htmx 2.x). If true, only requests to the same domain are allowed.
     /// </summary>
     [HtmlAttributeName("selfRequestsOnly")]
-    public bool SelfRequestsOnly { get; set; }
+    public bool? SelfRequestsOnly { get; set; }
 
     /// <summary>
     /// defaults to true
