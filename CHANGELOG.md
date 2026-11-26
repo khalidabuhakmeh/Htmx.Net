@@ -14,6 +14,28 @@ All notable changes to htmx.NET are documented here. This project adheres to
 > users should remain on the 1.x line. See the full
 > **[Migration guide](https://khalidabuhakmeh.github.io/Htmx.Net/migration/v1-to-v2/)**.
 
+### [2.0.0-preview.2] - 2026-11-26 (htmx 4)
+
+#### Security
+
+- **Antiforgery token no longer leaks into URLs or to other origins.** htmx 4 collects a rendered
+  `__RequestVerificationToken` hidden input into the request body for every verb, then moves GET/DELETE
+  values into the query string. In 2.0.0-preview.1 this meant: a `<form hx-delete>` (header mode) put the token in
+  the URL (logs, history, `Referer`); form-field mode DELETE injected the token into the URL and still failed
+  with 400; `<form hx-get>` put a rendered token in the URL; and with `mode: "cors"` or a cross-origin
+  `<base href>` the rendered token was sent to the other origin.
+- The snippet now strips the rendered token field from safe-method and cross-origin requests, strips the form
+  copy in header mode (header is authoritative), and in form-field mode refuses DELETE and any other method htmx 4 sends as URL parameters (it matches `/GET|DELETE/`, unanchored, so e.g. a custom `XGET` also fails closed): the field is stripped, nothing is sent, and `[htmx.net] Antiforgery token not sent for <METHOD> ...` is logged.
+
+#### Fixed
+
+- `<form hx-delete>` with a rendered token works in header mode (200) without exposing the token in the URL.
+
+#### Action required
+
+- Update to 2.0.0-preview.2. Use **header mode** (the ASP.NET Core default header name) for DELETE;
+  form-field mode no longer protects DELETE or other URL-parameter methods. No markup changes are needed otherwise.
+
 ### Highlights
 
 - **Targets htmx 4.0.0.** Rewritten request/response header handling, config Tag Helper, and
@@ -74,3 +96,32 @@ etc.), `hx-delete` form inclusion (use `hx-include`), non-200 swapping (now swap
 
 For releases prior to 2.0.0, see the [v1.x documentation](https://khalidabuhakmeh.github.io/Htmx.Net/v1/)
 and the `v1-final` git tag.
+
+## [1.13.0] - 2026-11-26 (htmx 1.x/2.x line)
+
+> This entry is for the **1.x line** (htmx 1.x/2.x). It does not apply to htmx.NET 2.0.0 (htmx 4).
+
+### Security
+
+- The antiforgery snippet only sends the token to the page's origin, resolved against `document.baseURI`.
+  Rendered token fields are stripped from safe-method and cross-origin requests.
+
+### Fixed
+
+- `<form hx-delete>` returned 400 on htmx 2 and leaked the token into the query string. Header mode now
+  always sets the header and strips the form copy.
+- Form-field mode no longer sends the token for verbs in `htmx.config.methodsThatUseUrlParams` (htmx 2: DELETE).
+  It logs a console warning instead.
+
+### Removed (behavior change)
+
+- Automatic token refresh after boosted responses. It parsed response text, which allowed token-config
+  poisoning. Apps that use `hx-boost` and change identity mid-session should send `HX-Refresh: true`
+  (`Response.Htmx(h => h.Refresh())`).
+
+### Changed (behavior change)
+
+- `HtmxConfigMetaTagHelper.SelfRequestsOnly` is now `bool?` and omitted unless set. Previously it always
+  emitted `selfRequestsOnly:false`, which silently disabled htmx 2's same-origin default.
+- The idempotence guard moved to `window.__htmxAntiforgery`. HEAD, OPTIONS, and TRACE are skipped.
+- Sample updated to htmx 2.0.11. `global.json` pinned to SDK 10.

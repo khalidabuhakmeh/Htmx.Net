@@ -6,17 +6,28 @@
     window.__htmxAntiforgery = true;
 
     const SAFE_METHODS = ["GET", "HEAD", "OPTIONS", "TRACE"];
+    // Mirrors htmx 4.0.0's own (unanchored) test for verbs whose values go into the URL query
+    // string, so custom methods such as "XGET" are covered too. Keep in sync with htmx.
+    const USES_URL_PARAMS = /GET|DELETE/;
 
     document.addEventListener("htmx:config:request", evt => {
         const ctx = evt.detail && evt.detail.ctx;
         const request = ctx && ctx.request;
         if (!request) return;
 
-        const method = (request.method || "GET").toUpperCase();
-        if (SAFE_METHODS.indexOf(method) !== -1) return;
-
         const af = htmx.config.antiForgery;
-        if (!af || !af.requestToken) return;
+        if (!af) return;
+
+        const method = (request.method || "GET").toUpperCase();
+
+        // At this point htmx 4 has already collected form values (including a server-rendered
+        // __RequestVerificationToken hidden input) into request.body, a FormData, for EVERY verb.
+        // After this event it moves GET/DELETE values into the URL query string.
+        const stripFormField = () => {
+            if (af.formFieldName && request.body && typeof request.body.delete === "function") {
+                request.body.delete(af.formFieldName);
+            }
+        };
 
         // SECURITY: only attach the token to same-origin requests, never leak it cross-origin.
         // Resolve the action the way fetch() will — against the document base URI, which a
@@ -29,22 +40,43 @@
         } catch (e) {
             sameOrigin = false;
         }
-        if (!sameOrigin) return;
+
+        // Safe methods don't need the token (and would put form fields in the URL); cross-origin
+        // targets must never receive it, even when a rendered form field or hx-include carries it.
+        if (SAFE_METHODS.indexOf(method) !== -1 || !sameOrigin) {
+            stripFormField();
+            return;
+        }
+
+        if (!af.requestToken) return;
 
         // NOTE: af.requestToken is HtmlAttributeEncoded server-side; the browser decodes the
         // attribute when parsing <meta name="htmx-config">, so the value read here is already
         // plain text. Do NOT decode again.
         if (af.headerName) {
             request.headers[af.headerName] = af.requestToken;
-        } else if (af.formFieldName) {
-            // Form-field mode. Assumes htmx 4 encodes a FormData assigned to request.body
-            // when it is null (GET/DELETE are null pre-encoding); verified by E2E tests.
-            // NOTE: DELETE will not validate in form mode (htmx 4 puts DELETE data in the query string).
-            if (!request.body) request.body = new FormData();
-            // Token already present (e.g. from a rendered form): leave it alone.
-            if (request.body.has(af.formFieldName)) return;
-            request.body.set(af.formFieldName, af.requestToken);
+            // The header is authoritative. Drop the form copy so a DELETE can't serialize it
+            // into the query string.
+            stripFormField();
+            return;
         }
+
+        if (!af.formFieldName) return;
+
+        // Form-field mode. Never put the token in a URL: htmx 4 sends values for any method matching
+        // /GET|DELETE/ as query parameters, so refuse those (fail closed).
+        if (USES_URL_PARAMS.test(method)) {
+            stripFormField();
+            console.warn("[htmx.net] Antiforgery token not sent for " + method +
+                ": htmx 4 sends its values in the URL. Configure an antiforgery header name " +
+                "(the ASP.NET Core default) to protect " + method + " requests.");
+            return;
+        }
+
+        if (!request.body) request.body = new FormData();
+        // Token already present (e.g. from a rendered form): leave it alone.
+        if (request.body.has(af.formFieldName)) return;
+        request.body.set(af.formFieldName, af.requestToken);
     });
 
     // NOTE: No automatic token refresh from htmx responses.

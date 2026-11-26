@@ -53,6 +53,19 @@ the htmx 4 rewrite and are proven by the D5 Playwright E2E tests.
    (e.g. on sign-in/sign-out), trigger a full page reload (for example via the `HX-Refresh` response
    header) after that state change rather than relying on an auto-refresh.
 
-5. **DELETE requires header mode.** For DELETE requests, use header-mode antiforgery (the default when
-   a header name is configured). Form-field mode does not work for DELETE because htmx 4 serializes
-   DELETE form data into the query string, which ASP.NET antiforgery validation does not inspect.
+5. **Rendered token fields are stripped when the token must not be sent.** At `htmx:config:request`
+   htmx 4 has already collected every form value, including a server-rendered
+   `__RequestVerificationToken` hidden input, into `request.body` for every verb, and afterwards moves
+   GET/DELETE values into the URL query string. The snippet therefore deletes the configured form field
+   from `request.body` on **safe-method** requests and on **cross-origin** targets (including a
+   `<base href>` to another origin), so the token never lands in a URL (logs, history, `Referer`) or
+   goes to another origin.
+
+6. **Header mode strips the form copy.** When a header name is configured the header is authoritative:
+   it is set and the rendered form field is removed, so `<form hx-delete>` works (200) and the token is
+   not serialized into the DELETE query string.
+
+7. **Form-field mode refuses DELETE and any other URL-parameter method.** htmx 4 sends values of methods matching `/GET|DELETE/` (unanchored, so a custom `hx-method="XGET"` also matches) in the URL query string, which
+   ASP.NET antiforgery validation does not inspect and where a token must never be placed. In
+   form-field mode the snippet strips the field, sends no token, and logs
+   `console.warn("[htmx.net] Antiforgery token not sent for <METHOD> ...")`. Use header mode for DELETE.

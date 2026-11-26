@@ -82,21 +82,62 @@ public class AntiforgeryTests(SampleServerFixture s, ITestOutputHelper output) :
         await Expect(T("af-valid")).ToHaveTextAsync("True");
     }
 
-    // EXPECTED htmx 4 behavior (documented limitation): in form-field mode DELETE does NOT work. htmx 4 sends DELETE form data in the URL query string (like
-    // GET), so the FormData the script assigns to request.body is serialized into the URL: the token is exposed
-    // in the URL (logs/Referer-adjacent) and ASP.NET Core does not read it from the query => validation fails.
-    // Use header mode (the default from the meta tag) for DELETE.
+    // Form-field mode cannot protect DELETE (htmx 4 sends DELETE values in the URL). The script refuses: it sends
+    // no token (never in the URL), and warns in the console. Header mode is required for DELETE.
     [Fact]
-    public async Task Form_mode_DELETE_puts_token_in_url_query_and_fails_validation_observed_limitation()
+    public async Task Form_mode_DELETE_sends_no_token_and_warns()
     {
         await GoAsync("/Antiforgery");
         await UseFormModeAsync();
+        var warnings = new List<string>();
+        Page.Console += (_, m) => { if (m.Type == "warning") lock (warnings) warnings.Add(m.Text); };
         var req = await ClickAndCaptureAsync("af-btn-form-delete", "/demo/af/check");
         Assert.Equal("DELETE", req.Method);
-        Assert.Contains("__RequestVerificationToken=", req.Url);
+        Assert.DoesNotContain("RequestVerificationToken", req.Url);
         Assert.False(await HasHeaderAsync(req));
         await Expect(T("af-token-source")).ToHaveTextAsync("none");
         await Expect(T("af-valid")).ToHaveTextAsync("False");
+        lock (warnings) Assert.Contains(warnings, w => w.StartsWith("[htmx.net] Antiforgery token not sent for DELETE"));
+    }
+
+    [Fact]
+    public async Task Form_mode_DELETE_with_rendered_token_strips_it_from_url()
+    {
+        await GoAsync("/Antiforgery");
+        await UseFormModeAsync();
+        var req = await ClickAndCaptureAsync("af-btn-form-delete-rendered", "/demo/af/check");
+        Assert.DoesNotContain("RequestVerificationToken", req.Url);
+        Assert.DoesNotContain("CfDJ8", req.Url);
+    }
+
+    // Header mode + <form hx-delete> with a rendered token: header validates (200); form copy must not leak to URL.
+    [Fact]
+    public async Task Header_mode_form_DELETE_with_rendered_token_uses_header_and_not_url()
+    {
+        await GoAsync("/Antiforgery");
+        var resp = await Page.RunAndWaitForResponseAsync(() => T("af-btn-form-delete-rendered").ClickAsync(), r => r.Url.Contains("/demo/af/check"));
+        var req = resp.Request;
+        Assert.Equal("DELETE", req.Method);
+        Assert.Equal(200, resp.Status);
+        Assert.True(await HasHeaderAsync(req));
+        Assert.DoesNotContain("RequestVerificationToken", req.Url);
+        Assert.DoesNotContain("CfDJ8", req.Url);
+        await Expect(T("af-token-source")).ToHaveTextAsync("header");
+        await Expect(T("af-valid")).ToHaveTextAsync("True");
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Form_GET_with_rendered_token_does_not_put_it_in_url(bool formMode)
+    {
+        await GoAsync("/Antiforgery");
+        if (formMode) await UseFormModeAsync();
+        var req = await ClickAndCaptureAsync("af-btn-form-get-rendered", "/demo/af/check");
+        Assert.Equal("GET", req.Method);
+        Assert.DoesNotContain("RequestVerificationToken", req.Url);
+        Assert.DoesNotContain("CfDJ8", req.Url);
+        Assert.False(await HasHeaderAsync(req));
     }
 
     // ---------- 3. existing token not duplicated ----------
@@ -111,9 +152,10 @@ public class AntiforgeryTests(SampleServerFixture s, ITestOutputHelper output) :
         var field = await Page.GetByTestId("af-field-name").InnerTextAsync();
         var body = req.PostData ?? "";
         var count = body.Split(field).Length - 1;
-        // Form mode: the rendered field must be left alone (exactly 1). Header mode: field from the form
-        // (exactly 1) plus the header; the script adds no extra body field.
-        Assert.Equal(1, count);
+        // Form mode: the rendered field must be left alone (exactly 1). Header mode: token travels in the header only.
+        // Header mode now strips the rendered form copy (the header is authoritative) => 0 in body.
+        Assert.Equal(formMode ? 1 : 0, count);
+        if (!formMode) Assert.True(await HasHeaderAsync(req));
         await Expect(T("af-valid")).ToHaveTextAsync("True");
     }
 
@@ -279,6 +321,26 @@ public class AntiforgeryTests(SampleServerFixture s, ITestOutputHelper output) :
         Assert.True(await HasHeaderAsync(req));
         var caps = await GetCapturesAsync();
         Assert.Contains(caps, c => c.Host.StartsWith("127.0.0.1") && c.HeaderToken.Length > 0);
+    }
+
+    [Theory]
+    [InlineData("post", "x-btn-cross-form-post")]
+    [InlineData("delete", "x-btn-cross-form-delete")]
+    public async Task Cross_origin_form_with_rendered_token_never_carries_it(string verb, string testId)
+    {
+        await GoXAsync($"?variant=min&attacker={Uri.EscapeDataString(Attacker)}");
+        await ResetCapturesAsync();
+        var req = await ClickAndCaptureAsync(testId, "/demo/af-test/capture");
+        Assert.StartsWith(Attacker, req.Url);
+        Assert.Equal(verb.ToUpperInvariant(), req.Method);
+        Assert.DoesNotContain("RequestVerificationToken", req.Url);
+        Assert.DoesNotContain("CfDJ8", req.Url);
+        Assert.DoesNotContain("CfDJ8", req.PostData ?? "");
+        Assert.False(await HasHeaderAsync(req));
+        await Expect(T("x-out")).ToContainTextAsync("captured by localhost");
+        var caps = await GetCapturesAsync();
+        Assert.NotEmpty(caps);
+        Assert.All(caps, c => { Assert.Equal("", c.HeaderToken); Assert.Equal("", c.FormToken); });
     }
 
     // ---------- 8. warp finding 2: same-origin -> cross-origin redirect ----------

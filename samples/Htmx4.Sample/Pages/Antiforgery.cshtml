@@ -87,6 +87,16 @@ app.MapHtmxAntiforgeryScript();";
     <button type="submit" data-testid="af-btn-form-delete">DELETE form</button>
 </form>
 
+<h2>Forms that render a token field with DELETE / GET (token must never reach the URL)</h2>
+<form hx-delete="/demo/af/check" hx-target="#af-out" data-testid="af-form-delete-rendered">
+    <input type="hidden" name="@tokens.FormFieldName" value="@tokens.RequestToken" />
+    <button type="submit" data-testid="af-btn-form-delete-rendered">DELETE form with rendered token</button>
+</form>
+<form hx-get="/demo/af/check" hx-target="#af-out" data-testid="af-form-get-rendered">
+    <input type="hidden" name="@tokens.FormFieldName" value="@tokens.RequestToken" />
+    <button type="submit" data-testid="af-btn-form-get-rendered">GET form with rendered token</button>
+</form>
+
 <h2>Attribute-validated endpoints</h2>
 <button data-testid="af-btn-strict-post" hx-post="/demo/af/strict" hx-target="#af-out">POST [AutoValidateAntiforgeryToken]</button>
 <button data-testid="af-btn-strict-delete" hx-delete="/demo/af/strict" hx-target="#af-out">DELETE [AutoValidateAntiforgeryToken]</button>

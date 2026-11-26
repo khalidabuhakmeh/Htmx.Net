@@ -95,15 +95,20 @@ The script listens to `htmx:config:request` and, for POST/PUT/PATCH/DELETE to th
 - **No form body** (e.g. a bare `hx-post` button): adds the header (`RequestVerificationToken` by default).
 - **Form body**: adds the hidden form field (`__RequestVerificationToken`), unless the form already carries one.
 
-GET/HEAD/OPTIONS/TRACE never receive the token. The `Check` action in the sample reports `token-source: header | form | none` so you can see which mode ran.
+GET/HEAD/OPTIONS/TRACE never receive the token. In header mode a rendered token field is removed from the request (the header is authoritative). The `Check` action in the sample reports `token-source: header | form | none` so you can see which mode ran.
+
+## Security fix in 2.0.0-preview.2
+
+2.0.0-preview.1 could leak a rendered token into the URL (`<form hx-get>`, `<form hx-delete>`) and to other origins (`mode: "cors"`, cross-origin `<base href>`). 2.0.0-preview.2 fixes this as described below. Update, and use header mode (the default) for DELETE. The 1.x line received the equivalent fix in 1.13.0; see the [v1 docs](/Htmx.Net/v1/tag-helpers/#htmx-and-anti-forgery-tokens).
 
 ## Security notes
 
 1. **Safe methods are skipped.**
 2. **Same-origin guard.** The token is attached only when the request target resolves to the page origin. The target is resolved against `document.baseURI` (what `fetch()` uses), so a `<base href>` cannot smuggle a cross-origin request through.
 3. **No automatic token refresh.** The script injects the token; it does not refresh it from responses. htmx 4 boost swaps only `<body>` and never merges `<head>`, and parsing response text to refresh would allow token-config poisoning from untrusted fragment or cross-origin responses. If you rotate the token mid-session (e.g. sign-in/out) while using `hx-boost`, trigger a **full page reload**, for example `Response.Htmx(h => h.Refresh())` (`HX-Refresh`).
-4. <a id="delete-needs-header-mode"></a>**DELETE requires header mode.** htmx 4 serializes DELETE form data into the query string, which ASP.NET antiforgery validation does not inspect. Use header-mode antiforgery for DELETE (a button without a form body, or make sure your validator reads the header).
-5. **Residual risk with `mode: "cors"`.** The guard checks only the initial URL. If a same-origin endpoint 307/308-redirects to another origin and you opted into `htmx.config.mode: "cors"`, the browser may re-send the token (body or custom header) to the foreign origin. The default `mode: "same-origin"` blocks this. Mitigate by avoiding open redirects, rotating tokens, and validating `Origin`/`Referer` server-side.
+4. <a id="delete-needs-header-mode"></a>**DELETE requires header mode.** htmx 4 serializes DELETE form data into the query string, which ASP.NET antiforgery validation does not inspect and where a token must never go. In form-field mode (no header name configured) the script strips the token field, sends nothing, and logs `[htmx.net] Antiforgery token not sent for <METHOD> ...` to the console. The same applies to any method htmx 4 sends as URL parameters (it matches `/GET|DELETE/`, unanchored, so a custom `hx-method="XGET"` also fails closed). Use header mode for DELETE. In header mode `<form hx-delete>` works: the header is set and the form copy is removed.
+5. **Rendered token fields are stripped when they must not be sent.** htmx 4 collects a server-rendered `__RequestVerificationToken` hidden input into every request, and moves GET/DELETE values into the URL. The script removes that field on safe-method and cross-origin requests (including a cross-origin `<base href>`), so the token never appears in a URL (logs, history, `Referer`) or reaches another origin.
+6. **Residual risk with `mode: "cors"`.** The guard checks only the initial URL. If a same-origin endpoint 307/308-redirects to another origin and you opted into `htmx.config.mode: "cors"`, the browser may re-send the token (body or custom header) to the foreign origin. The default `mode: "same-origin"` blocks this. Mitigate by avoiding open redirects, rotating tokens, and validating `Origin`/`Referer` server-side.
 
 :::caution
 If a page overrides `htmx-config` through a layout section, include `includeAspNetAntiforgeryToken="true"` again, or the token will not be present. See [Config tag helper](/Htmx.Net/guides/config/#page-scoped-config-with-a-layout-section).

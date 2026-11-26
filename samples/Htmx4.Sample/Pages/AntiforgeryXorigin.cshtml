@@ -1,5 +1,6 @@
 @page
 @using Htmx.TagHelpers
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @* TEST-ONLY page: ?base=<href for <base>>, ?variant=min|full, ?attacker=<other origin>. *@
 @{
     Layout = null;
@@ -8,6 +9,7 @@
     var attacker = Request.Query["attacker"].ToString();
     var full = Request.Query["variant"] == "full";
     var script = full ? self + "/demo/af-test/antiforgery.full.js" : self + HtmxAntiforgeryScriptEndpoints.Path;
+    var tokens = Antiforgery.GetAndStoreTokens(HttpContext);
     var capture = "/demo/af-test/capture";
     string Redirect(int code) => "/demo/af-test/redirect-to?code=" + code + "&url=" + Uri.EscapeDataString(attacker + capture);
 }
@@ -26,5 +28,13 @@
 <button data-testid="x-btn-cross-abs" hx-post="@(attacker + capture)" hx-target="#out">absolute cross-origin</button>
 <button data-testid="x-btn-redirect307" hx-post="@Redirect(307)" hx-target="#out">same-origin 307 to attacker</button>
 <button data-testid="x-btn-redirect308" hx-post="@Redirect(308)" hx-target="#out">same-origin 308 to attacker</button>
+<form hx-post="@(attacker + capture)" hx-target="#out" data-testid="x-form-cross-post">
+    <input type="hidden" name="@tokens.FormFieldName" value="@tokens.RequestToken" />
+    <button type="submit" data-testid="x-btn-cross-form-post">cross-origin form POST with rendered token</button>
+</form>
+<form hx-delete="@(attacker + capture)" hx-target="#out" data-testid="x-form-cross-delete">
+    <input type="hidden" name="@tokens.FormFieldName" value="@tokens.RequestToken" />
+    <button type="submit" data-testid="x-btn-cross-form-delete">cross-origin form DELETE with rendered token</button>
+</form>
 </body>
 </html>
